@@ -15,27 +15,30 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* إعدادات عامة */
+        /* إعدادات عامة للصفحة */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        /* متغيرات الألوان والإعدادات */
         :root {
             --primary-color: #4a00e0;
             --secondary-color: #8e2de2;
             --text-color: #333;
-            --bg-color: #f5f7fa;
+            --bg-color: #ffffff;
             --error-color: #ff4d4f;
             --success-color: #00cc00;
             --shadow: 0 5px 15px rgba(0,0,0,0.1);
-            --google-color: #4285f4;
-            --microsoft-color: #00a4ef;
-            --apple-color: #000000;
+            --google-color: #ffffff;
+            --microsoft-color: #ffffff;
+            --apple-color: #ffffff;
             --input-bg: #ffffff;
             --border-color: #e0e0e0;
+            --green-btn: #00c853;
+            --link-color: #1a73e8;
         }
 
         /* وضع الظلام */
@@ -44,13 +47,16 @@
             --secondary-color: #4a00e0;
             --text-color: #f0f0f0;
             --bg-color: #1a1a2e;
-            --google-color: #4285f4;
-            --microsoft-color: #00a4ef;
-            --apple-color: #ffffff;
+            --google-color: #2a2a3e;
+            --microsoft-color: #2a2a3e;
+            --apple-color: #2a2a3e;
             --input-bg: #2a2a3e;
             --border-color: #444;
+            --green-btn: #00e676;
+            --link-color: #82b1ff;
         }
 
+        /* إعدادات الجسم */
         body {
             min-height: 100vh;
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
@@ -65,10 +71,10 @@
         /* حاوية النظام */
         .auth-container {
             background: var(--bg-color);
-            padding: 3rem;
-            border-radius: 25px;
+            padding: 2rem;
+            border-radius: 15px;
             width: 100%;
-            max-width: 500px;
+            max-width: 400px;
             box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
@@ -76,6 +82,7 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        /* تأثير الانزلاق عند الظهور */
         @keyframes slideIn {
             from {
                 transform: translateY(-100px);
@@ -87,23 +94,35 @@
             }
         }
 
+        /* الشعار */
+        .logo {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
         /* العنوان */
         .auth-header {
             text-align: center;
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .auth-header h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
+            font-size: 1.8rem;
+            color: var(--text-color);
             margin-bottom: 0.5rem;
-            font-weight: 700;
-            letter-spacing: 1px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
         .auth-header p {
             color: #777;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 300;
         }
 
@@ -111,7 +130,7 @@
         .auth-form {
             display: flex;
             flex-direction: column;
-            gap: 1.8rem;
+            gap: 1.5rem;
         }
 
         .form-group {
@@ -120,133 +139,124 @@
 
         .form-group input {
             width: 100%;
-            padding: 1.2rem 1.5rem;
+            padding: 0.8rem 1rem;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
+            border-radius: 5px;
             font-size: 1rem;
             transition: all 0.3s ease;
             background: var(--input-bg);
             color: var(--text-color);
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
 
         .form-group input:focus {
-            border-color: var(--primary-color);
+            border-color: var(--link-color);
             outline: none;
-            box-shadow: 0 0 8px rgba(74, 0, 224, 0.2);
+            box-shadow: 0 0 5px rgba(26, 115, 232, 0.2);
         }
 
         .form-group label {
             position: absolute;
-            right: 1.5rem;
+            right: 1rem;
             top: 50%;
             transform: translateY(-50%);
             color: #999;
             transition: all 0.3s ease;
             pointer-events: none;
             background: var(--input-bg);
-            padding: 0 8px;
-            font-size: 1rem;
+            padding: 0 5px;
+            font-size: 0.9rem;
         }
 
         .form-group input:focus + label,
         .form-group input:not(:placeholder-shown) + label {
-            top: 0;
-            font-size: 0.85rem;
-            color: var(--primary-color);
+            top: -10px;
+            font-size: 0.75rem;
+            color: var(--link-color);
         }
 
-        /* الأزرار */
+        /* زر المتابعة */
         .auth-btn {
-            padding: 1.2rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            padding: 0.8rem;
+            background: var(--green-btn);
             border: none;
-            border-radius: 12px;
+            border-radius: 5px;
             color: white;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
         }
 
         .auth-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(74, 0, 224, 0.3);
+            background: #00e676;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 200, 83, 0.3);
         }
 
         /* أزرار تسجيل الدخول الاجتماعي */
         .social-btn {
-            padding: 1rem;
-            border-radius: 12px;
-            border: none;
-            color: white;
-            font-size: 1.1rem;
+            padding: 0.8rem;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+            background: var(--google-color);
+            color: var(--text-color);
+            font-size: 0.9rem;
             font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.8rem;
+            gap: 0.5rem;
             transition: all 0.3s ease;
-            margin: 0.8rem 0;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            margin: 0.5rem 0;
         }
 
-        .google-btn {
+        .google-btn, .microsoft-btn, .apple-btn {
             background: var(--google-color);
         }
 
-        .microsoft-btn {
-            background: var(--microsoft-color);
-        }
-
-        .apple-btn {
-            background: var(--apple-color);
-        }
-
         .social-btn:hover {
-            transform: translateY(-3px);
-            filter: brightness(110%);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            background: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
         }
 
         .social-btn i {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
         }
 
         /* روابط إضافية */
         .extra-links {
             text-align: center;
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 1rem;
         }
 
         .extra-links a {
-            color: var(--primary-color);
+            color: var(--link-color);
             text-decoration: none;
-            font-size: 1rem;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .extra-links a:hover {
             text-decoration: underline;
-            color: var(--secondary-color);
         }
 
         /* مفتاح الوضع */
         .theme-toggle {
             position: absolute;
-            top: 1.5rem;
-            left: 1.5rem;
-            padding: 0.6rem;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.5rem;
             background: rgba(255, 255, 255, 0.2);
             border: none;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
         }
 
@@ -256,12 +266,12 @@
 
         /* رسالة الخطأ/النجاح */
         .message {
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1.5rem;
+            padding: 0.8rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
             display: none;
             text-align: center;
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .message.error {
@@ -279,10 +289,10 @@
         /* التحميل */
         .loader {
             display: none;
-            width: 50px;
-            height: 50px;
-            border: 5px solid var(--primary-color);
-            border-top: 5px solid transparent;
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--primary-color);
+            border-top: 4px solid transparent;
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin: 1rem auto;
@@ -298,7 +308,9 @@
             display: flex;
             align-items: center;
             gap: 1rem;
-            margin: 2rem 0;
+            margin: 1.5rem 0;
+            color: #777;
+            font-size: 0.9rem;
         }
 
         .divider-line {
@@ -308,29 +320,49 @@
         }
 
         .divider-text {
-            color: #777;
-            font-size: 1rem;
             font-weight: 300;
+        }
+
+        /* زر تعديل البريد */
+        .edit-email {
+            color: var(--link-color);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: 0.5rem;
+        }
+
+        .edit-email:hover {
+            text-decoration: underline;
+        }
+
+        /* زر إظهار/إخفاء كلمة المرور */
+        .toggle-password {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
         }
 
         /* التصميم المتجاوب */
         @media (max-width: 480px) {
             .auth-container {
-                margin: 1.5rem;
-                padding: 2rem;
+                margin: 1rem;
+                padding: 1.5rem;
             }
 
             .auth-header h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
             .auth-header p {
-                font-size: 1rem;
+                font-size: 0.9rem;
             }
 
             .auth-btn, .social-btn {
-                font-size: 1rem;
-                padding: 0.8rem;
+                font-size: 0.9rem;
+                padding: 0.7rem;
             }
         }
 
@@ -350,16 +382,19 @@
 <body>
     <div class="auth-container">
         <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
+        <div class="logo">
+            <img src="https://via.placeholder.com/40" alt="Logo">
+        </div>
         <div class="auth-header" id="authHeader">
-            <h1>تسجيل الدخول</h1>
-            <p>أدخل بياناتك للوصول إلى النظام بسهولة</p>
+            <h1>إنشاء حساب</h1>
+            <p>أدخل بياناتك لإنشاء حساب جديد</p>
         </div>
 
         <div class="message" id="message"></div>
         <div class="loader" id="loader"></div>
 
         <!-- نموذج تسجيل الدخول -->
-        <form class="auth-form" id="loginForm" style="display: block;">
+        <form class="auth-form" id="loginForm" style="display: none;">
             <div class="form-group">
                 <input type="email" id="loginEmail" placeholder=" " required>
                 <label for="loginEmail">البريد الإلكتروني</label>
@@ -368,29 +403,37 @@
             <div class="form-group">
                 <input type="password" id="loginPassword" placeholder=" " required>
                 <label for="loginPassword">كلمة المرور</label>
+                <span class="toggle-password" onclick="togglePassword('loginPassword')"><i class="fas fa-eye"></i></span>
             </div>
 
             <button type="submit" class="auth-btn">تسجيل الدخول</button>
         </form>
 
-        <!-- نموذج إنشاء الحساب -->
-        <form class="auth-form" id="signupForm" style="display: none;">
+        <!-- نموذج إنشاء الحساب - الخطوة الأولى (البريد الإلكتروني) -->
+        <form class="auth-form" id="signupStep1Form" style="display: block;">
             <div class="form-group">
-                <input type="email" id="signupEmail" placeholder=" " required>
-                <label for="signupEmail">البريد الإلكتروني</label>
+                <input type="email" id="signupEmailStep1" placeholder=" " required>
+                <label for="signupEmailStep1">البريد الإلكتروني</label>
+            </div>
+
+            <button type="submit" class="auth-btn">متابعة</button>
+        </form>
+
+        <!-- نموذج إنشاء الحساب - الخطوة الثانية (كلمة المرور) -->
+        <form class="auth-form" id="signupStep2Form" style="display: none;">
+            <div class="form-group">
+                <input type="email" id="signupEmailStep2" placeholder=" " readonly>
+                <label for="signupEmailStep2">البريد الإلكتروني</label>
+                <a href="#" class="edit-email" onclick="backToStep1()">تعديل</a>
             </div>
 
             <div class="form-group">
                 <input type="password" id="signupPassword" placeholder=" " required>
                 <label for="signupPassword">كلمة المرور</label>
+                <span class="toggle-password" onclick="togglePassword('signupPassword')"><i class="fas fa-eye"></i></span>
             </div>
 
-            <div class="form-group">
-                <input type="password" id="confirmPassword" placeholder=" " required>
-                <label for="confirmPassword">تأكيد كلمة المرور</label>
-            </div>
-
-            <button type="submit" class="auth-btn">إنشاء حساب</button>
+            <button type="submit" class="auth-btn">متابعة</button>
         </form>
 
         <!-- نموذج استعادة كلمة المرور -->
@@ -406,26 +449,26 @@
         <!-- فاصل وأزرار اجتماعية -->
         <div class="divider">
             <span class="divider-line"></span>
-            <span class="divider-text">أو تابع باستخدام</span>
+            <span class="divider-text">أو</span>
             <span class="divider-line"></span>
         </div>
 
         <div class="social-login">
             <button class="social-btn google-btn" onclick="signInWithGoogle()">
-                <i class="fab fa-google"></i> تسجيل عبر Google
+                <i class="fab fa-google"></i> متابعة باستخدام Google
             </button>
             <button class="social-btn microsoft-btn" onclick="signInWithMicrosoft()">
-                <i class="fab fa-microsoft"></i> تسجيل عبر Microsoft
+                <i class="fab fa-microsoft"></i> متابعة باستخدام Microsoft
             </button>
             <button class="social-btn apple-btn" onclick="signInWithApple()">
-                <i class="fab fa-apple"></i> تسجيل عبر Apple
+                <i class="fab fa-apple"></i> متابعة باستخدام Apple
             </button>
         </div>
 
         <!-- الروابط الإضافية -->
         <div class="extra-links">
+            <a href="#" onclick="showLoginForm()" id="toggleLink">لديك حساب؟ تسجيل الدخول</a>
             <a href="#" onclick="showResetForm()">نسيت كلمة المرور؟</a>
-            <a href="#" onclick="toggleForms()" id="toggleLink">إنشاء حساب جديد</a>
         </div>
     </div>
 
@@ -446,14 +489,18 @@
 
         // عناصر DOM
         const loginForm = document.getElementById('loginForm');
-        const signupForm = document.getElementById('signupForm');
+        const signupStep1Form = document.getElementById('signupStep1Form');
+        const signupStep2Form = document.getElementById('signupStep2Form');
         const resetForm = document.getElementById('resetForm');
         const authHeader = document.getElementById('authHeader');
         const toggleLink = document.getElementById('toggleLink');
         const messageDiv = document.getElementById('message');
         const loader = document.getElementById('loader');
 
-        // دوال مساعدة
+        // متغير لتخزين البريد الإلكتروني مؤقتًا
+        let tempEmail = '';
+
+        // دالة إظهار الرسائل
         function showMessage(text, type) {
             messageDiv.style.display = 'block';
             messageDiv.textContent = text;
@@ -463,9 +510,16 @@
             }, 5000);
         }
 
+        // دالة التحقق من صحة البريد الإلكتروني
         function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(email);
+        }
+
+        // دالة التحقق من قوة كلمة المرور
+        function validatePassword(password) {
+            const re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            return re.test(password);
         }
 
         // تسجيل الدخول
@@ -508,25 +562,31 @@
             }
         });
 
-        // إنشاء حساب
-        signupForm.addEventListener('submit', async (e) => {
+        // إنشاء حساب - الخطوة الأولى
+        signupStep1Form.addEventListener('submit', (e) => {
             e.preventDefault();
-            const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value.trim();
-            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+            const email = document.getElementById('signupEmailStep1').value.trim();
 
             if (!validateEmail(email)) {
                 showMessage('البريد الإلكتروني غير صالح', 'error');
                 return;
             }
 
-            if (password.length < 6) {
-                showMessage('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
-                return;
-            }
+            tempEmail = email;
+            document.getElementById('signupEmailStep2').value = email;
+            signupStep1Form.style.display = 'none';
+            signupStep2Form.style.display = 'block';
+            authHeader.innerHTML = '<h1>إنشاء حساب</h1><p>أدخل كلمة المرور لإكمال التسجيل</p>';
+        });
 
-            if (password !== confirmPassword) {
-                showMessage('كلمة المرور غير متطابقة', 'error');
+        // إنشاء حساب - الخطوة الثانية
+        signupStep2Form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = tempEmail;
+            const password = document.getElementById('signupPassword').value.trim();
+
+            if (!validatePassword(password)) {
+                showMessage('كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل، مع حرف كبير، صغير، رقم، ورمز خاص', 'error');
                 return;
             }
 
@@ -550,6 +610,13 @@
                 loader.style.display = 'none';
             }
         });
+
+        // العودة إلى الخطوة الأولى
+        function backToStep1() {
+            signupStep1Form.style.display = 'block';
+            signupStep2Form.style.display = 'none';
+            authHeader.innerHTML = '<h1>إنشاء حساب</h1><p>أدخل بياناتك لإنشاء حساب جديد</p>';
+        }
 
         // استعادة كلمة المرور
         resetForm.addEventListener('submit', async (e) => {
@@ -634,10 +701,11 @@
         function toggleForms() {
             if (loginForm.style.display === 'block') {
                 loginForm.style.display = 'none';
-                signupForm.style.display = 'block';
+                signupStep1Form.style.display = 'block';
+                signupStep2Form.style.display = 'none';
                 resetForm.style.display = 'none';
-                authHeader.innerHTML = '<h1>إنشاء حساب</h1><p>أنشئ حسابك الجديد الآن</p>';
-                toggleLink.textContent = 'تسجيل الدخول';
+                authHeader.innerHTML = '<h1>إنشاء حساب</h1><p>أدخل بياناتك لإنشاء حساب جديد</p>';
+                toggleLink.textContent = 'لديك حساب؟ تسجيل الدخول';
             } else {
                 showLoginForm();
             }
@@ -645,7 +713,8 @@
 
         function showResetForm() {
             loginForm.style.display = 'none';
-            signupForm.style.display = 'none';
+            signupStep1Form.style.display = 'none';
+            signupStep2Form.style.display = 'none';
             resetForm.style.display = 'block';
             authHeader.innerHTML = '<h1>استعادة كلمة المرور</h1><p>أدخل بريدك لاستعادة كلمة المرور</p>';
             toggleLink.textContent = 'العودة إلى تسجيل الدخول';
@@ -653,7 +722,8 @@
 
         function showLoginForm() {
             loginForm.style.display = 'block';
-            signupForm.style.display = 'none';
+            signupStep1Form.style.display = 'none';
+            signupStep2Form.style.display = 'none';
             resetForm.style.display = 'none';
             authHeader.innerHTML = '<h1>تسجيل الدخول</h1><p>أدخل بياناتك للوصول إلى النظام</p>';
             toggleLink.textContent = 'إنشاء حساب جديد';
@@ -679,16 +749,33 @@
             }
         });
 
+        // إظهار/إخفاء كلمة المرور
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = input.nextElementSibling.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
         // تأثيرات تفاعلية
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
-                input.parentElement.style.transform = 'scale(1.02)';
+                input.parentElement.style.transform = 'scale(1.01)';
             });
             input.addEventListener('blur', () => {
                 input.parentElement.style.transform = 'scale(1)';
             });
         });
+
+
     </script>
 </body>
 </html>
