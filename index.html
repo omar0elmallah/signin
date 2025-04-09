@@ -3,13 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="صفحة تسجيل دخول متطورة مع تكامل Firebase">
+    <meta name="description" content="صفحة تسجيل دخول وإنشاء حساب متطورة مع تكامل Firebase">
     <meta name="author" content="Grok 3 by xAI">
-    <title>تسجيل الدخول | نظام متكامل</title>
+    <title>تسجيل الدخول وإنشاء حساب | نظام متكامل</title>
     
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+    
+    <!-- أيقونات (Font Awesome) للأزرار الاجتماعية -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         /* إعدادات عامة */
@@ -28,6 +31,9 @@
             --error-color: #ff4d4f;
             --success-color: #00cc00;
             --shadow: 0 5px 15px rgba(0,0,0,0.1);
+            --google-color: #4285f4;
+            --microsoft-color: #00a4ef;
+            --apple-color: #000000;
         }
 
         /* وضع الظلام */
@@ -36,6 +42,9 @@
             --secondary-color: #4a00e0;
             --text-color: #f0f0f0;
             --bg-color: #1a1a2e;
+            --google-color: #4285f4;
+            --microsoft-color: #00a4ef;
+            --apple-color: #ffffff;
         }
 
         body {
@@ -46,10 +55,11 @@
             align-items: center;
             color: var(--text-color);
             transition: all 0.5s ease;
+            padding: 1rem;
         }
 
-        /* حاوية تسجيل الدخول */
-        .login-container {
+        /* حاوية النظام */
+        .auth-container {
             background: var(--bg-color);
             padding: 2.5rem;
             border-radius: 20px;
@@ -73,24 +83,24 @@
         }
 
         /* العنوان */
-        .login-header {
+        .auth-header {
             text-align: center;
             margin-bottom: 2rem;
         }
 
-        .login-header h1 {
+        .auth-header h1 {
             font-size: 2.2rem;
             color: var(--primary-color);
             margin-bottom: 0.5rem;
         }
 
-        .login-header p {
+        .auth-header p {
             color: #666;
             font-size: 1rem;
         }
 
         /* النموذج */
-        .login-form {
+        .auth-form {
             display: flex;
             flex-direction: column;
             gap: 1.5rem;
@@ -136,10 +146,10 @@
             color: var(--primary-color);
         }
 
-        /* زر تسجيل الدخول */
-        .login-btn {
+        /* الأزرار */
+        .auth-btn {
             padding: 1rem;
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            background: linear-gradient(135deg, var(--primary-color47), var(--secondary-color));
             border: none;
             border-radius: 10px;
             color: white;
@@ -148,9 +158,42 @@
             transition: all 0.3s ease;
         }
 
-        .login-btn:hover {
+        .auth-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74 Marked as incomplete, 0, 224, 0.3);
+            box-shadow: 0 5px 15px rgba(74, 0, 224, 0.3);
+        }
+
+        /* أزرار تسجيل الدخول الاجتماعي */
+        .social-btn {
+            padding: 1rem;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            margin: 0.5rem 0;
+        }
+
+        .google-btn {
+            background: var(--google-color);
+        }
+
+        .microsoft-btn {
+            background: var(--microsoft-color);
+        }
+
+        .apple-btn {
+            background: var(--apple-color);
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(110%);
         }
 
         /* روابط إضافية */
@@ -164,6 +207,7 @@
             text-decoration: none;
             margin: 0 10px;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
 
         .extra-links a:hover {
@@ -220,26 +264,41 @@
             100% { transform: rotate(360deg); }
         }
 
+        /* فاصل */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .divider-line {
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider-text {
+            color: #666;
+        }
+
         /* التصميم المتجاوب */
         @media (max-width: 480px) {
-            .login-container {
+            .auth-container {
                 margin: 1rem;
                 padding: 1.5rem;
             }
 
-            .login-header h1 {
+            .auth-header h1 {
                 font-size: 1.8rem;
             }
         }
-
-        /* أكثر من 1100 سطر من خلال التعليقات والتفاصيل */
-        /* ... (إضافة تعليقات وتفاصيل إضافية لاحقاً) ... */
     </style>
 </head>
 <body>
-    <div class="login-container">
+    <div class="auth-container">
         <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
-        <div class="login-header">
+        <div class="auth-header" id="authHeader">
             <h1>تسجيل الدخول</h1>
             <p>أدخل بياناتك للوصول إلى النظام</p>
         </div>
@@ -247,23 +306,74 @@
         <div class="message" id="message"></div>
         <div class="loader" id="loader"></div>
 
-        <form class="login-form" id="loginForm">
+        <!-- نموذج تسجيل الدخول -->
+        <form class="auth-form" id="loginForm" style="display: block;">
             <div class="form-group">
-                <input type="email" id="email" placeholder=" " required>
-                <label for="email">البريد الإلكتروني</label>
+                <input type="email" id="loginEmail" placeholder=" " required>
+                <label for="loginEmail">البريد الإلكتروني</label>
             </div>
 
             <div class="form-group">
-                <input type="password" id="password" placeholder=" " required>
-                <label for="password">كلمة المرور</label>
+                <input type="password" id="loginPassword" placeholder=" " required>
+                <label for="loginPassword">كلمة المرور</label>
             </div>
 
-            <button type="submit" class="login-btn">تسجيل الدخول</button>
+            <button type="submit" class="auth-btn">تسجيل الدخول</button>
         </form>
 
+        <!-- نموذج إنشاء الحساب -->
+        <form class="auth-form" id="signupForm" style="display: none;">
+            <div class="form-group">
+                <input type="email" id="signupEmail" placeholder=" " required>
+                <label for="signupEmail">البريد الإلكتروني</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="signupPassword" placeholder=" " required>
+                <label for="signupPassword">كلمة المرور</label>
+            </div>
+
+            <div class="form-group">
+                <input type="password" id="confirmPassword" placeholder=" " required>
+                <label for="confirmPassword">تأكيد كلمة المرور</label>
+            </div>
+
+            <button type="submit" class="auth-btn">إنشاء حساب</button>
+        </form>
+
+        <!-- نموذج استعادة كلمة المرور -->
+        <form class="auth-form" id="resetForm" style="display: none;">
+            <div class="form-group">
+                <input type="email" id="resetEmail" placeholder=" " required>
+                <label for="resetEmail">البريد الإلكتروني</label>
+            </div>
+
+            <button type="submit" class="auth-btn">إرسال رابط الاستعادة</button>
+        </form>
+
+        <!-- فاصل وأزرار اجتماعية -->
+        <div class="divider">
+            <span class="divider-line"></span>
+            <span class="divider-text">أو</span>
+            <span class="divider-line"></span>
+        </div>
+
+        <div class="social-login">
+            <button class="social-btn google-btn" onclick="signInWithGoogle()">
+                <i class="fab fa-google"></i> تسجيل عبر Google
+            </button>
+            <button class="social-btn microsoft-btn" onclick="signInWithMicrosoft()">
+                <i class="fab fa-microsoft"></i> تسجيل عبر Microsoft
+            </button>
+            <button class="social-btn apple-btn" onclick="signInWithApple()">
+                <i class="fab fa-apple"></i> تسجيل عبر Apple
+            </button>
+        </div>
+
+        <!-- الروابط الإضافية -->
         <div class="extra-links">
-            <a href="#">نسيت كلمة المرور؟</a>
-            <a href="#">إنشاء حساب جديد</a>
+            <a href="#" onclick="showResetForm()">نسيت كلمة المرور؟</a>
+            <a href="#" onclick="toggleForms()" id="toggleLink">إنشاء حساب جديد</a>
         </div>
     </div>
 
@@ -284,12 +394,14 @@
 
         // عناصر DOM
         const loginForm = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
+        const signupForm = document.getElementById('signupForm');
+        const resetForm = document.getElementById('resetForm');
+        const authHeader = document.getElementById('authHeader');
+        const toggleLink = document.getElementById('toggleLink');
         const messageDiv = document.getElementById('message');
         const loader = document.getElementById('loader');
 
-        // دالة إظهار الرسائل
+        // دوال مساعدة
         function showMessage(text, type) {
             messageDiv.style.display = 'block';
             messageDiv.textContent = text;
@@ -299,7 +411,6 @@
             }, 5000);
         }
 
-        // التحقق من صحة البريد الإلكتروني
         function validateEmail(email) {
             const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(email);
@@ -308,11 +419,9 @@
         // تسجيل الدخول
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
-            const email = emailInput.value.trim();
-            const password = passwordInput.value.trim();
+            const email = document.getElementById('loginEmail').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
 
-            // التحقق من البيانات
             if (!validateEmail(email)) {
                 showMessage('البريد الإلكتروني غير صالح', 'error');
                 return;
@@ -327,8 +436,6 @@
                 loader.style.display = 'block';
                 const userCredential = await auth.signInWithEmailAndPassword(email, password);
                 showMessage('تم تسجيل الدخول بنجاح!', 'success');
-                console.log('تم تسجيل الدخول:', userCredential.user);
-                // إعادة توجيه أو عمل آخر بعد تسجيل الدخول
                 setTimeout(() => {
                     window.location.href = '/dashboard';
                 }, 2000);
@@ -348,6 +455,157 @@
                 loader.style.display = 'none';
             }
         });
+
+        // إنشاء حساب
+        signupForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signupEmail').value.trim();
+            const password = document.getElementById('signupPassword').value.trim();
+            const confirmPassword = document.getElementById('confirmPassword').value.trim();
+
+            if (!validateEmail(email)) {
+                showMessage('البريد الإلكتروني غير صالح', 'error');
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage('كلمة المرور يجب أن تكون 6 أحرف على الأقل', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage('كلمة المرور غير متطابقة', 'error');
+                return;
+            }
+
+            try {
+                loader.style.display = 'block';
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                showMessage('تم إنشاء الحساب بنجاح!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
+            } catch (error) {
+                loader.style.display = 'none';
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        showMessage('البريد الإلكتروني مستخدم بالفعل', 'error');
+                        break;
+                    default:
+                        showMessage('حدث خطأ: ' + error.message, 'error');
+                }
+            } finally {
+                loader.style.display = 'none';
+            }
+        });
+
+        // استعادة كلمة المرور
+        resetForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('resetEmail').value.trim();
+
+            if (!validateEmail(email)) {
+                showMessage('البريد الإلكتروني غير صالح', 'error');
+                return;
+            }
+
+            try {
+                loader.style.display = 'block';
+                await auth.sendPasswordResetEmail(email);
+                showMessage('تم إرسال رابط استعادة كلمة المرور إلى بريدك!', 'success');
+                setTimeout(() => {
+                    showLoginForm();
+                }, 2000);
+            } catch (error) {
+                loader.style.display = 'none';
+                showMessage('حدث خطأ: ' + error.message, 'error');
+            } finally {
+                loader.style.display = 'none';
+            }
+        });
+
+        // تسجيل الدخول عبر Google
+        async function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            try {
+                loader.style.display = 'block';
+                const result = await auth.signInWithPopup(provider);
+                showMessage('تم تسجيل الدخول عبر Google بنجاح!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
+            } catch (error) {
+                loader.style.display = 'none';
+                showMessage('حدث خطأ أثناء تسجيل الدخول عبر Google: ' + error.message, 'error');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // تسجيل الدخول عبر Microsoft
+        async function signInWithMicrosoft() {
+            const provider = new firebase.auth.OAuthProvider('microsoft.com');
+            try {
+                loader.style.display = 'block';
+                const result = await auth.signInWithPopup(provider);
+                showMessage('تم تسجيل الدخول عبر Microsoft بنجاح!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
+            } catch (error) {
+                loader.style.display = 'none';
+                showMessage('حدث خطأ أثناء تسجيل الدخول عبر Microsoft: ' + error.message, 'error');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // تسجيل الدخول عبر Apple
+        async function signInWithApple() {
+            const provider = new firebase.auth.OAuthProvider('apple.com');
+            try {
+                loader.style.display = 'block';
+                const result = await auth.signInWithPopup(provider);
+                showMessage('تم تسجيل الدخول عبر Apple بنجاح!', 'success');
+                setTimeout(() => {
+                    window.location.href = '/dashboard';
+                }, 2000);
+            } catch (error) {
+                loader.style.display = 'none';
+                showMessage('حدث خطأ أثناء تسجيل الدخول عبر Apple: ' + error.message, 'error');
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        // تبديل النماذج
+        function toggleForms() {
+            if (loginForm.style.display === 'block') {
+                loginForm.style.display = 'none';
+                signupForm.style.display = 'block';
+                resetForm.style.display = 'none';
+                authHeader.innerHTML = '<h1>إنشاء حساب</h1><p>أنشئ حسابك الجديد الآن</p>';
+                toggleLink.textContent = 'تسجيل الدخول';
+            } else {
+                showLoginForm();
+            }
+        }
+
+        function showResetForm() {
+            loginForm.style.display = 'none';
+            signupForm.style.display = 'none';
+            resetForm.style.display = 'block';
+            authHeader.innerHTML = '<h1>استعادة كلمة المرور</h1><p>أدخل بريدك لاستعادة كلمة المرور</p>';
+            toggleLink.textContent = 'العودة إلى تسجيل الدخول';
+        }
+
+        function showLoginForm() {
+            loginForm.style.display = 'block';
+            signupForm.style.display = 'none';
+            resetForm.style.display = 'none';
+            authHeader.innerHTML = '<h1>تسجيل الدخول</h1><p>أدخل بياناتك للوصول إلى النظام</p>';
+            toggleLink.textContent = 'إنشاء حساب جديد';
+        }
 
         // تبديل الوضع (الظلام/النهار)
         function toggleTheme() {
@@ -369,7 +627,7 @@
             }
         });
 
-        // إضافة تأثيرات تفاعلية
+        // تأثيرات تفاعلية
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
@@ -379,8 +637,6 @@
                 input.parentElement.style.transform = 'scale(1)';
             });
         });
-
-        // ... (يمكن إضافة المزيد من الوظائف والتعليقات للوصول إلى 1100+ سطر) ...
     </script>
 </body>
 </html>
