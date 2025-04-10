@@ -18,7 +18,7 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, OAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, OAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -36,12 +36,13 @@
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
 
-        // Expose auth to global scope for use in the script below
+        // Expose auth and functions to global scope for use in the script below
         window.auth = auth;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
         window.signInWithPopup = signInWithPopup;
         window.GoogleAuthProvider = GoogleAuthProvider;
         window.OAuthProvider = OAuthProvider;
+        window.sendPasswordResetEmail = sendPasswordResetEmail; // Added for Forgot Password
     </script>
 
     <!-- Custom CSS -->
@@ -127,6 +128,14 @@
             display: none;
         }
 
+        /* Success message (Added for Forgot Password) */
+        .success-message {
+            color: #10b981;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
         /* Loading spinner */
         .spinner {
             border: 2px solid #f3f3f3;
@@ -151,6 +160,38 @@
                 padding: 1.5rem;
             }
         }
+
+        /* Modal Styles (Added for Forgot Password) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            position: relative;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #374151;
+        }
     </style>
 </head>
 <body>
@@ -174,6 +215,11 @@
             <!-- Password Input -->
             <div>
                 <input type="password" id="password" class="input-field" placeholder="Password" required aria-label="Password">
+            </div>
+
+            <!-- Forgot Password Link (Added) -->
+            <div class="text-right">
+                <a href="#" id="forgotPasswordLink" class="text-sm text-green-600 hover:underline">Forgot Password?</a>
             </div>
 
             <!-- Error Message -->
@@ -216,6 +262,23 @@
         </p>
     </div>
 
+    <!-- Forgot Password Modal (Added) -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Reset Your Password</h3>
+            <form id="forgotPasswordForm" class="space-y-4">
+                <div>
+                    <input type="email" id="resetEmail" class="input-field" placeholder="Enter your email" required aria-label="Email for password reset">
+                </div>
+                <div id="resetErrorMessage" class="error-message"></div>
+                <div id="resetSuccessMessage" class="success-message"></div>
+                <button type="submit" id="resetPasswordBtn" class="btn btn-primary">Send Reset Email</button>
+                <div id="resetSpinner" class="spinner"></div>
+            </form>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script>
         // DOM Elements
@@ -228,21 +291,38 @@
         const googleLoginBtn = document.getElementById('googleLoginBtn');
         const appleLoginBtn = document.getElementById('appleLoginBtn');
 
+        // Forgot Password DOM Elements (Added)
+        const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+        const closeModal = document.getElementById('closeModal');
+        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
+        const resetEmailInput = document.getElementById('resetEmail');
+        const resetErrorMessage = document.getElementById('resetErrorMessage');
+        const resetSuccessMessage = document.getElementById('resetSuccessMessage');
+        const resetPasswordBtn = document.getElementById('resetPasswordBtn');
+        const resetSpinner = document.getElementById('resetSpinner');
+
         // Show error message
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        // Show success message (Added for Forgot Password)
+        function showSuccess(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
         }
 
         // Show loading state
-        function showLoading(isLoading) {
+        function showLoading(isLoading, button, spinner, originalText) {
             if (isLoading) {
-                continueBtn.disabled = true;
-                continueBtn.textContent = 'Loading...';
+                button.disabled = true;
+                button.textContent = 'Loading...';
                 spinner.style.display = 'block';
             } else {
-                continueBtn.disabled = false;
-                continueBtn.textContent = 'Continue';
+                button.disabled = false;
+                button.textContent = originalText;
                 spinner.style.display = 'none';
             }
         }
@@ -253,7 +333,7 @@
             const email = emailInput.value;
             const password = passwordInput.value;
 
-            showLoading(true);
+            showLoading(true, continueBtn, spinner, 'Continue');
             errorMessage.style.display = 'none';
 
             try {
@@ -261,8 +341,9 @@
                 // Redirect to dashboard or homepage
                 window.location.href = '/dashboard';
             } catch (error) {
-                showError(error.message);
-                showLoading(false);
+                console.error('Email/Password Sign-In Error:', error.code, error.message); // Added for debugging
+                showError(errorMessage, error.message);
+                showLoading(false, continueBtn, spinner, 'Continue');
             }
         });
 
@@ -273,7 +354,8 @@
                 await signInWithPopup(auth, provider);
                 window.location.href = '/dashboard';
             } catch (error) {
-                showError(error.message);
+                console.error('Google Sign-In Error:', error.code, error.message); // Added for debugging
+                showError(errorMessage, error.message);
             }
         });
 
@@ -284,7 +366,8 @@
                 await signInWithPopup(auth, provider);
                 window.location.href = '/dashboard';
             } catch (error) {
-                showError(error.message);
+                console.error('Apple Sign-In Error:', error.code, error.message); // Added for debugging
+                showError(errorMessage, error.message);
             }
         });
 
@@ -292,6 +375,48 @@
         loginForm.addEventListener('keypress', (e) => {
             if (e.key === 'Enter') {
                 loginForm.dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Forgot Password Functionality (Added)
+        forgotPasswordLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            forgotPasswordModal.style.display = 'flex';
+        });
+
+        closeModal.addEventListener('click', () => {
+            forgotPasswordModal.style.display = 'none';
+            resetErrorMessage.style.display = 'none';
+            resetSuccessMessage.style.display = 'none';
+            resetEmailInput.value = '';
+        });
+
+        forgotPasswordForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = resetEmailInput.value;
+
+            showLoading(true, resetPasswordBtn, resetSpinner, 'Send Reset Email');
+            resetErrorMessage.style.display = 'none';
+            resetSuccessMessage.style.display = 'none';
+
+            try {
+                await sendPasswordResetEmail(auth, email);
+                showSuccess(resetSuccessMessage, 'Password reset email sent! Check your inbox.');
+                showLoading(false, resetPasswordBtn, resetSpinner, 'Send Reset Email');
+            } catch (error) {
+                console.error('Password Reset Error:', error.code, error.message); // Added for debugging
+                showError(resetErrorMessage, error.message);
+                showLoading(false, resetPasswordBtn, resetSpinner, 'Send Reset Email');
+            }
+        });
+
+        // Close modal when clicking outside (Added)
+        window.addEventListener('click', (e) => {
+            if (e.target === forgotPasswordModal) {
+                forgotPasswordModal.style.display = 'none';
+                resetErrorMessage.style.display = 'none';
+                resetSuccessMessage.style.display = 'none';
+                resetEmailInput.value = '';
             }
         });
     </script>
