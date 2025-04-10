@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A modern login page inspired by ChatGPT, built with Firebase authentication.">
+    <meta name="description" content="A modern sign in/up form with Firebase authentication.">
     <meta name="author" content="Your Name">
-    <title>Login - ChatGPT Inspired</title>
+    <title>Sign In/Up - Weekly Coding Challenge</title>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://placehold.co/32x32">
+    <!-- Font Awesome for Social Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <!-- Tailwind CSS CDN (for rapid styling) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
 
     <!-- Firebase SDK -->
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, OAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -36,128 +36,309 @@
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
 
-        // Expose auth and functions to global scope for use in the script below
+        // Expose auth and functions to global scope
         window.auth = auth;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.signInWithPopup = signInWithPopup;
         window.GoogleAuthProvider = GoogleAuthProvider;
-        window.OAuthProvider = OAuthProvider;
         window.sendPasswordResetEmail = sendPasswordResetEmail;
+        window.signOut = signOut;
     </script>
 
     <!-- Custom CSS -->
     <style>
-        /* Global Styles */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
+            background: #f6f5f7;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0;
-            overflow: hidden;
+            flex-direction: column;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: -20px 0 50px;
         }
 
-        /* Container for the login form */
-        .login-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        h1 {
+            font-weight: bold;
+            margin: 0;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        p {
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 20px;
+            letter-spacing: 0.5px;
+            margin: 20px 0 30px;
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        a {
+            color: #333;
+            font-size: 14px;
+            text-decoration: none;
+            margin: 15px 0;
+        }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button:focus {
+            outline: none;
+        }
+
+        button.ghost {
+            background-color: transparent;
+            border-color: #FFFFFF;
+        }
+
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+        }
+
+        input {
+            background-color: #eee;
+            border: none;
+            padding: 12px 15px;
+            margin: 8px 0;
             width: 100%;
-            max-width: 400px;
-            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                        0 10px 10px rgba(0,0,0,0.22);
+            position: relative;
+            overflow: hidden;
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+
+        .container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% {
+                opacity: 0;
+                z-index: 1;
+            }
+            
+            50%, 100% {
+                opacity: 1;
+                z-index: 5;
+            }
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+
+        .container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+
+        .overlay {
+            background: #FF416C;
+            background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
+            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 0 0;
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 40px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .overlay-left {
+            transform: translateX(-20%);
+        }
+
+        .container.right-panel-active .overlay-left {
+            transform: translateX(0);
+        }
+
+        .overlay-right {
+            right: 0;
+            transform: translateX(0);
+        }
+
+        .container.right-panel-active .overlay-right {
+            transform: translateX(20%);
+        }
+
+        .social-container {
+            margin: 20px 0;
+        }
+
+        .social-container a {
+            border: 1px solid #DDDDDD;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 5px;
+            height: 40px;
+            width: 40px;
+        }
+
+        footer {
+            background-color: #222;
+            color: #fff;
+            font-size: 14px;
+            bottom: 0;
+            position: fixed;
+            left: 0;
+            right: 0;
+            text-align: center;
+            z-index: 999;
+        }
+
+        footer p {
+            margin: 10px 0;
+        }
+
+        footer i {
+            color: red;
+        }
+
+        footer a {
+            color: #3c97bf;
+            text-decoration: none;
         }
 
         /* Dashboard Container */
         .dashboard-container {
-            background: white;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0,0,0,0.25), 
+                        0 10px 10px rgba(0,0,0,0.22);
+            width: 768px;
+            max-width: 100%;
+            min-height: 480px;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            width: 100%;
-            max-width: 600px;
-            animation: fadeIn 0.5s ease-in-out;
-            display: none; /* Hidden by default */
         }
 
-        /* Fade-in animation */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Input fields */
-        .input-field {
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
-            padding: 0.75rem;
-            width: 100%;
-            transition: border-color 0.3s ease;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        /* Buttons */
-        .btn {
-            padding: 0.75rem;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-
-        .btn-primary {
-            background-color: #10b981;
-            color: white;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #059669;
-        }
-
-        .btn-secondary {
-            border: 1px solid #e5e7eb;
-            background: white;
-            color: #374151;
-        }
-
-        .btn-secondary:hover {
-            background: #f3f4f6;
-        }
-
-        /* Error message */
+        /* Error and Success Messages */
         .error-message {
-            color: #ef4444;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
+            color: #FF4B2B;
+            font-size: 12px;
+            margin-top: 10px;
             display: none;
         }
 
-        /* Success message */
         .success-message {
-            color: #10b981;
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
+            color: #28a745;
+            font-size: 12px;
+            margin-top: 10px;
             display: none;
         }
 
-        /* Loading spinner */
+        /* Loading Spinner */
         .spinner {
             border: 2px solid #f3f3f3;
-            border-top: 2px solid #10b981;
+            border-top: 2px solid #FF4B2B;
             border-radius: 50%;
             width: 20px;
             height: 20px;
             animation: spin 1s linear infinite;
             display: none;
-            margin: 0 auto;
+            margin: 10px auto;
         }
 
         @keyframes spin {
@@ -176,6 +357,7 @@
             background: rgba(0, 0, 0, 0.5);
             justify-content: center;
             align-items: center;
+            z-index: 1000;
         }
 
         .modal-content {
@@ -197,99 +379,102 @@
             color: #374151;
         }
 
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Responsive adjustments */
-        @media (max-width: 640px) {
-            .login-container {
-                margin: 1rem;
-                padding: 1.5rem;
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                min-height: 600px;
+            }
+
+            .form-container {
+                width: 100%;
+                padding: 0 20px;
+            }
+
+            .overlay-container {
+                display: none;
+            }
+
+            .container.right-panel-active .sign-in-container {
+                transform: translateX(0);
+                opacity: 0;
+            }
+
+            .container.right-panel-active .sign-up-container {
+                transform: translateX(0);
+                opacity: 1;
             }
 
             .dashboard-container {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-
-            .modal-content {
-                margin: 1rem;
+                width: 100%;
+                min-height: 600px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Login Container -->
-    <div class="login-container" id="loginPage">
-        <!-- Logo (Placeholder) -->
-        <div class="flex justify-center mb-6">
-            <img src="https://placehold.co/40x40" alt="Logo" class="h-10">
+    <h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
+    <div class="container" id="container">
+        <div class="form-container sign-up-container">
+            <form id="signUpForm">
+                <h1>Create Account</h1>
+                <div class="social-container">
+                    <a href="#" class="social" id="signUpWithGoogle"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" id="signUpName" placeholder="Name" required />
+                <input type="email" id="signUpEmail" placeholder="Email" required />
+                <input type="password" id="signUpPassword" placeholder="Password" required />
+                <div id="signUpError" class="error-message"></div>
+                <div id="signUpSpinner" class="spinner"></div>
+                <button type="submit">Sign Up</button>
+            </form>
         </div>
-
-        <!-- Title -->
-        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">Create your account</h2>
-
-        <!-- Form -->
-        <form id="loginForm" class="space-y-4">
-            <!-- Email Input -->
-            <div>
-                <input type="email" id="email" class="input-field" placeholder="Email" required aria-label="Email address">
-            </div>
-
-            <!-- Password Input -->
-            <div>
-                <input type="password" id="password" class="input-field" placeholder="Password" required aria-label="Password">
-                <!-- Forgot Password Link -->
-                <div class="text-right mt-2">
-                    <a href="#" id="forgotPasswordLink" class="text-sm text-green-600 hover:underline">نسيت كلمة المرور؟</a>
+        <div class="form-container sign-in-container">
+            <form id="signInForm">
+                <h1>Sign in</h1>
+                <div class="social-container">
+                    <a href="#" class="social" id="signInWithGoogle"><i class="fab fa-google-plus-g"></i></a>
+                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your account</span>
+                <input type="email" id="signInEmail" placeholder="Email" required />
+                <input type="password" id="signInPassword" placeholder="Password" required />
+                <a href="#" id="forgotPasswordLink">Forgot your password?</a>
+                <div id="signInError" class="error-message"></div>
+                <div id="signInSpinner" class="spinner"></div>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+        <div class="overlay-container">
+            <div class="overlay">
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
                 </div>
             </div>
-
-            <!-- Error Message -->
-            <div id="errorMessage" class="error-message"></div>
-
-            <!-- Continue Button -->
-            <button type="submit" id="continueBtn" class="btn btn-primary">Continue</button>
-
-            <!-- Loading Spinner -->
-            <div id="spinner" class="spinner"></div>
-        </form>
-
-        <!-- Divider -->
-        <div class="flex items-center my-6">
-            <div class="flex-grow border-t border-gray-200"></div>
-            <span class="mx-4 text-gray-500 text-sm">OR</span>
-            <div class="flex-grow border-t border-gray-200"></div>
         </div>
-
-        <!-- Social Login Buttons -->
-        <div class="space-y-3">
-            <!-- Google Login -->
-            <button id="googleLoginBtn" class="btn btn-secondary flex items-center justify-center">
-                <img src="https://www.google.com/favicon.ico" alt="Google Icon" class="w-5 h-5 mr-2">
-                Continue with Google
-            </button>
-
-            <!-- Apple Login -->
-            <button id="appleLoginBtn" class="btn btn-secondary flex items-center justify-center">
-                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-.86 3.71-.86.93 0 2.37.25 3.42 1.67-1.02.63-1.62 1.55-1.47 2.63.15 1.08.98 1.95 2.01 2.37-.55 1.61-1.37 3.15-2.28 4.44zM12.99 0c-1.67 0-3.02 1.37-3.02 3.06 0 1.69 1.35 3.06 3.02 3.06 1.67 0 3.02-1.37 3.02-3.06 0-1.69-1.35-3.06-3.02-3.06z"/>
-                </svg>
-                Continue with Apple
-            </button>
-        </div>
-
-        <!-- Login Link -->
-        <p class="text-center text-sm text-gray-600 mt-6">
-            Already have an account? <a href="#" id="switchToLogin" class="text-green-600 hover:underline">Log in</a>
-        </p>
     </div>
 
-    <!-- Dashboard Page (Temporary for Testing) -->
+    <!-- Dashboard Page -->
     <div class="dashboard-container" id="dashboardPage">
-        <div class="flex justify-center mb-6">
-            <img src="https://placehold.co/40x40" alt="Logo" class="h-10">
-        </div>
-        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">مرحباً بك في لوحة التحكم</h2>
-        <p class="text-center text-gray-600 mb-6">لقد قمت بتسجيل الدخول بنجاح!</p>
-        <button id="logoutBtn" class="btn btn-primary">تسجيل الخروج</button>
+        <h1>مرحباً بك في لوحة التحكم</h1>
+        <p>لقد قمت بتسجيل الدخول بنجاح!</p>
+        <button id="logoutBtn">تسجيل الخروج</button>
     </div>
 
     <!-- Forgot Password Modal -->
@@ -299,29 +484,46 @@
             <h3 class="text-xl font-semibold text-gray-800 mb-4">إعادة تعيين كلمة المرور</h3>
             <form id="resetPasswordForm" class="space-y-4">
                 <div>
-                    <input type="email" id="resetEmail" class="input-field" placeholder="البريد الإلكتروني" required aria-label="البريد الإلكتروني لإعادة تعيين كلمة المرور">
+                    <input type="email" id="resetEmail" placeholder="البريد الإلكتروني" required aria-label="البريد الإلكتروني لإعادة تعيين كلمة المرور">
                 </div>
                 <div id="resetErrorMessage" class="error-message"></div>
                 <div id="resetSuccessMessage" class="success-message"></div>
-                <button type="submit" id="resetPasswordBtn" class="btn btn-primary">إرسال رابط إعادة التعيين</button>
+                <button type="submit" id="resetPasswordBtn">إرسال رابط إعادة التعيين</button>
                 <div id="resetSpinner" class="spinner"></div>
             </form>
         </div>
     </div>
 
+    <footer>
+        <p>
+            Created with <i class="fa fa-heart"></i> by
+            <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
+            - Read how I created this and how you can join the challenge
+            <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+        </p>
+    </footer>
+
     <!-- JavaScript -->
     <script>
         // DOM Elements
-        const loginForm = document.getElementById('loginForm');
-        const emailInput = document.getElementById('email');
-        const passwordInput = document.getElementById('password');
-        const errorMessage = document.getElementById('errorMessage');
-        const continueBtn = document.getElementById('continueBtn');
-        const spinner = document.getElementById('spinner');
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        const appleLoginBtn = document.getElementById('appleLoginBtn');
-
-        // Forgot Password Elements
+        const signUpButton = document.getElementById('signUp');
+        const signInButton = document.getElementById('signIn');
+        const container = document.getElementById('container');
+        const signUpForm = document.getElementById('signUpForm');
+        const signInForm = document.getElementById('signInForm');
+        const signUpName = document.getElementById('signUpName');
+        const signUpEmail = document.getElementById('signUpEmail');
+        const signUpPassword = document.getElementById('signUpPassword');
+        const signInEmail = document.getElementById('signInEmail');
+        const signInPassword = document.getElementById('signInPassword');
+        const signUpError = document.getElementById('signUpError');
+        const signInError = document.getElementById('signInError');
+        const signUpSpinner = document.getElementById('signUpSpinner');
+        const signInSpinner = document.getElementById('signInSpinner');
+        const signUpWithGoogle = document.getElementById('signUpWithGoogle');
+        const signInWithGoogle = document.getElementById('signInWithGoogle');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const logoutBtn = document.getElementById('logoutBtn');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
         const forgotPasswordModal = document.getElementById('forgotPasswordModal');
         const closeModal = document.getElementById('closeModal');
@@ -332,11 +534,14 @@
         const resetPasswordBtn = document.getElementById('resetPasswordBtn');
         const resetSpinner = document.getElementById('resetSpinner');
 
-        // Page Elements
-        const loginPage = document.getElementById('loginPage');
-        const dashboardPage = document.getElementById('dashboardPage');
-        const switchToLogin = document.getElementById('switchToLogin');
-        const logoutBtn = document.getElementById('logoutBtn');
+        // Toggle between Sign Up and Sign In
+        signUpButton.addEventListener('click', () => {
+            container.classList.add("right-panel-active");
+        });
+
+        signInButton.addEventListener('click', () => {
+            container.classList.remove("right-panel-active");
+        });
 
         // Show error message
         function showError(element, message) {
@@ -351,37 +556,57 @@
         }
 
         // Show loading state
-        function showLoading(isLoading, button, spinner, originalText) {
-            if (isLoading) {
-                button.disabled = true;
-                button.textContent = 'جاري التحميل...';
-                spinner.style.display = 'block';
-            } else {
-                button.disabled = false;
-                button.textContent = originalText;
-                spinner.style.display = 'none';
-            }
+        function showLoading(isLoading, spinner) {
+            spinner.style.display = isLoading ? 'block' : 'none';
         }
 
         // Show specific page
         function showPage(pageToShow, pageToHide) {
             pageToHide.style.display = 'none';
-            pageToShow.style.display = 'block';
+            pageToShow.style.display = 'flex';
         }
 
-        // Email/Password Login
-        loginForm.addEventListener('submit', async (e) => {
+        // Sign Up with Email and Password
+        signUpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = emailInput.value;
-            const password = passwordInput.value;
+            const name = signUpName.value;
+            const email = signUpEmail.value;
+            const password = signUpPassword.value;
 
-            showLoading(true, continueBtn, spinner, 'Continue');
-            errorMessage.style.display = 'none';
+            showLoading(true, signUpSpinner);
+            signUpError.style.display = 'none';
+
+            try {
+                await createUserWithEmailAndPassword(auth, email, password);
+                // Optionally, you can update the user's display name
+                // await updateProfile(auth.currentUser, { displayName: name });
+                showPage(dashboardPage, container);
+            } catch (error) {
+                let errorMsg = 'حدث خطأ أثناء التسجيل. حاول مرة أخرى.';
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMsg = 'البريد الإلكتروني مستخدم بالفعل.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'البريد الإلكتروني غير صالح.';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMsg = 'كلمة المرور ضعيفة جداً. يجب أن تكون 6 أحرف على الأقل.';
+                }
+                showError(signUpError, errorMsg);
+                showLoading(false, signUpSpinner);
+            }
+        });
+
+        // Sign In with Email and Password
+        signInForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = signInEmail.value;
+            const password = signInPassword.value;
+
+            showLoading(true, signInSpinner);
+            signInError.style.display = 'none';
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                // Show dashboard page instead of redirecting
-                showPage(dashboardPage, loginPage);
+                showPage(dashboardPage, container);
             } catch (error) {
                 let errorMsg = 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.';
                 if (error.code === 'auth/wrong-password') {
@@ -391,59 +616,48 @@
                 } else if (error.code === 'auth/invalid-email') {
                     errorMsg = 'البريد الإلكتروني غير صالح.';
                 }
-                showError(errorMessage, errorMsg);
-                showLoading(false, continueBtn, spinner, 'Continue');
+                showError(signInError, errorMsg);
+                showLoading(false, signInSpinner);
             }
         });
 
-        // Google Login
-        googleLoginBtn.addEventListener('click', async () => {
+        // Sign Up with Google
+        signUpWithGoogle.addEventListener('click', async (e) => {
+            e.preventDefault();
             const provider = new GoogleAuthProvider();
             provider.addScope('email');
             provider.addScope('profile');
             try {
                 await signInWithPopup(auth, provider);
-                // Show dashboard page instead of redirecting
-                showPage(dashboardPage, loginPage);
+                showPage(dashboardPage, container);
+            } catch (error) {
+                let errorMsg = 'حدث خطأ أثناء التسجيل باستخدام Google.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
+                }
+                showError(signUpError, errorMsg);
+            }
+        });
+
+        // Sign In with Google
+        signInWithGoogle.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            try {
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
             } catch (error) {
                 let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Google.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
-                } else if (error.code === 'auth/operation-not-allowed') {
-                    errorMsg = 'تسجيل الدخول باستخدام Google غير مفعل في إعدادات Firebase.';
                 } else if (error.code === 'auth/unauthorized-domain') {
                     errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
                 }
-                showError(errorMessage, errorMsg);
-            }
-        });
-
-        // Apple Login
-        appleLoginBtn.addEventListener('click', async () => {
-            const provider = new OAuthProvider('apple.com');
-            provider.addScope('email');
-            provider.addScope('name');
-            try {
-                await signInWithPopup(auth, provider);
-                // Show dashboard page instead of redirecting
-                showPage(dashboardPage, loginPage);
-            } catch (error) {
-                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Apple.';
-                if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
-                } else if (error.code === 'auth/operation-not-allowed') {
-                    errorMsg = 'تسجيل الدخول باستخدام Apple غير مفعل في إعدادات Firebase.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
-                }
-                showError(errorMessage, errorMsg);
-            }
-        });
-
-        // Accessibility: Allow form submission with Enter key
-        loginForm.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                loginForm.dispatchEvent(new Event('submit'));
+                showError(signInError, errorMsg);
             }
         });
 
@@ -464,14 +678,14 @@
             e.preventDefault();
             const email = resetEmail.value;
 
-            showLoading(true, resetPasswordBtn, resetSpinner, 'إرسال رابط إعادة التعيين');
+            showLoading(true, resetSpinner);
             resetErrorMessage.style.display = 'none';
             resetSuccessMessage.style.display = 'none';
 
             try {
                 await sendPasswordResetEmail(auth, email);
                 showSuccess(resetSuccessMessage, 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.');
-                showLoading(false, resetPasswordBtn, resetSpinner, 'إرسال رابط إعادة التعيين');
+                showLoading(false, resetSpinner);
             } catch (error) {
                 let errorMsg = 'حدث خطأ أثناء إرسال رابط إعادة التعيين.';
                 if (error.code === 'auth/invalid-email') {
@@ -480,7 +694,7 @@
                     errorMsg = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
                 }
                 showError(resetErrorMessage, errorMsg);
-                showLoading(false, resetPasswordBtn, resetSpinner, 'إرسال رابط إعادة التعيين');
+                showLoading(false, resetSpinner);
             }
         });
 
@@ -494,19 +708,11 @@
             }
         });
 
-        // Switch to Login Page (already on login page, so just refresh for now)
-        switchToLogin.addEventListener('click', (e) => {
-            e.preventDefault();
-            // Since this is already the login page, we can just reload or do nothing
-            // In a real app, this would navigate to a separate login page
-            window.location.reload();
-        });
-
         // Logout Functionality
         logoutBtn.addEventListener('click', async () => {
             try {
-                await auth.signOut();
-                showPage(loginPage, dashboardPage);
+                await signOut(auth);
+                showPage(container, dashboardPage);
             } catch (error) {
                 console.error('Error signing out:', error);
             }
