@@ -42,7 +42,7 @@
         window.signInWithPopup = signInWithPopup;
         window.GoogleAuthProvider = GoogleAuthProvider;
         window.OAuthProvider = OAuthProvider;
-        window.sendPasswordResetEmail = sendPasswordResetEmail; // Added for Forgot Password
+        window.sendPasswordResetEmail = sendPasswordResetEmail;
     </script>
 
     <!-- Custom CSS -->
@@ -128,7 +128,7 @@
             display: none;
         }
 
-        /* Success message (Added for Forgot Password) */
+        /* Success message */
         .success-message {
             color: #10b981;
             font-size: 0.875rem;
@@ -153,15 +153,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Responsive adjustments */
-        @media (max-width: 640px) {
-            .login-container {
-                margin: 1rem;
-                padding: 1.5rem;
-            }
-        }
-
-        /* Modal Styles (Added for Forgot Password) */
+        /* Modal for Forgot Password */
         .modal {
             display: none;
             position: fixed;
@@ -177,7 +169,7 @@
         .modal-content {
             background: white;
             padding: 1.5rem;
-            border-radius: 8px;
+            border-radius: 12px;
             width: 100%;
             max-width: 400px;
             position: relative;
@@ -191,6 +183,18 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: #374151;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .login-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .modal-content {
+                margin: 1rem;
+            }
         }
     </style>
 </head>
@@ -215,11 +219,10 @@
             <!-- Password Input -->
             <div>
                 <input type="password" id="password" class="input-field" placeholder="Password" required aria-label="Password">
-            </div>
-
-            <!-- Forgot Password Link (Added) -->
-            <div class="text-right">
-                <a href="#" id="forgotPasswordLink" class="text-sm text-green-600 hover:underline">Forgot Password?</a>
+                <!-- Forgot Password Link -->
+                <div class="text-right mt-2">
+                    <a href="#" id="forgotPasswordLink" class="text-sm text-green-600 hover:underline">نسيت كلمة المرور؟</a>
+                </div>
             </div>
 
             <!-- Error Message -->
@@ -262,18 +265,18 @@
         </p>
     </div>
 
-    <!-- Forgot Password Modal (Added) -->
+    <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">&times;</span>
-            <h3 class="text-lg font-semibold text-gray-800 mb-4">Reset Your Password</h3>
-            <form id="forgotPasswordForm" class="space-y-4">
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">إعادة تعيين كلمة المرور</h3>
+            <form id="resetPasswordForm" class="space-y-4">
                 <div>
-                    <input type="email" id="resetEmail" class="input-field" placeholder="Enter your email" required aria-label="Email for password reset">
+                    <input type="email" id="resetEmail" class="input-field" placeholder="البريد الإلكتروني" required aria-label="البريد الإلكتروني لإعادة تعيين كلمة المرور">
                 </div>
                 <div id="resetErrorMessage" class="error-message"></div>
                 <div id="resetSuccessMessage" class="success-message"></div>
-                <button type="submit" id="resetPasswordBtn" class="btn btn-primary">Send Reset Email</button>
+                <button type="submit" id="resetPasswordBtn" class="btn btn-primary">إرسال رابط إعادة التعيين</button>
                 <div id="resetSpinner" class="spinner"></div>
             </form>
         </div>
@@ -291,12 +294,12 @@
         const googleLoginBtn = document.getElementById('googleLoginBtn');
         const appleLoginBtn = document.getElementById('appleLoginBtn');
 
-        // Forgot Password DOM Elements (Added)
+        // Forgot Password Elements
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
         const forgotPasswordModal = document.getElementById('forgotPasswordModal');
         const closeModal = document.getElementById('closeModal');
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-        const resetEmailInput = document.getElementById('resetEmail');
+        const resetPasswordForm = document.getElementById('resetPasswordForm');
+        const resetEmail = document.getElementById('resetEmail');
         const resetErrorMessage = document.getElementById('resetErrorMessage');
         const resetSuccessMessage = document.getElementById('resetSuccessMessage');
         const resetPasswordBtn = document.getElementById('resetPasswordBtn');
@@ -308,7 +311,7 @@
             element.style.display = 'block';
         }
 
-        // Show success message (Added for Forgot Password)
+        // Show success message
         function showSuccess(element, message) {
             element.textContent = message;
             element.style.display = 'block';
@@ -318,7 +321,7 @@
         function showLoading(isLoading, button, spinner, originalText) {
             if (isLoading) {
                 button.disabled = true;
-                button.textContent = 'Loading...';
+                button.textContent = 'جاري التحميل...';
                 spinner.style.display = 'block';
             } else {
                 button.disabled = false;
@@ -341,8 +344,15 @@
                 // Redirect to dashboard or homepage
                 window.location.href = '/dashboard';
             } catch (error) {
-                console.error('Email/Password Sign-In Error:', error.code, error.message); // Added for debugging
-                showError(errorMessage, error.message);
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.';
+                if (error.code === 'auth/wrong-password') {
+                    errorMsg = 'كلمة المرور غير صحيحة.';
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMsg = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'البريد الإلكتروني غير صالح.';
+                }
+                showError(errorMessage, errorMsg);
                 showLoading(false, continueBtn, spinner, 'Continue');
             }
         });
@@ -350,24 +360,38 @@
         // Google Login
         googleLoginBtn.addEventListener('click', async () => {
             const provider = new GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
             try {
                 await signInWithPopup(auth, provider);
                 window.location.href = '/dashboard';
             } catch (error) {
-                console.error('Google Sign-In Error:', error.code, error.message); // Added for debugging
-                showError(errorMessage, error.message);
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Google.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    errorMsg = 'تسجيل الدخول باستخدام Google غير مفعل في إعدادات Firebase.';
+                }
+                showError(errorMessage, errorMsg);
             }
         });
 
         // Apple Login
         appleLoginBtn.addEventListener('click', async () => {
             const provider = new OAuthProvider('apple.com');
+            provider.addScope('email');
+            provider.addScope('name');
             try {
                 await signInWithPopup(auth, provider);
                 window.location.href = '/dashboard';
             } catch (error) {
-                console.error('Apple Sign-In Error:', error.code, error.message); // Added for debugging
-                showError(errorMessage, error.message);
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Apple.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
+                } else if (error.code === 'auth/operation-not-allowed') {
+                    errorMsg = 'تسجيل الدخول باستخدام Apple غير مفعل في إعدادات Firebase.';
+                }
+                showError(errorMessage, errorMsg);
             }
         });
 
@@ -378,7 +402,7 @@
             }
         });
 
-        // Forgot Password Functionality (Added)
+        // Forgot Password Functionality
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
             forgotPasswordModal.style.display = 'flex';
@@ -388,35 +412,40 @@
             forgotPasswordModal.style.display = 'none';
             resetErrorMessage.style.display = 'none';
             resetSuccessMessage.style.display = 'none';
-            resetEmailInput.value = '';
+            resetEmail.value = '';
         });
 
-        forgotPasswordForm.addEventListener('submit', async (e) => {
+        resetPasswordForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const email = resetEmailInput.value;
+            const email = resetEmail.value;
 
-            showLoading(true, resetPasswordBtn, resetSpinner, 'Send Reset Email');
+            showLoading(true, resetPasswordBtn, resetSpinner, 'إرسال رابط إعادة التعيين');
             resetErrorMessage.style.display = 'none';
             resetSuccessMessage.style.display = 'none';
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                showSuccess(resetSuccessMessage, 'Password reset email sent! Check your inbox.');
-                showLoading(false, resetPasswordBtn, resetSpinner, 'Send Reset Email');
+                showSuccess(resetSuccessMessage, 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.');
+                showLoading(false, resetPasswordBtn, resetSpinner, 'إرسال رابط إعادة التعيين');
             } catch (error) {
-                console.error('Password Reset Error:', error.code, error.message); // Added for debugging
-                showError(resetErrorMessage, error.message);
-                showLoading(false, resetPasswordBtn, resetSpinner, 'Send Reset Email');
+                let errorMsg = 'حدث خطأ أثناء إرسال رابط إعادة التعيين.';
+                if (error.code === 'auth/invalid-email') {
+                    errorMsg = 'البريد الإلكتروني غير صالح.';
+                } else if (error.code === 'auth/user-not-found') {
+                    errorMsg = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+                }
+                showError(resetErrorMessage, errorMsg);
+                showLoading(false, resetPasswordBtn, resetSpinner, 'إرسال رابط إعادة التعيين');
             }
         });
 
-        // Close modal when clicking outside (Added)
+        // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === forgotPasswordModal) {
                 forgotPasswordModal.style.display = 'none';
                 resetErrorMessage.style.display = 'none';
                 resetSuccessMessage.style.display = 'none';
-                resetEmailInput.value = '';
+                resetEmail.value = '';
             }
         });
     </script>
