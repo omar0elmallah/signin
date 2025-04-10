@@ -18,7 +18,7 @@
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, sendPasswordResetEmail, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
         // Your web app's Firebase configuration
         const firebaseConfig = {
@@ -42,6 +42,8 @@
         window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.signInWithPopup = signInWithPopup;
         window.GoogleAuthProvider = GoogleAuthProvider;
+        window.FacebookAuthProvider = FacebookAuthProvider;
+        window.OAuthProvider = OAuthProvider;
         window.sendPasswordResetEmail = sendPasswordResetEmail;
         window.signOut = signOut;
     </script>
@@ -418,15 +420,15 @@
     </style>
 </head>
 <body>
-    <h2>Weekly Coding Challenge #1: Sign in/up Form</h2>
+    <!-- Removed: <h2>Weekly Coding Challenge #1: Sign in/up Form</h2> -->
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form id="signUpForm">
                 <h1>Create Account</h1>
                 <div class="social-container">
                     <a href="#" class="social" id="signUpWithGoogle"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social" id="signUpWithFacebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social" id="signUpWithLinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>or use your email for registration</span>
                 <input type="text" id="signUpName" placeholder="Name" required />
@@ -442,8 +444,8 @@
                 <h1>Sign in</h1>
                 <div class="social-container">
                     <a href="#" class="social" id="signInWithGoogle"><i class="fab fa-google-plus-g"></i></a>
-                    <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#" class="social" id="signInWithFacebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="social" id="signInWithLinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 </div>
                 <span>or use your account</span>
                 <input type="email" id="signInEmail" placeholder="Email" required />
@@ -472,23 +474,23 @@
 
     <!-- Dashboard Page -->
     <div class="dashboard-container" id="dashboardPage">
-        <h1>مرحباً بك في لوحة التحكم</h1>
-        <p>لقد قمت بتسجيل الدخول بنجاح!</p>
-        <button id="logoutBtn">تسجيل الخروج</button>
+        <h1>Welcome to Your Dashboard</h1>
+        <p>You have successfully signed in!</p>
+        <button id="logoutBtn">Sign Out</button>
     </div>
 
     <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">×</span>
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">إعادة تعيين كلمة المرور</h3>
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">Reset Password</h3>
             <form id="resetPasswordForm" class="space-y-4">
                 <div>
-                    <input type="email" id="resetEmail" placeholder="البريد الإلكتروني" required aria-label="البريد الإلكتروني لإعادة تعيين كلمة المرور">
+                    <input type="email" id="resetEmail" placeholder="Email" required aria-label="Email for password reset">
                 </div>
                 <div id="resetErrorMessage" class="error-message"></div>
                 <div id="resetSuccessMessage" class="success-message"></div>
-                <button type="submit" id="resetPasswordBtn">إرسال رابط إعادة التعيين</button>
+                <button type="submit" id="resetPasswordBtn">Send Reset Link</button>
                 <div id="resetSpinner" class="spinner"></div>
             </form>
         </div>
@@ -496,10 +498,7 @@
 
     <footer>
         <p>
-            Created with <i class="fa fa-heart"></i> by
-            <a target="_blank" href="https://florin-pop.com">Florin Pop</a>
-            - Read how I created this and how you can join the challenge
-            <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>.
+            <!-- Removed: Created with <i class="fa fa-heart"></i> by <a target="_blank" href="https://florin-pop.com">Florin Pop</a> - Read how I created this and how you can join the challenge <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>. -->
         </p>
     </footer>
 
@@ -522,6 +521,10 @@
         const signInSpinner = document.getElementById('signInSpinner');
         const signUpWithGoogle = document.getElementById('signUpWithGoogle');
         const signInWithGoogle = document.getElementById('signInWithGoogle');
+        const signUpWithFacebook = document.getElementById('signUpWithFacebook');
+        const signInWithFacebook = document.getElementById('signInWithFacebook');
+        const signUpWithLinkedIn = document.getElementById('signUpWithLinkedIn');
+        const signInWithLinkedIn = document.getElementById('signInWithLinkedIn');
         const dashboardPage = document.getElementById('dashboardPage');
         const logoutBtn = document.getElementById('logoutBtn');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
@@ -578,20 +581,19 @@
 
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
-                // Optionally, you can update the user's display name
-                // await updateProfile(auth.currentUser, { displayName: name });
                 showPage(dashboardPage, container);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on success
             } catch (error) {
-                let errorMsg = 'حدث خطأ أثناء التسجيل. حاول مرة أخرى.';
+                let errorMsg = 'An error occurred during sign up. Please try again.';
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMsg = 'البريد الإلكتروني مستخدم بالفعل.';
+                    errorMsg = 'The email is already in use.';
                 } else if (error.code === 'auth/invalid-email') {
-                    errorMsg = 'البريد الإلكتروني غير صالح.';
+                    errorMsg = 'The email is invalid.';
                 } else if (error.code === 'auth/weak-password') {
-                    errorMsg = 'كلمة المرور ضعيفة جداً. يجب أن تكون 6 أحرف على الأقل.';
+                    errorMsg = 'The password is too weak. It must be at least 6 characters.';
                 }
                 showError(signUpError, errorMsg);
-                showLoading(false, signUpSpinner);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
             }
         });
 
@@ -607,17 +609,18 @@
             try {
                 await signInWithEmailAndPassword(auth, email, password);
                 showPage(dashboardPage, container);
+                showLoading(false, signInSpinner); // Ensure spinner hides on success
             } catch (error) {
-                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.';
+                let errorMsg = 'An error occurred during sign in. Please try again.';
                 if (error.code === 'auth/wrong-password') {
-                    errorMsg = 'كلمة المرور غير صحيحة.';
+                    errorMsg = 'The password is incorrect.';
                 } else if (error.code === 'auth/user-not-found') {
-                    errorMsg = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+                    errorMsg = 'No account is associated with this email.';
                 } else if (error.code === 'auth/invalid-email') {
-                    errorMsg = 'البريد الإلكتروني غير صالح.';
+                    errorMsg = 'The email is invalid.';
                 }
                 showError(signInError, errorMsg);
-                showLoading(false, signInSpinner);
+                showLoading(false, signInSpinner); // Ensure spinner hides on failure
             }
         });
 
@@ -628,16 +631,20 @@
             provider.addScope('email');
             provider.addScope('profile');
             try {
+                showLoading(true, signUpSpinner);
+                signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on success
             } catch (error) {
-                let errorMsg = 'حدث خطأ أثناء التسجيل باستخدام Google.';
+                let errorMsg = 'An error occurred during Google sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
+                    errorMsg = 'The sign-up window was closed. Please try again.';
                 } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
             }
         });
 
@@ -648,16 +655,114 @@
             provider.addScope('email');
             provider.addScope('profile');
             try {
+                showLoading(true, signInSpinner);
+                signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
+                showLoading(false, signInSpinner); // Ensure spinner hides on success
             } catch (error) {
-                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Google.';
+                let errorMsg = 'An error occurred during Google sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
+                    errorMsg = 'The sign-in window was closed. Please try again.';
                 } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
+                showLoading(false, signInSpinner); // Ensure spinner hides on failure
+            }
+        });
+
+        // Sign Up with Facebook
+        signUpWithFacebook.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new FacebookAuthProvider();
+            provider.addScope('email');
+            try {
+                showLoading(true, signUpSpinner);
+                signUpError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on success
+            } catch (error) {
+                let errorMsg = 'An error occurred during Facebook sign up.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-up window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signUpError, errorMsg);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
+            }
+        });
+
+        // Sign In with Facebook
+        signInWithFacebook.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new FacebookAuthProvider();
+            provider.addScope('email');
+            try {
+                showLoading(true, signInSpinner);
+                signInError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signInSpinner); // Ensure spinner hides on success
+            } catch (error) {
+                let errorMsg = 'An error occurred during Facebook sign in.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-in window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signInError, errorMsg);
+                showLoading(false, signInSpinner); // Ensure spinner hides on failure
+            }
+        });
+
+        // Sign Up with LinkedIn
+        signUpWithLinkedIn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new OAuthProvider('linkedin.com');
+            provider.addScope('r_emailaddress');
+            provider.addScope('r_liteprofile');
+            try {
+                showLoading(true, signUpSpinner);
+                signUpError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on success
+            } catch (error) {
+                let errorMsg = 'An error occurred during LinkedIn sign up.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-up window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signUpError, errorMsg);
+                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
+            }
+        });
+
+        // Sign In with LinkedIn
+        signInWithLinkedIn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new OAuthProvider('linkedin.com');
+            provider.addScope('r_emailaddress');
+            provider.addScope('r_liteprofile');
+            try {
+                showLoading(true, signInSpinner);
+                signInError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signInSpinner); // Ensure spinner hides on success
+            } catch (error) {
+                let errorMsg = 'An error occurred during LinkedIn sign in.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-in window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signInError, errorMsg);
+                showLoading(false, signInSpinner); // Ensure spinner hides on failure
             }
         });
 
@@ -684,17 +789,17 @@
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                showSuccess(resetSuccessMessage, 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.');
-                showLoading(false, resetSpinner);
+                showSuccess(resetSuccessMessage, 'A password reset link has been sent to your email.');
+                showLoading(false, resetSpinner); // Ensure spinner hides on success
             } catch (error) {
-                let errorMsg = 'حدث خطأ أثناء إرسال رابط إعادة التعيين.';
+                let errorMsg = 'An error occurred while sending the reset link.';
                 if (error.code === 'auth/invalid-email') {
-                    errorMsg = 'البريد الإلكتروني غير صالح.';
+                    errorMsg = 'The email is invalid.';
                 } else if (error.code === 'auth/user-not-found') {
-                    errorMsg = 'لا يوجد حساب مرتبط بهذا البريد الإلكتروني.';
+                    errorMsg = 'No account is associated with this email.';
                 }
                 showError(resetErrorMessage, errorMsg);
-                showLoading(false, resetSpinner);
+                showLoading(false, resetSpinner); // Ensure spinner hides on failure
             }
         });
 
