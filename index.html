@@ -8,7 +8,7 @@
     <title>Login - ChatGPT Inspired</title>
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://via.placeholder.com/32">
+    <link rel="icon" type="image/png" href="https://placehold.co/32x32">
 
     <!-- Tailwind CSS CDN (for rapid styling) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -68,6 +68,18 @@
             width: 100%;
             max-width: 400px;
             animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 600px;
+            animation: fadeIn 0.5s ease-in-out;
+            display: none; /* Hidden by default */
         }
 
         /* Fade-in animation */
@@ -192,6 +204,11 @@
                 padding: 1.5rem;
             }
 
+            .dashboard-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
             .modal-content {
                 margin: 1rem;
             }
@@ -200,10 +217,10 @@
 </head>
 <body>
     <!-- Login Container -->
-    <div class="login-container">
+    <div class="login-container" id="loginPage">
         <!-- Logo (Placeholder) -->
         <div class="flex justify-center mb-6">
-            <img src="https://via.placeholder.com/40" alt="Logo" class="h-10">
+            <img src="https://placehold.co/40x40" alt="Logo" class="h-10">
         </div>
 
         <!-- Title -->
@@ -261,14 +278,24 @@
 
         <!-- Login Link -->
         <p class="text-center text-sm text-gray-600 mt-6">
-            Already have an account? <a href="/login" class="text-green-600 hover:underline">Log in</a>
+            Already have an account? <a href="#" id="switchToLogin" class="text-green-600 hover:underline">Log in</a>
         </p>
+    </div>
+
+    <!-- Dashboard Page (Temporary for Testing) -->
+    <div class="dashboard-container" id="dashboardPage">
+        <div class="flex justify-center mb-6">
+            <img src="https://placehold.co/40x40" alt="Logo" class="h-10">
+        </div>
+        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">مرحباً بك في لوحة التحكم</h2>
+        <p class="text-center text-gray-600 mb-6">لقد قمت بتسجيل الدخول بنجاح!</p>
+        <button id="logoutBtn" class="btn btn-primary">تسجيل الخروج</button>
     </div>
 
     <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
-            <span class="close-btn" id="closeModal">&times;</span>
+            <span class="close-btn" id="closeModal">×</span>
             <h3 class="text-xl font-semibold text-gray-800 mb-4">إعادة تعيين كلمة المرور</h3>
             <form id="resetPasswordForm" class="space-y-4">
                 <div>
@@ -305,6 +332,12 @@
         const resetPasswordBtn = document.getElementById('resetPasswordBtn');
         const resetSpinner = document.getElementById('resetSpinner');
 
+        // Page Elements
+        const loginPage = document.getElementById('loginPage');
+        const dashboardPage = document.getElementById('dashboardPage');
+        const switchToLogin = document.getElementById('switchToLogin');
+        const logoutBtn = document.getElementById('logoutBtn');
+
         // Show error message
         function showError(element, message) {
             element.textContent = message;
@@ -330,6 +363,12 @@
             }
         }
 
+        // Show specific page
+        function showPage(pageToShow, pageToHide) {
+            pageToHide.style.display = 'none';
+            pageToShow.style.display = 'block';
+        }
+
         // Email/Password Login
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -341,8 +380,8 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                // Redirect to dashboard or homepage
-                window.location.href = '/dashboard';
+                // Show dashboard page instead of redirecting
+                showPage(dashboardPage, loginPage);
             } catch (error) {
                 let errorMsg = 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.';
                 if (error.code === 'auth/wrong-password') {
@@ -364,13 +403,16 @@
             provider.addScope('profile');
             try {
                 await signInWithPopup(auth, provider);
-                window.location.href = '/dashboard';
+                // Show dashboard page instead of redirecting
+                showPage(dashboardPage, loginPage);
             } catch (error) {
                 let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Google.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
                 } else if (error.code === 'auth/operation-not-allowed') {
                     errorMsg = 'تسجيل الدخول باستخدام Google غير مفعل في إعدادات Firebase.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
                 }
                 showError(errorMessage, errorMsg);
             }
@@ -383,13 +425,16 @@
             provider.addScope('name');
             try {
                 await signInWithPopup(auth, provider);
-                window.location.href = '/dashboard';
+                // Show dashboard page instead of redirecting
+                showPage(dashboardPage, loginPage);
             } catch (error) {
                 let errorMsg = 'حدث خطأ أثناء تسجيل الدخول باستخدام Apple.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'تم إغلاق نافذة تسجيل الدخول. حاول مرة أخرى.';
                 } else if (error.code === 'auth/operation-not-allowed') {
                     errorMsg = 'تسجيل الدخول باستخدام Apple غير مفعل في إعدادات Firebase.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'النطاق غير مسموح به. أضف النطاق في إعدادات Firebase.';
                 }
                 showError(errorMessage, errorMsg);
             }
@@ -446,6 +491,24 @@
                 resetErrorMessage.style.display = 'none';
                 resetSuccessMessage.style.display = 'none';
                 resetEmail.value = '';
+            }
+        });
+
+        // Switch to Login Page (already on login page, so just refresh for now)
+        switchToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Since this is already the login page, we can just reload or do nothing
+            // In a real app, this would navigate to a separate login page
+            window.location.reload();
+        });
+
+        // Logout Functionality
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await auth.signOut();
+                showPage(loginPage, dashboardPage);
+            } catch (error) {
+                console.error('Error signing out:', error);
             }
         });
     </script>
