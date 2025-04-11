@@ -356,7 +356,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0,0,0,0.5);
             justify-content: center;
             align-items: center;
             z-index: 1000;
@@ -420,7 +420,6 @@
     </style>
 </head>
 <body>
-    <!-- Removed: <h2>Weekly Coding Challenge #1: Sign in/up Form</h2> -->
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form id="signUpForm">
@@ -428,7 +427,9 @@
                 <div class="social-container">
                     <a href="#" class="social" id="signUpWithGoogle"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social" id="signUpWithFacebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social" id="signUpWithLinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <!-- Replaced LinkedIn with Apple -->
+                    <a href="#" class="social" id="signUpWithApple"><i class="fab fa-apple"></i></a>
+                    <!-- <a href="#" class="social" id="signUpWithLinkedIn"><i class="fab fa-linkedin-in"></i></a> -->
                 </div>
                 <span>or use your email for registration</span>
                 <input type="text" id="signUpName" placeholder="Name" required />
@@ -445,7 +446,9 @@
                 <div class="social-container">
                     <a href="#" class="social" id="signInWithGoogle"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social" id="signInWithFacebook"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="social" id="signInWithLinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                    <!-- Replaced LinkedIn with Apple -->
+                    <a href="#" class="social" id="signInWithApple"><i class="fab fa-apple"></i></a>
+                    <!-- <a href="#" class="social" id="signInWithLinkedIn"><i class="fab fa-linkedin-in"></i></a> -->
                 </div>
                 <span>or use your account</span>
                 <input type="email" id="signInEmail" placeholder="Email" required />
@@ -498,7 +501,6 @@
 
     <footer>
         <p>
-            <!-- Removed: Created with <i class="fa fa-heart"></i> by <a target="_blank" href="https://florin-pop.com">Florin Pop</a> - Read how I created this and how you can join the challenge <a target="_blank" href="https://www.florin-pop.com/blog/2019/03/double-slider-sign-in-up-form/">here</a>. -->
         </p>
     </footer>
 
@@ -523,8 +525,12 @@
         const signInWithGoogle = document.getElementById('signInWithGoogle');
         const signUpWithFacebook = document.getElementById('signUpWithFacebook');
         const signInWithFacebook = document.getElementById('signInWithFacebook');
-        const signUpWithLinkedIn = document.getElementById('signUpWithLinkedIn');
-        const signInWithLinkedIn = document.getElementById('signInWithLinkedIn');
+        // Commented out LinkedIn elements
+        // const signUpWithLinkedIn = document.getElementById('signUpWithLinkedIn');
+        // const signInWithLinkedIn = document.getElementById('signInWithLinkedIn');
+        // Added Apple elements
+        const signUpWithApple = document.getElementById('signUpWithApple');
+        const signInWithApple = document.getElementById('signInWithApple');
         const dashboardPage = document.getElementById('dashboardPage');
         const logoutBtn = document.getElementById('logoutBtn');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
@@ -582,7 +588,7 @@
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
                 showPage(dashboardPage, container);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on success
+                showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during sign up. Please try again.';
                 if (error.code === 'auth/email-already-in-use') {
@@ -593,7 +599,7 @@
                     errorMsg = 'The password is too weak. It must be at least 6 characters.';
                 }
                 showError(signUpError, errorMsg);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
+                showLoading(false, signUpSpinner);
             }
         });
 
@@ -609,7 +615,7 @@
             try {
                 await signInWithEmailAndPassword(auth, email, password);
                 showPage(dashboardPage, container);
-                showLoading(false, signInSpinner); // Ensure spinner hides on success
+                showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during sign in. Please try again.';
                 if (error.code === 'auth/wrong-password') {
@@ -620,7 +626,7 @@
                     errorMsg = 'The email is invalid.';
                 }
                 showError(signInError, errorMsg);
-                showLoading(false, signInSpinner); // Ensure spinner hides on failure
+                showLoadingI(false, signInSpinner);
             }
         });
 
@@ -635,7 +641,7 @@
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on success
+                showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Google sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -644,7 +650,7 @@
                     errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
+                showLoading(false, signUpSpinner);
             }
         });
 
@@ -659,7 +665,7 @@
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
-                showLoading(false, signInSpinner); // Ensure spinner hides on success
+                showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Google sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -668,7 +674,7 @@
                     errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
-                showLoading(false, signInSpinner); // Ensure spinner hides on failure
+                showLoading(false, signInSpinner);
             }
         });
 
@@ -682,7 +688,7 @@
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on success
+                showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Facebook sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -691,7 +697,7 @@
                     errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
+                showLoading(false, signUpSpinner);
             }
         });
 
@@ -705,7 +711,7 @@
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
-                showLoading(false, signInSpinner); // Ensure spinner hides on success
+                showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Facebook sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -714,11 +720,12 @@
                     errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
-                showLoading(false, signInSpinner); // Ensure spinner hides on failure
+                showLoading(false, signInSpinner);
             }
         });
 
-        // Sign Up with LinkedIn
+        // Commented out LinkedIn Sign Up
+        /*
         signUpWithLinkedIn.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new OAuthProvider('linkedin.com');
@@ -729,7 +736,7 @@
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on success
+                showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during LinkedIn sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -738,11 +745,13 @@
                     errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
-                showLoading(false, signUpSpinner); // Ensure spinner hides on failure
+                showLoading(false, signUpSpinner);
             }
         });
+        */
 
-        // Sign In with LinkedIn
+        // Commented out LinkedIn Sign In
+        /*
         signInWithLinkedIn.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new OAuthProvider('linkedin.com');
@@ -753,7 +762,7 @@
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
                 showPage(dashboardPage, container);
-                showLoading(false, signInSpinner); // Ensure spinner hides on success
+                showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during LinkedIn sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
@@ -762,7 +771,56 @@
                     errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
-                showLoading(false, signInSpinner); // Ensure spinner hides on failure
+                showLoading(false, signInSpinner);
+            }
+        });
+        */
+
+        // Sign Up with Apple
+        signUpWithApple.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new OAuthProvider('apple.com');
+            provider.addScope('email');
+            provider.addScope('name');
+            try {
+                showLoading(true, signUpSpinner);
+                signUpError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signUpSpinner);
+            } catch (error) {
+                let errorMsg = 'An error occurred during Apple sign up.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-up window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signUpError, errorMsg);
+                showLoading(false, signUpSpinner);
+            }
+        });
+
+        // Sign In with Apple
+        signInWithApple.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new OAuthProvider('apple.com');
+            provider.addScope('email');
+            provider.addScope('name');
+            try {
+                showLoading(true, signInSpinner);
+                signInError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signInSpinner);
+            } catch (error) {
+                let errorMsg = 'An error occurred during Apple sign in.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-in window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signInError, errorMsg);
+                showLoading(false, signInSpinner);
             }
         });
 
@@ -790,7 +848,7 @@
             try {
                 await sendPasswordResetEmail(auth, email);
                 showSuccess(resetSuccessMessage, 'A password reset link has been sent to your email.');
-                showLoading(false, resetSpinner); // Ensure spinner hides on success
+                showLoading(false, resetSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred while sending the reset link.';
                 if (error.code === 'auth/invalid-email') {
@@ -799,7 +857,7 @@
                     errorMsg = 'No account is associated with this email.';
                 }
                 showError(resetErrorMessage, errorMsg);
-                showLoading(false, resetSpinner); // Ensure spinner hides on failure
+                showLoading(false, resetSpinner);
             }
         });
 
