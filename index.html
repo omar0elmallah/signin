@@ -427,8 +427,11 @@
                 <div class="social-container">
                     <a href="#" class="social" id="signUpWithGoogle"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social" id="signUpWithFacebook"><i class="fab fa-facebook-f"></i></a>
-                    <!-- Replaced LinkedIn with Apple -->
-                    <a href="#" class="social" id="signUpWithApple"><i class="fab fa-apple"></i></a>
+                    <!-- Replaced Apple with Microsoft -->
+                    <a href="#" class="social" id="signUpWithMicrosoft"><i class="fab fa-microsoft"></i></a>
+                    <!-- Commented out Apple -->
+                    <!-- <a href="#" class="social" id="signUpWithApple"><i class="fab fa-apple"></i></a> -->
+                    <!-- Commented out LinkedIn -->
                     <!-- <a href="#" class="social" id="signUpWithLinkedIn"><i class="fab fa-linkedin-in"></i></a> -->
                 </div>
                 <span>or use your email for registration</span>
@@ -446,8 +449,11 @@
                 <div class="social-container">
                     <a href="#" class="social" id="signInWithGoogle"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social" id="signInWithFacebook"><i class="fab fa-facebook-f"></i></a>
-                    <!-- Replaced LinkedIn with Apple -->
-                    <a href="#" class="social" id="signInWithApple"><i class="fab fa-apple"></i></a>
+                    <!-- Replaced Apple with Microsoft -->
+                    <a href="#" class="social" id="signInWithMicrosoft"><i class="fab fa-microsoft"></i></a>
+                    <!-- Commented out Apple -->
+                    <!-- <a href="#" class="social" id="signInWithApple"><i class="fab fa-apple"></i></a> -->
+                    <!-- Commented out LinkedIn -->
                     <!-- <a href="#" class="social" id="signInWithLinkedIn"><i class="fab fa-linkedin-in"></i></a> -->
                 </div>
                 <span>or use your account</span>
@@ -528,9 +534,12 @@
         // Commented out LinkedIn elements
         // const signUpWithLinkedIn = document.getElementById('signUpWithLinkedIn');
         // const signInWithLinkedIn = document.getElementById('signInWithLinkedIn');
-        // Added Apple elements
-        const signUpWithApple = document.getElementById('signUpWithApple');
-        const signInWithApple = document.getElementById('signInWithApple');
+        // Commented out Apple elements
+        // const signUpWithApple = document.getElementById('signUpWithApple');
+        // const signInWithApple = document.getElementById('signInWithApple');
+        // Added Microsoft elements
+        const signUpWithMicrosoft = document.getElementById('signUpWithMicrosoft');
+        const signInWithMicrosoft = document.getElementById('signInWithMicrosoft');
         const dashboardPage = document.getElementById('dashboardPage');
         const logoutBtn = document.getElementById('logoutBtn');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
@@ -626,7 +635,7 @@
                     errorMsg = 'The email is invalid.';
                 }
                 showError(signInError, errorMsg);
-                showLoadingI(false, signInSpinner);
+                showLoading(false, signInSpinner);
             }
         });
 
@@ -776,7 +785,8 @@
         });
         */
 
-        // Sign Up with Apple
+        // Commented out Apple Sign Up
+        /*
         signUpWithApple.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new OAuthProvider('apple.com');
@@ -799,8 +809,10 @@
                 showLoading(false, signUpSpinner);
             }
         });
+        */
 
-        // Sign In with Apple
+        // Commented out Apple Sign In
+        /*
         signInWithApple.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new OAuthProvider('apple.com');
@@ -814,6 +826,55 @@
                 showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Apple sign in.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-in window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signInError, errorMsg);
+                showLoading(false, signInSpinner);
+            }
+        });
+        */
+
+        // Sign Up with Microsoft
+        signUpWithMicrosoft.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new OAuthProvider('microsoft.com');
+            provider.addScope('email');
+            provider.addScope('profile');
+            try {
+                showLoading(true, signUpSpinner);
+                signUpError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signUpSpinner);
+            } catch (error) {
+                let errorMsg = 'An error occurred during Microsoft sign up.';
+                if (error.code === 'auth/popup-closed-by-user') {
+                    errorMsg = 'The sign-up window was closed. Please try again.';
+                } else if (error.code === 'auth/unauthorized-domain') {
+                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
+                }
+                showError(signUpError, errorMsg);
+                showLoading(false, signUpSpinner);
+            }
+        });
+
+        // Sign In with Microsoft
+        signInWithMicrosoft.addEventListener('click', async (e) => {
+            e.preventDefault();
+            const provider = new OAuthProvider('microsoft.com');
+            provider.addScope('email');
+            provider.addScope('profile');
+            try {
+                showLoading(true, signInSpinner);
+                signInError.style.display = 'none';
+                await signInWithPopup(auth, provider);
+                showPage(dashboardPage, container);
+                showLoading(false, signInSpinner);
+            } catch (error) {
+                let errorMsg = 'An error occurred during Microsoft sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-in window was closed. Please try again.';
                 } else if (error.code === 'auth/unauthorized-domain') {
