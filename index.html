@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A modern e-commerce website for selling accessories like watches, bracelets, rings, and medals.">
+    <meta name="description" content="E-commerce store for accessories with Firebase authentication.">
     <meta name="author" content="Your Name">
-    <title>Accessories Store - Inspired by Amazon</title>
+    <title>Accessories Store - Sign In/Up</title>
 
-    <!-- Font Awesome for Social Icons -->
+    <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <!-- Google Fonts -->
@@ -15,12 +15,10 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        // Your web app's Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyBfXJ-2tmCYo-pQjfN_4nAdxC-NcqfjAlo",
             authDomain: "tamec-8f9ea.firebaseapp.com",
@@ -31,12 +29,10 @@
             measurementId: "G-W7TT6VTKSP"
         };
 
-        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
 
-        // Expose auth and functions to global scope
         window.auth = auth;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
         window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
@@ -57,15 +53,14 @@
 
         body {
             background: #f6f5f7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
             font-family: 'Montserrat', sans-serif;
             margin: 0;
-            padding-top: 70px; /* Space for the fixed navbar */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
 
+        /* Existing Login Styles (Unchanged) */
         h1 {
             font-weight: bold;
             margin: 0;
@@ -183,15 +178,8 @@
         }
 
         @keyframes show {
-            0%, 49.99% {
-                opacity: 0;
-                z-index: 1;
-            }
-            
-            50%, 100% {
-                opacity: 1;
-                z-index: 5;
-            }
+            0%, 49.99% { opacity: 0; z-index: 1; }
+            50%, 100% { opacity: 1; z-index: 5; }
         }
 
         .overlay-container {
@@ -211,7 +199,6 @@
 
         .overlay {
             background: #FF416C;
-            background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
             background: linear-gradient(to right, #FF4B2B, #FF416C);
             background-repeat: no-repeat;
             background-size: cover;
@@ -301,7 +288,6 @@
             text-decoration: none;
         }
 
-        /* Dashboard Container */
         .dashboard-container {
             background-color: #fff;
             border-radius: 10px;
@@ -317,7 +303,6 @@
             padding: 2rem;
         }
 
-        /* Error and Success Messages */
         .error-message {
             color: #FF4B2B;
             font-size: 12px;
@@ -332,7 +317,6 @@
             display: none;
         }
 
-        /* Loading Spinner */
         .spinner {
             border: 2px solid #f3f3f3;
             border-top: 2px solid #FF4B2B;
@@ -349,7 +333,6 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Modal for Forgot Password */
         .modal {
             display: none;
             position: fixed;
@@ -387,234 +370,298 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Amazon-like Navbar */
+        /* New E-commerce Styles */
         .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
             background-color: #131921;
             color: white;
-            height: 60px;
+            padding: 10px 20px;
             display: flex;
             align-items: center;
-            padding: 0 20px;
-            z-index: 1000;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .navbar-logo {
-            font-size: 24px;
-            font-weight: bold;
-            margin-right: 20px;
-        }
-
-        .navbar-logo a {
-            color: white;
-            text-decoration: none;
+        .navbar-logo img {
+            height: 40px;
         }
 
         .navbar-search {
             flex: 1;
+            margin: 0 20px;
             display: flex;
             align-items: center;
+            max-width: 600px;
+        }
+
+        .navbar-search select,
+        .navbar-search input {
+            padding: 10px;
+            border: none;
+            font-size: 14px;
+        }
+
+        .navbar-search select {
+            border-radius: 4px 0 0 4px;
+            background: #f3f3f3;
+            color: #111;
         }
 
         .navbar-search input {
-            width: 100%;
-            padding: 8px;
-            border: none;
-            border-radius: 4px 0 0 4px;
-            background-color: white;
+            flex: 1;
+            border-radius: 0;
+            background: white;
         }
 
         .navbar-search button {
-            background-color: #febd69;
+            background: #f0c14b;
+            color: #111;
             border: none;
-            padding: 8px;
+            padding: 10px 15px;
             border-radius: 0 4px 4px 0;
             cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .navbar-search button i {
-            color: #131921;
-        }
-
-        .navbar-links {
-            display: flex;
-            align-items: center;
-            margin-left: 20px;
+        .navbar-search button:hover {
+            background: #e0b03b;
         }
 
         .navbar-links a {
             color: white;
             margin: 0 15px;
             font-size: 14px;
-        }
-
-        .navbar-links .cart {
             position: relative;
         }
 
-        .navbar-links .cart .cart-count {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            background-color: #febd69;
-            color: #131921;
+        .navbar-links a:hover {
+            text-decoration: underline;
+        }
+
+        .navbar-cart {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .navbar-cart i {
+            font-size: 24px;
+            margin-right: 5px;
+        }
+
+        .navbar-cart span {
+            background: #f0c14b;
+            color: #111;
             border-radius: 50%;
-            padding: 2px 6px;
+            padding: 2px 8px;
             font-size: 12px;
         }
 
-        /* Home Page Categories */
-        .home-container {
-            width: 100%;
-            max-width: 1200px;
+        .main-content {
+            flex: 1;
             padding: 20px;
-            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+            background: #fff;
         }
 
         .categories {
-            display: flex;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
-            justify-content: center;
+            margin-bottom: 40px;
         }
 
         .category-card {
-            background-color: white;
+            background: white;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 200px;
             text-align: center;
-            padding: 20px;
+            padding: 15px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .category-card:hover {
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .category-card img {
             width: 100%;
-            height: 150px;
+            height: 180px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
 
-        .category-card h3 {
-            margin: 10px 0;
-            font-size: 18px;
-        }
-
-        /* Products Page */
-        .products-container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            display: none;
-        }
-
-        .products-grid {
-            display: flex;
-            flex-wrap: wrap;
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
             gap: 20px;
-            justify-content: center;
         }
 
         .product-card {
-            background-color: white;
+            background: white;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 200px;
+            padding: 15px;
             text-align: center;
-            padding: 20px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         .product-card:hover {
-            transform: scale(1.05);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
         .product-card img {
             width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 10px;
         }
 
         .product-card h3 {
-            margin: 10px 0;
             font-size: 16px;
+            margin: 10px 0;
+            color: #0F1111;
         }
 
         .product-card p {
-            color: #FF4B2B;
+            color: #B12704;
             font-weight: bold;
-            margin: 5px 0;
+            font-size: 18px;
         }
 
-        /* Product Details Page */
-        .product-details-container {
-            width: 100%;
-            max-width: 1200px;
-            padding: 20px;
-            display: none;
-            background-color: white;
+        .product-detail {
+            background: white;
+            border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .product-details {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
             display: flex;
-            gap: 20px;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .product-detail img {
+            width: 350px;
+            height: 350px;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+
+        .product-detail-info {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .product-detail-info h2 {
+            margin-top: 0;
+            font-size: 24px;
+            color: #0F1111;
+        }
+
+        .product-detail-info .price {
+            color: #B12704;
+            font-size: 28px;
+            margin: 10px 0;
+        }
+
+        .product-detail-info .add-to-cart {
+            background: #f0c14b;
+            color: #111;
+            border: 1px solid #a88734;
+            padding: 12px 30px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .product-detail-info .add-to-cart:hover {
+            background: #e0b03b;
+        }
+
+        .product-detail-info .add-to-cart:disabled {
+            background: #ccc;
+            border: none;
+            cursor: not-allowed;
+        }
+
+        .guest-message {
+            color: #B12704;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .cart-modal-content {
+            background: white;
             padding: 20px;
-        }
-
-        .product-details img {
-            width: 300px;
-            height: 300px;
-            object-fit: cover;
             border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
         }
 
-        .product-info {
+        .cart-item {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+
+        .cart-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin-right: 10px;
+        }
+
+        .cart-item-info {
             flex: 1;
         }
 
-        .product-info h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-
-        .product-info p.price {
-            color: #FF4B2B;
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
-
-        .product-info p.description {
-            margin-bottom: 20px;
-        }
-
-        .product-info .guest-message {
-            color: #FF4B2B;
+        .cart-item-info h4 {
+            margin: 0;
             font-size: 14px;
-            margin-top: 10px;
-            display: none;
         }
 
-        /* Guest Mode Restrictions */
-        .guest-hidden {
-            display: none;
+        .cart-item-info p {
+            margin: 5px 0;
+            color: #B12704;
         }
 
-        /* Responsive adjustments */
+        .cart-item button {
+            background: #FF4B2B;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Responsive Adjustments */
         @media (max-width: 768px) {
-            .container {
+            .container, .dashboard-container {
                 width: 100%;
                 min-height: 600px;
             }
@@ -638,15 +685,14 @@
                 opacity: 1;
             }
 
-            .dashboard-container {
-                width: 100%;
-                min-height: 600px;
-            }
-
             .navbar {
                 flex-direction: column;
-                height: auto;
+                align-items: flex-start;
                 padding: 10px;
+            }
+
+            .navbar-logo img {
+                height: 30px;
             }
 
             .navbar-search {
@@ -655,77 +701,65 @@
             }
 
             .navbar-links {
+                display: flex;
+                flex-direction: column;
                 width: 100%;
-                justify-content: space-around;
+                margin-top: 10px;
             }
 
-            .product-details {
+            .navbar-links a {
+                margin: 5px 0;
+            }
+
+            .navbar-cart {
+                margin-top: 10px;
+            }
+
+            .product-detail {
                 flex-direction: column;
                 align-items: center;
             }
 
-            .product-details img {
+            .product-detail img {
                 width: 100%;
+                max-width: 300px;
                 height: auto;
+            }
+
+            .categories, .products {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .category-card img, .product-card img {
+                height: 150px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar-search select,
+            .navbar-search input,
+            .navbar-search button {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .product-detail-info h2 {
+                font-size: 20px;
+            }
+
+            .product-detail-info .price {
+                font-size: 24px;
+            }
+
+            .cart-modal-content {
+                width: 90%;
+                padding: 15px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Amazon-like Navbar -->
-    <div class="navbar">
-        <div class="navbar-logo">
-            <a href="#" id="homeLink">Accessories Store</a>
-        </div>
-        <div class="navbar-search">
-            <input type="text" placeholder="Search for accessories..." id="searchInput">
-            <button><i class="fas fa-search"></i></button>
-        </div>
-        <div class="navbar-links">
-            <a href="#" id="authLink">Hello, Guest</a>
-            <a href="#" class="cart" id="cartLink"><i class="fas fa-shopping-cart"></i> <span class="cart-count" id="cartCount">0</span></a>
-        </div>
-    </div>
-
-    <!-- Home Page -->
-    <div class="home-container" id="homePage">
-        <h2>Shop by Category</h2>
-        <div class="categories">
-            <div class="category-card" data-category="watches">
-                <img src="https://images.unsplash.com/photo-1523275339254-cc7c4e63b76e" alt="Watches">
-                <h3>Watches</h3>
-            </div>
-            <div class="category-card" data-category="bracelets">
-                <img src="https://images.unsplash.com/photo-1608049356913-593d5b1f7c02" alt="Bracelets">
-                <h3>Bracelets</h3>
-            </div>
-            <div class="category-card" data-category="rings">
-                <img src="https://images.unsplash.com/photo-1608049474458-5f3d5e897f4d" alt="Rings">
-                <h3>Rings</h3>
-            </div>
-            <div class="category-card" data-category="medals">
-                <img src="https://images.unsplash.com/photo-1627826488069-2d90c0b0d0f3" alt="Medals">
-                <h3>Medals</h3>
-            </div>
-        </div>
-    </div>
-
-    <!-- Products Page -->
-    <div class="products-container" id="productsPage">
-        <h2 id="categoryTitle">Category</h2>
-        <div class="products-grid" id="productsGrid">
-            <!-- Products will be dynamically added here -->
-        </div>
-    </div>
-
-    <!-- Product Details Page -->
-    <div class="product-details-container" id="productDetailsPage">
-        <div class="product-details" id="productDetails">
-            <!-- Product details will be dynamically added here -->
-        </div>
-    </div>
-
-    <!-- Login/Signup Container (Previous Code) -->
+    <!-- Login Container -->
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form id="signUpForm">
@@ -742,6 +776,7 @@
                 <div id="signUpError" class="error-message"></div>
                 <div id="signUpSpinner" class="spinner"></div>
                 <button type="submit">Sign Up</button>
+                <button type="button" id="guestSignUpBtn" style="margin-top: 10px; background: #666;">Continue as Guest</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
@@ -759,6 +794,7 @@
                 <div id="signInError" class="error-message"></div>
                 <div id="signInSpinner" class="spinner"></div>
                 <button type="submit">Sign In</button>
+                <button type="button" id="guestSignInBtn" style="margin-top: 10px; background: #666;">Continue as Guest</button>
             </form>
         </div>
         <div class="overlay-container">
@@ -778,10 +814,11 @@
     </div>
 
     <!-- Dashboard Page -->
-    <div class="dashboard-container" id="dashboardPage">
+    <div class="dashboard-container" id="dashboardPage" style="display: none;">
         <h1>Welcome to Your Dashboard</h1>
         <p>You have successfully signed in!</p>
         <button id="logoutBtn">Sign Out</button>
+        <button id="backToStoreBtn">Go to Store</button>
     </div>
 
     <!-- Forgot Password Modal -->
@@ -801,14 +838,61 @@
         </div>
     </div>
 
+    <!-- Store Content -->
+    <div id="storeContent" style="display: none;">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="navbar-logo">
+                <img src="https://placehold.co/120x40?text=Accessories" alt="Store Logo">
+            </div>
+            <div class="navbar-search">
+                <select id="searchCategory">
+                    <option>All Categories</option>
+                    <option>Watches</option>
+                    <option>Bracelets</option>
+                    <option>Rings</option>
+                    <option>Pendants</option>
+                </select>
+                <input type="text" id="searchInput" placeholder="Search Accessories...">
+                <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="navbar-links">
+                <a href="#" id="accountLink">Account</a>
+                <a href="#" id="ordersLink">Orders</a>
+                <a href="#" id="signOutLink">Sign Out</a>
+            </div>
+            <div class="navbar-cart" id="cartBtn">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <div class="categories" id="categories"></div>
+            <div class="products" id="products" style="display: none;"></div>
+            <div class="product-detail" id="productDetail" style="display: none;"></div>
+        </main>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="cart-modal">
+        <div class="cart-modal-content">
+            <span class="close-btn" id="closeCartModal">×</span>
+            <h2>Your Cart</h2>
+            <div id="cartItems"></div>
+            <p id="cartEmpty" style="display: none;">Your cart is empty.</p>
+            <button id="checkoutBtn" style="width: 100%; margin-top: 20px;">Proceed to Checkout</button>
+        </div>
+    </div>
+
     <footer>
-        <p>
-        </p>
+        <p>© 2025 Accessories Store</p>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        // DOM Elements (Previous Code)
+        // DOM Elements
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');
         const container = document.getElementById('container');
@@ -840,164 +924,226 @@
         const resetSuccessMessage = document.getElementById('resetSuccessMessage');
         const resetPasswordBtn = document.getElementById('resetPasswordBtn');
         const resetSpinner = document.getElementById('resetSpinner');
-
-        // New DOM Elements for E-commerce
-        const homePage = document.getElementById('homePage');
-        const productsPage = document.getElementById('productsPage');
-        const productDetailsPage = document.getElementById('productDetailsPage');
-        const categoryTitle = document.getElementById('categoryTitle');
-        const productsGrid = document.getElementById('productsGrid');
-        const productDetails = document.getElementById('productDetails');
-        const homeLink = document.getElementById('homeLink');
-        const authLink = document.getElementById('authLink');
-        const cartLink = document.getElementById('cartLink');
+        const storeContent = document.getElementById('storeContent');
+        const mainContent = document.getElementById('mainContent');
+        const categoriesDiv = document.getElementById('categories');
+        const productsDiv = document.getElementById('products');
+        const productDetailDiv = document.getElementById('productDetail');
+        const accountLink = document.getElementById('accountLink');
+        const ordersLink = document.getElementById('ordersLink');
+        const signOutLink = document.getElementById('signOutLink');
+        const cartBtn = document.getElementById('cartBtn');
+        const cartModal = document.getElementById('cartModal');
+        const closeCartModal = document.getElementById('closeCartModal');
+        const cartItemsDiv = document.getElementById('cartItems');
+        const cartEmpty = document.getElementById('cartEmpty');
+        const checkoutBtn = document.getElementById('checkoutBtn');
         const cartCount = document.getElementById('cartCount');
+        const guestSignInBtn = document.getElementById('guestSignInBtn');
+        const guestSignUpBtn = document.getElementById('guestSignUpBtn');
+        const backToStoreBtn = document.getElementById('backToStoreBtn');
         const searchInput = document.getElementById('searchInput');
+        const searchCategory = document.getElementById('searchCategory');
 
-        // State Management
-        let isLoggedIn = false;
-        let cartItems = 0;
+        // Sample Product Data
+        const products = [
+            { id: 1, name: 'Classic Watch', category: 'Watches', price: 99.99, image: 'https://picsum.photos/300/300?random=1', description: 'Elegant watch with leather strap.', specs: 'Water-resistant, Quartz movement' },
+            { id: 2, name: 'Sports Watch', category: 'Watches', price: 149.99, image: 'https://picsum.photos/300/300?random=2', description: 'Durable watch for active lifestyles.', specs: 'Chronograph, 100m waterproof' },
+            { id: 3, name: 'Gold Bracelet', category: 'Bracelets', price: 59.99, image: 'https://picsum.photos/300/300?random=3', description: 'Shiny gold bracelet for any occasion.', specs: '18k gold-plated' },
+            { id: 4, name: 'Beaded Bracelet', category: 'Bracelets', price: 29.99, image: 'https://picsum.photos/300/300?random=4', description: 'Handcrafted beaded design.', specs: 'Adjustable fit' },
+            { id: 5, name: 'Diamond Ring', category: 'Rings', price: 199.99, image: 'https://picsum.photos/300/300?random=5', description: 'Sparkling diamond ring.', specs: '0.5 carat diamond' },
+            { id: 6, name: 'Silver Ring', category: 'Rings', price: 79.99, image: 'https://picsum.photos/300/300?random=6', description: 'Sleek silver band.', specs: 'Sterling silver' },
+            { id: 7, name: 'Heart Pendant', category: 'Pendants', price: 49.99, image: 'https://picsum.photos/300/300?random=7', description: 'Romantic heart-shaped pendant.', specs: 'Silver chain included' },
+            { id: 8, name: 'Star Pendant', category: 'Pendants', price: 69.99, image: 'https://picsum.photos/300/300?random=8', description: 'Celestial star pendant.', specs: 'Gold chain included' }
+        ];
 
-        // Sample Products Data
-        const products = {
-            watches: [
-                { id: 1, name: "Classic Watch", price: 99.99, image: "https://images.unsplash.com/photo-1523275339254-cc7c4e63b76e", description: "A timeless classic watch with leather strap.", details: "Water-resistant, 2-year warranty, stainless steel case." },
-                { id: 2, name: "Sport Watch", price: 129.99, image: "https://images.unsplash.com/photo-1542496658-e18a7b0d56af", description: "A durable sport watch for active lifestyles.", details: "Shock-resistant, 5 ATM water resistance, silicone strap." }
-            ],
-            bracelets: [
-                { id: 3, name: "Silver Bracelet", price: 49.99, image: "https://images.unsplash.com/photo-1608049356913-593d5b1f7c02", description: "Elegant silver bracelet for any occasion.", details: "925 sterling silver, adjustable size, hypoallergenic." },
-                { id: 4, name: "Beaded Bracelet", price: 29.99, image: "https://images.unsplash.com/photo-1608049474458-5f3d5e897f4d", description: "Handmade beaded bracelet with vibrant colors.", details: "Natural stones, elastic band, lightweight." }
-            ],
-            rings: [
-                { id: 5, name: "Gold Ring", price: 199.99, image: "https://images.unsplash.com/photo-1608049474458-5f3d5e897f4d", description: "A stunning gold ring for special moments.", details: "18K gold, size 7, diamond accent." },
-                { id: 6, name: "Silver Ring", price: 89.99, image: "https://images.unsplash.com/photo-1608049356913-593d5b1f7c02", description: "Simple yet elegant silver ring.", details: "925 sterling silver, size 6, minimalist design." }
-            ],
-            medals: [
-                { id: 7, name: "Gold Medal", price: 59.99, image: "https://images.unsplash.com/photo-1627826488069-2d90c0b0d0f3", description: "A commemorative gold medal for achievements.", details: "Gold-plated, 50mm diameter, ribbon included." },
-                { id: 8, name: "Silver Medal", price: 39.99, image: "https://images.unsplash.com/photo-1627826488069-2d90c0b0d0f3", description: "A silver medal to celebrate success.", details: "Silver-plated, 50mm diameter, ribbon included." }
-            ]
-        };
+        const categories = [
+            { name: 'Watches', image: 'https://picsum.photos/300/300?random=9' },
+            { name: 'Bracelets', image: 'https://picsum.photos/300/300?random=10' },
+            { name: 'Rings', image: 'https://picsum.photos/300/300?random=11' },
+            { name: 'Pendants', image: 'https://picsum.photos/300/300?random=12' }
+        ];
 
-        // Show specific page
-        function showPage(pageToShow, pagesToHide) {
-            pagesToHide.forEach(page => page.style.display = 'none');
-            pageToShow.style.display = 'block';
+        // State
+        let currentUser = null;
+        let isGuest = false;
+        let cart = [];
+
+        // Utility Functions
+        function showPage(show, ...hide) {
+            hide.forEach(el => el.style.display = 'none');
+            show.style.display = show === container || show === storeContent ? 'block' : 'flex';
         }
 
-        // Check Authentication State
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                isLoggedIn = true;
-                authLink.textContent = `Hello, ${user.displayName || user.email}`;
-                cartLink.classList.remove('guest-hidden');
-                document.querySelectorAll('.guest-hidden').forEach(el => el.style.display = 'block');
-                document.querySelectorAll('.guest-message').forEach(el => el.style.display = 'none');
+        function showError(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function showSuccess(element, message) {
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        function showLoading(isLoading, spinner) {
+            spinner.style.display = isLoading ? 'block' : 'none';
+        }
+
+        // Cart Functions
+        function updateCart() {
+            cartCount.textContent = cart.length;
+            if (cart.length === 0) {
+                cartItemsDiv.style.display = 'none';
+                cartEmpty.style.display = 'block';
+                checkoutBtn.style.display = 'none';
             } else {
-                isLoggedIn = false;
-                authLink.textContent = 'Hello, Guest';
-                cartLink.classList.add('guest-hidden');
-                document.querySelectorAll('.guest-hidden').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.guest-message').forEach(el => el.style.display = 'block');
+                cartItemsDiv.style.display = 'block';
+                cartEmpty.style.display = 'none';
+                checkoutBtn.style.display = 'block';
+                cartItemsDiv.innerHTML = cart.map((item, index) => `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <p>$${item.price.toFixed(2)}</p>
+                        </div>
+                        <button onclick="removeFromCart(${index})">Remove</button>
+                    </div>
+                `).join('');
             }
-        });
+        }
 
-        // Navbar Interactions
-        homeLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            showPage(homePage, [productsPage, productDetailsPage, container, dashboardPage, forgotPasswordModal]);
-        });
-
-        authLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            if (isLoggedIn) {
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
-            } else {
-                showPage(container, [homePage, productsPage, productDetailsPage, dashboardPage, forgotPasswordModal]);
+        function addToCart(product) {
+            if (isGuest) {
+                showPage(container, storeContent, dashboardPage);
+                return;
             }
-        });
+            cart.push(product);
+            updateCart();
+        }
 
-        cartLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Cart functionality is not implemented yet.');
-        });
+        window.removeFromCart = function(index) {
+            cart.splice(index, 1);
+            updateCart();
+        };
 
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const query = searchInput.value.toLowerCase();
-                let found = false;
-                for (let category in products) {
-                    const matches = products[category].filter(product => 
-                        product.name.toLowerCase().includes(query) || 
-                        product.description.toLowerCase().includes(query)
-                    );
-                    if (matches.length > 0) {
-                        displayProducts(category, matches);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    alert('No products found.');
-                }
-            }
-        });
+        // Render Functions
+        function renderCategories() {
+            categoriesDiv.style.display = 'grid';
+            productsDiv.style.display = 'none';
+            productDetailDiv.style.display = 'none';
+            categoriesDiv.innerHTML = categories.map(category => `
+                <div class="category-card" data-category="${category.name}">
+                    <img src="${category.image}" alt="${category.name}">
+                    <h3>${category.name}</h3>
+                </div>
+            `).join('');
+        }
 
-        // Category Navigation
-        document.querySelectorAll('.category-card').forEach(card => {
-            card.addEventListener('click', () => {
-                const category = card.getAttribute('data-category');
-                displayProducts(category);
-            });
-        });
-
-        // Display Products
-        function displayProducts(category, productList = products[category]) {
-            categoryTitle.textContent = category.charAt(0).toUpperCase() + category.slice(1);
-            productsGrid.innerHTML = '';
-            productList.forEach(product => {
-                const productCard = document.createElement('div');
-                productCard.classList.add('product-card');
-                productCard.innerHTML = `
+        function renderProducts(category) {
+            categoriesDiv.style.display = 'none';
+            productsDiv.style.display = 'grid';
+            productDetailDiv.style.display = 'none';
+            const filteredProducts = category === 'All Categories' 
+                ? products 
+                : products.filter(p => p.category === category);
+            productsDiv.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" data-id="${product.id}">
                     <img src="${product.image}" alt="${product.name}">
                     <h3>${product.name}</h3>
                     <p>$${product.price.toFixed(2)}</p>
-                `;
-                productCard.addEventListener('click', () => {
-                    displayProductDetails(product);
-                });
-                productsGrid.appendChild(productCard);
-            });
-            showPage(productsPage, [homePage, productDetailsPage, container, dashboardPage, forgotPasswordModal]);
+                </div>
+            `).join('');
         }
 
-        // Display Product Details
-        function displayProductDetails(product) {
-            productDetails.innerHTML = `
+        function renderProductDetail(id) {
+            categoriesDiv.style.display = 'none';
+            productsDiv.style.display = 'none';
+            productDetailDiv.style.display = 'flex';
+            const product = products.find(p => p.id === id);
+            productDetailDiv.innerHTML = `
                 <img src="${product.image}" alt="${product.name}">
-                <div class="product-info">
+                <div class="product-detail-info">
                     <h2>${product.name}</h2>
                     <p class="price">$${product.price.toFixed(2)}</p>
-                    <p class="description">${product.description}</p>
-                    <p class="details guest-hidden">${product.details}</p>
-                    <button class="guest-hidden" onclick="addToCart(${product.id})">Add to Cart</button>
-                    <p class="guest-message">Please sign in to add to cart and view more details.</p>
+                    <p>${product.description}</p>
+                    ${isGuest ? '' : `<p><strong>Specifications:</strong> ${product.specs}</p>`}
+                    <button class="add-to-cart" ${isGuest ? 'disabled' : ''} data-id="${product.id}">Add to Cart</button>
+                    ${isGuest ? '<p class="guest-message">Please sign in to purchase or view detailed specs.</p>' : ''}
                 </div>
             `;
-            showPage(productDetailsPage, [homePage, productsPage, container, dashboardPage, forgotPasswordModal]);
         }
 
-        // Add to Cart
-        window.addToCart = function(productId) {
-            cartItems++;
-            cartCount.textContent = cartItems;
-            alert('Product added to cart!');
+        // Search Function
+        window.searchProducts = function() {
+            const query = searchInput.value.toLowerCase();
+            const category = searchCategory.value;
+            const filteredProducts = products.filter(product => {
+                const matchesCategory = category === 'All Categories' || product.category === category;
+                const matchesQuery = product.name.toLowerCase().includes(query);
+                return matchesCategory && matchesQuery;
+            });
+            categoriesDiv.style.display = 'none';
+            productsDiv.style.display = 'grid';
+            productDetailDiv.style.display = 'none';
+            productsDiv.innerHTML = filteredProducts.map(product => `
+                <div class="product-card" data-id="${product.id}">
+                    <img src="${product.image}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>$${product.price.toFixed(2)}</p>
+                </div>
+            `).join('');
         };
 
-        // Show Home Page on Load
-        showPage(homePage, [productsPage, productDetailsPage, container, dashboardPage, forgotPasswordModal]);
+        // Event Listeners
+        categoriesDiv.addEventListener('click', (e) => {
+            const categoryCard = e.target.closest('.category-card');
+            if (categoryCard) {
+                const category = categoryCard.dataset.category;
+                renderProducts(category);
+            }
+        });
 
-        // Previous Code JavaScript (Unchanged)
-        // Toggle between Sign Up and Sign In
+        productsDiv.addEventListener('click', (e) => {
+            const productCard = e.target.closest('.product-card');
+            if (productCard) {
+                const id = parseInt(productCard.dataset.id);
+                renderProductDetail(id);
+            }
+        });
+
+        productDetailDiv.addEventListener('click', (e) => {
+            if (e.target.classList.contains('add-to-cart') && !isGuest) {
+                const id = parseInt(e.target.dataset.id);
+                const product = products.find(p => p.id === id);
+                addToCart(product);
+            }
+        });
+
+        cartBtn.addEventListener('click', () => {
+            if (isGuest) {
+                showPage(container, storeContent, dashboardPage);
+            } else {
+                cartModal.style.display = 'flex';
+                updateCart();
+            }
+        });
+
+        closeCartModal.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === cartModal) {
+                cartModal.style.display = 'none';
+            }
+        });
+
+        checkoutBtn.addEventListener('click', () => {
+            alert('Checkout functionality not implemented yet.');
+        });
+
+        // Existing Auth Handlers (Unchanged)
         signUpButton.addEventListener('click', () => {
             container.classList.add("right-panel-active");
         });
@@ -1006,24 +1152,6 @@
             container.classList.remove("right-panel-active");
         });
 
-        // Show error message
-        function showError(element, message) {
-            element.textContent = message;
-            element.style.display = 'block';
-        }
-
-        // Show success message
-        function showSuccess(element, message) {
-            element.textContent = message;
-            element.style.display = 'block';
-        }
-
-        // Show loading state
-        function showLoading(isLoading, spinner) {
-            spinner.style.display = isLoading ? 'block' : 'none';
-        }
-
-        // Sign Up with Email and Password
         signUpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = signUpName.value;
@@ -1035,7 +1163,8 @@
 
             try {
                 await createUserWithEmailAndPassword(auth, email, password);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during sign up. Please try again.';
@@ -1051,7 +1180,6 @@
             }
         });
 
-        // Sign In with Email and Password
         signInForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = signInEmail.value;
@@ -1062,7 +1190,8 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during sign in. Please try again.';
@@ -1078,7 +1207,6 @@
             }
         });
 
-        // Sign Up with Google
         signUpWithGoogle.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new GoogleAuthProvider();
@@ -1088,21 +1216,19 @@
                 showLoading(true, signUpSpinner);
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Google sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-up window was closed. Please try again.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
             }
         });
 
-        // Sign In with Google
         signInWithGoogle.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new GoogleAuthProvider();
@@ -1112,21 +1238,19 @@
                 showLoading(true, signInSpinner);
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Google sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-in window was closed. Please try again.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
             }
         });
 
-        // Sign Up with Facebook
         signUpWithFacebook.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new FacebookAuthProvider();
@@ -1135,21 +1259,19 @@
                 showLoading(true, signUpSpinner);
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Facebook sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-up window was closed. Please try again.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
             }
         });
 
-        // Sign In with Facebook
         signInWithFacebook.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new FacebookAuthProvider();
@@ -1158,21 +1280,19 @@
                 showLoading(true, signInSpinner);
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Facebook sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-in window was closed. Please try again.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
             }
         });
 
-        // Sign Up with Microsoft
         signUpWithMicrosoft.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new OAuthProvider('microsoft.com');
@@ -1182,21 +1302,19 @@
                 showLoading(true, signUpSpinner);
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signUpSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Microsoft sign up.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-up window was closed. Please try again.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
             }
         });
 
-        // Sign In with Microsoft
         signInWithMicrosoft.addEventListener('click', async (e) => {
             e.preventDefault();
             const provider = new OAuthProvider('microsoft.com');
@@ -1206,21 +1324,19 @@
                 showLoading(true, signInSpinner);
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(dashboardPage, [homePage, productsPage, productDetailsPage, container, forgotPasswordModal]);
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
                 showLoading(false, signInSpinner);
             } catch (error) {
                 let errorMsg = 'An error occurred during Microsoft sign in.';
                 if (error.code === 'auth/popup-closed-by-user') {
                     errorMsg = 'The sign-in window was closed. Please try again.';
-                } else if (error.code === 'auth/unauthorized-domain') {
-                    errorMsg = 'The domain is not authorized. Add it in Firebase settings.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
             }
         });
 
-        // Forgot Password Functionality
         forgotPasswordLink.addEventListener('click', (e) => {
             e.preventDefault();
             forgotPasswordModal.style.display = 'flex';
@@ -1257,7 +1373,6 @@
             }
         });
 
-        // Close modal when clicking outside
         window.addEventListener('click', (e) => {
             if (e.target === forgotPasswordModal) {
                 forgotPasswordModal.style.display = 'none';
@@ -1267,15 +1382,85 @@
             }
         });
 
-        // Logout Functionality
         logoutBtn.addEventListener('click', async () => {
             try {
                 await signOut(auth);
-                showPage(container, [homePage, productsPage, productDetailsPage, dashboardPage, forgotPasswordModal]);
+                isGuest = false;
+                cart = [];
+                showPage(container, storeContent, dashboardPage);
             } catch (error) {
                 console.error('Error signing out:', error);
             }
         });
+
+        // Guest Mode Handlers
+        guestSignInBtn.addEventListener('click', () => {
+            isGuest = true;
+            currentUser = null;
+            showPage(storeContent, container, dashboardPage);
+            renderCategories();
+            accountLink.textContent = 'Guest';
+        });
+
+        guestSignUpBtn.addEventListener('click', () => {
+            isGuest = true;
+            currentUser = null;
+            showPage(storeContent, container, dashboardPage);
+            renderCategories();
+            accountLink.textContent = 'Guest';
+        });
+
+        // Store Navigation Handlers
+        accountLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (currentUser || isGuest) {
+                showPage(dashboardPage, storeContent, container);
+            } else {
+                showPage(container, storeContent, dashboardPage);
+            }
+        });
+
+        ordersLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isGuest) {
+                showPage(container, storeContent, dashboardPage);
+            } else {
+                alert('Orders page not implemented yet.');
+            }
+        });
+
+        signOutLink.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await signOut(auth);
+                isGuest = false;
+                cart = [];
+                showPage(container, storeContent, dashboardPage);
+            } catch (error) {
+                console.error('Error signing out:', error);
+            }
+        });
+
+        backToStoreBtn.addEventListener('click', () => {
+            showPage(storeContent, dashboardPage, container);
+            renderCategories();
+        });
+
+        // Auth State Listener
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                isGuest = false;
+                accountLink.textContent = user.email.split('@')[0];
+                showPage(storeContent, container, dashboardPage);
+                renderCategories();
+            } else if (!isGuest) {
+                showPage(container, storeContent, dashboardPage);
+            }
+        });
+
+        // Initialize
+        showPage(container, storeContent, dashboardPage);
     </script>
 </body>
 </html>
