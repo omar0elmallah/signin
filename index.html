@@ -1,23 +1,24 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="E-commerce store for accessories with Firebase authentication.">
+    <meta name="description" content="متجر إلكتروني للإكسسوارات مع تسجيل دخول عبر Firebase">
     <meta name="author" content="Your Name">
-    <title>Accessories Store - Sign In/Up</title>
+    <title>متجر الإكسسوارات</title>
 
-    <!-- Font Awesome for Icons -->
+    <!-- Font Awesome للأيقونات -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,800" rel="stylesheet">
+    <!-- خطوط جوجل (Tajawal للعربية) -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Firebase SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBfXJ-2tmCYo-pQjfN_4nAdxC-NcqfjAlo",
@@ -32,8 +33,10 @@
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const auth = getAuth(app);
+        const storage = getStorage(app);
 
         window.auth = auth;
+        window.storage = storage;
         window.signInWithEmailAndPassword = signInWithEmailAndPassword;
         window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
         window.signInWithPopup = signInWithPopup;
@@ -43,6 +46,10 @@
         window.sendPasswordResetEmail = sendPasswordResetEmail;
         window.signOut = signOut;
         window.onAuthStateChanged = onAuthStateChanged;
+        window.updateProfile = updateProfile;
+        window.ref = ref;
+        window.uploadBytes = uploadBytes;
+        window.getDownloadURL = getDownloadURL;
     </script>
 
     <!-- Custom CSS -->
@@ -53,14 +60,57 @@
 
         body {
             background: #f6f5f7;
-            font-family: 'Montserrat', sans-serif;
+            font-family: 'Tajawal', sans-serif;
             margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            direction: rtl;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Existing Login Styles (Unchanged) */
+        /* الوضع الليلي */
+        body.dark-mode {
+            background: #1a1a1a;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .container,
+        body.dark-mode .dashboard-container,
+        body.dark-mode .main-content,
+        body.dark-mode .category-card,
+        body.dark-mode .product-card,
+        body.dark-mode .product-detail,
+        body.dark-mode .cart-modal-content,
+        body.dark-mode .modal-content,
+        body.dark-mode .profile-page {
+            background: #2a2a2a;
+            color: #e0e0e0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+        }
+
+        body.dark-mode input,
+        body.dark-mode select {
+            background: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #555;
+        }
+
+        body.dark-mode button:not(.add-to-cart):not(.navbar-search button) {
+            background: #444;
+            border-color: #666;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .navbar {
+            background: #0a0a0a;
+        }
+
+        body.dark-mode .form-container {
+            background: #2a2a2a;
+        }
+
+        /* أنماط تسجيل الدخول الأصلية */
         h1 {
             font-weight: bold;
             margin: 0;
@@ -99,7 +149,7 @@
             padding: 12px 45px;
             letter-spacing: 1px;
             text-transform: uppercase;
-            transition: transform 80ms ease-in;
+            transition: transform 80ms ease-in, background-color 0.2s;
         }
 
         button:active {
@@ -144,6 +194,7 @@
             width: 768px;
             max-width: 100%;
             min-height: 480px;
+            margin: 20px auto;
         }
 
         .form-container {
@@ -154,24 +205,24 @@
         }
 
         .sign-in-container {
-            left: 0;
+            right: 0;
             width: 50%;
             z-index: 2;
         }
 
         .container.right-panel-active .sign-in-container {
-            transform: translateX(100%);
+            transform: translateX(-100%);
         }
 
         .sign-up-container {
-            left: 0;
+            right: 0;
             width: 50%;
             opacity: 0;
             z-index: 1;
         }
 
         .container.right-panel-active .sign-up-container {
-            transform: translateX(100%);
+            transform: translateX(-100%);
             opacity: 1;
             z-index: 5;
             animation: show 0.6s;
@@ -185,7 +236,7 @@
         .overlay-container {
             position: absolute;
             top: 0;
-            left: 50%;
+            right: 50%;
             width: 50%;
             height: 100%;
             overflow: hidden;
@@ -194,18 +245,18 @@
         }
 
         .container.right-panel-active .overlay-container {
-            transform: translateX(-100%);
+            transform: translateX(100%);
         }
 
         .overlay {
             background: #FF416C;
-            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            background: linear-gradient(to left, #FF4B2B, #FF416C);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: 0 0;
             color: #FFFFFF;
             position: relative;
-            left: -100%;
+            right: -100%;
             height: 100%;
             width: 200%;
             transform: translateX(0);
@@ -213,7 +264,7 @@
         }
 
         .container.right-panel-active .overlay {
-            transform: translateX(50%);
+            transform: translateX(-50%);
         }
 
         .overlay-panel {
@@ -232,7 +283,7 @@
         }
 
         .overlay-left {
-            transform: translateX(-20%);
+            transform: translateX(20%);
         }
 
         .container.right-panel-active .overlay-left {
@@ -240,12 +291,12 @@
         }
 
         .overlay-right {
-            right: 0;
+            left: 0;
             transform: translateX(0);
         }
 
         .container.right-panel-active .overlay-right {
-            transform: translateX(20%);
+            transform: translateX(-20%);
         }
 
         .social-container {
@@ -269,8 +320,8 @@
             font-size: 14px;
             bottom: 0;
             position: fixed;
-            left: 0;
             right: 0;
+            left: 0;
             text-align: center;
             z-index: 999;
         }
@@ -301,6 +352,7 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
+            margin: 20px auto;
         }
 
         .error-message {
@@ -337,7 +389,7 @@
             display: none;
             position: fixed;
             top: 0;
-            left: 0;
+            right: 0;
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
@@ -359,7 +411,7 @@
         .close-btn {
             position: absolute;
             top: 10px;
-            right: 10px;
+            left: 10px;
             font-size: 1.5rem;
             cursor: pointer;
             color: #374151;
@@ -370,7 +422,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* New E-commerce Styles */
+        /* أنماط المتجر */
         .navbar {
             background-color: #131921;
             color: white;
@@ -380,6 +432,9 @@
             justify-content: space-between;
             flex-wrap: wrap;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .navbar-logo img {
@@ -399,17 +454,18 @@
             padding: 10px;
             border: none;
             font-size: 14px;
+            font-family: 'Tajawal', sans-serif;
         }
 
         .navbar-search select {
-            border-radius: 4px 0 0 4px;
+            border-radius: 0 4px 4px 0;
             background: #f3f3f3;
             color: #111;
         }
 
         .navbar-search input {
             flex: 1;
-            border-radius: 0;
+            border-radius: 4px 0 0 4px;
             background: white;
         }
 
@@ -418,7 +474,7 @@
             color: #111;
             border: none;
             padding: 10px 15px;
-            border-radius: 0 4px 4px 0;
+            border-radius: 0;
             cursor: pointer;
             transition: background 0.2s;
         }
@@ -427,7 +483,13 @@
             background: #e0b03b;
         }
 
-        .navbar-links a {
+        .navbar-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-links a,
+        .navbar-links span {
             color: white;
             margin: 0 15px;
             font-size: 14px;
@@ -438,6 +500,19 @@
             text-decoration: underline;
         }
 
+        .user-profile {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .user-profile img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin-left: 10px;
+        }
+
         .navbar-cart {
             display: flex;
             align-items: center;
@@ -446,7 +521,7 @@
 
         .navbar-cart i {
             font-size: 24px;
-            margin-right: 5px;
+            margin-left: 5px;
         }
 
         .navbar-cart span {
@@ -457,6 +532,15 @@
             font-size: 12px;
         }
 
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            margin-right: 15px;
+        }
+
         .main-content {
             flex: 1;
             padding: 20px;
@@ -464,6 +548,22 @@
             margin: 0 auto;
             width: 100%;
             background: #fff;
+            position: relative;
+        }
+
+        .loader {
+            display: none;
+            position: fixed;
+            top: 50%;
+            right: 50%;
+            transform: translate(50%, -50%);
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #f0c14b;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            z-index: 1001;
         }
 
         .categories {
@@ -484,7 +584,7 @@
         }
 
         .category-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
@@ -494,6 +594,11 @@
             object-fit: cover;
             border-radius: 5px;
             margin-bottom: 10px;
+            transition: transform 0.3s;
+        }
+
+        .category-card img:hover {
+            transform: scale(1.05);
         }
 
         .products {
@@ -513,7 +618,7 @@
         }
 
         .product-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-5px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
@@ -522,6 +627,11 @@
             height: 200px;
             object-fit: contain;
             margin-bottom: 10px;
+            transition: transform 0.3s;
+        }
+
+        .product-card img:hover {
+            transform: scale(1.1);
         }
 
         .product-card h3 {
@@ -536,6 +646,11 @@
             font-size: 18px;
         }
 
+        .product-card .rating {
+            color: #f0c14b;
+            margin: 5px 0;
+        }
+
         .product-detail {
             background: white;
             border: 1px solid #ddd;
@@ -548,11 +663,22 @@
             gap: 30px;
         }
 
-        .product-detail img {
+        .product-detail .image-container {
+            position: relative;
             width: 350px;
             height: 350px;
+            overflow: hidden;
+        }
+
+        .product-detail img {
+            width: 100%;
+            height: 100%;
             object-fit: contain;
-            border-radius: 5px;
+            transition: transform 0.3s;
+        }
+
+        .product-detail .image-container:hover img {
+            transform: scale(1.2);
         }
 
         .product-detail-info {
@@ -572,6 +698,11 @@
             margin: 10px 0;
         }
 
+        .product-detail-info .rating {
+            color: #f0c14b;
+            margin: 10px 0;
+        }
+
         .product-detail-info .add-to-cart {
             background: #f0c14b;
             color: #111;
@@ -580,11 +711,12 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            transition: background 0.2s;
+            transition: background 0.2s, transform 0.2s;
         }
 
         .product-detail-info .add-to-cart:hover {
             background: #e0b03b;
+            transform: scale(1.02);
         }
 
         .product-detail-info .add-to-cart:disabled {
@@ -603,7 +735,7 @@
             display: none;
             position: fixed;
             top: 0;
-            left: 0;
+            right: 0;
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
@@ -633,7 +765,7 @@
             width: 80px;
             height: 80px;
             object-fit: contain;
-            margin-right: 10px;
+            margin-left: 10px;
         }
 
         .cart-item-info {
@@ -659,9 +791,69 @@
             cursor: pointer;
         }
 
-        /* Responsive Adjustments */
+        .cart-total {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 4px;
+            z-index: 1001;
+            animation: slideIn 0.3s, slideOut 0.3s 2.7s;
+            display: none;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(100px); opacity: 0; }
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 24px;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+        }
+
+        .profile-page {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 20px auto;
+            display: none;
+            text-align: center;
+        }
+
+        .profile-page img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+        }
+
+        .profile-page input[type="file"] {
+            margin: 10px 0;
+        }
+
+        /* الاستجابة للشاشات الصغيرة */
         @media (max-width: 768px) {
-            .container, .dashboard-container {
+            .container, .dashboard-container, .profile-page {
                 width: 100%;
                 min-height: 600px;
             }
@@ -687,7 +879,7 @@
 
             .navbar {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: flex-end;
                 padding: 10px;
             }
 
@@ -701,14 +893,23 @@
             }
 
             .navbar-links {
-                display: flex;
+                display: none;
                 flex-direction: column;
                 width: 100%;
                 margin-top: 10px;
             }
 
-            .navbar-links a {
+            .navbar-links.active {
+                display: flex;
+            }
+
+            .navbar-links a,
+            .navbar-links span {
                 margin: 5px 0;
+            }
+
+            .hamburger {
+                display: block;
             }
 
             .navbar-cart {
@@ -720,7 +921,7 @@
                 align-items: center;
             }
 
-            .product-detail img {
+            .product-detail .image-container {
                 width: 100%;
                 max-width: 300px;
                 height: auto;
@@ -755,111 +956,132 @@
                 width: 90%;
                 padding: 15px;
             }
+
+            .profile-page {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Login Container -->
+    <!-- صفحة تسجيل الدخول -->
     <div class="container" id="container">
         <div class="form-container sign-up-container">
             <form id="signUpForm">
-                <h1>Create Account</h1>
+                <h1>إنشاء حساب</h1>
                 <div class="social-container">
                     <a href="#" class="social" id="signUpWithGoogle"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social" id="signUpWithFacebook"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social" id="signUpWithMicrosoft"><i class="fab fa-microsoft"></i></a>
                 </div>
-                <span>or use your email for registration</span>
-                <input type="text" id="signUpName" placeholder="Name" required />
-                <input type="email" id="signUpEmail" placeholder="Email" required />
-                <input type="password" id="signUpPassword" placeholder="Password" required />
+                <span>أو استخدم بريدك الإلكتروني للتسجيل</span>
+                <input type="text" id="signUpName" placeholder="الاسم" required />
+                <input type="email" id="signUpEmail" placeholder="البريد الإلكتروني" required />
+                <input type="password" id="signUpPassword" placeholder="كلمة المرور" required />
                 <div id="signUpError" class="error-message"></div>
                 <div id="signUpSpinner" class="spinner"></div>
-                <button type="submit">Sign Up</button>
-                <button type="button" id="guestSignUpBtn" style="margin-top: 10px; background: #666;">Continue as Guest</button>
+                <button type="submit">إنشاء حساب</button>
+                <button type="button" id="guestSignUpBtn" style="margin-top: 10px; background: #666;">متابعة كضيف</button>
             </form>
         </div>
         <div class="form-container sign-in-container">
             <form id="signInForm">
-                <h1>Sign in</h1>
+                <h1>تسجيل الدخول</h1>
                 <div class="social-container">
                     <a href="#" class="social" id="signInWithGoogle"><i class="fab fa-google-plus-g"></i></a>
                     <a href="#" class="social" id="signInWithFacebook"><i class="fab fa-facebook-f"></i></a>
                     <a href="#" class="social" id="signInWithMicrosoft"><i class="fab fa-microsoft"></i></a>
                 </div>
-                <span>or use your account</span>
-                <input type="email" id="signInEmail" placeholder="Email" required />
-                <input type="password" id="signInPassword" placeholder="Password" required />
-                <a href="#" id="forgotPasswordLink">Forgot your password?</a>
+                <span>أو استخدم حسابك</span>
+                <input type="email" id="signInEmail" placeholder="البريد الإلكتروني" required />
+                <input type="password" id="signInPassword" placeholder="كلمة المرور" required />
+                <a href="#" id="forgotPasswordLink">هل نسيت كلمة المرور؟</a>
                 <div id="signInError" class="error-message"></div>
                 <div id="signInSpinner" class="spinner"></div>
-                <button type="submit">Sign In</button>
-                <button type="button" id="guestSignInBtn" style="margin-top: 10px; background: #666;">Continue as Guest</button>
+                <button type="submit">تسجيل الدخول</button>
+                <button type="button" id="guestSignInBtn" style="margin-top: 10px; background: #666;">متابعة كضيف</button>
             </form>
         </div>
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Welcome Back!</h1>
-                    <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
+                    <h1>مرحبًا بعودتك!</h1>
+                    <p>للبقاء على اتصال، سجل دخولك بمعلوماتك الشخصية</p>
+                    <button class="ghost" id="signIn">تسجيل الدخول</button>
                 </div>
                 <div class="overlay-panel overlay-right">
-                    <h1>Hello, Friend!</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+                    <h1>مرحبًا، صديق!</h1>
+                    <p>أدخل معلوماتك الشخصية وابدأ رحلتك معنا</p>
+                    <button class="ghost" id="signUp">إنشاء حساب</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Dashboard Page -->
+    <!-- صفحة لوحة التحكم -->
     <div class="dashboard-container" id="dashboardPage" style="display: none;">
-        <h1>Welcome to Your Dashboard</h1>
-        <p>You have successfully signed in!</p>
-        <button id="logoutBtn">Sign Out</button>
-        <button id="backToStoreBtn">Go to Store</button>
+        <h1 id="welcomeMessage">مرحبًا بك</h1>
+        <p>لقد سجلت دخولك بنجاح!</p>
+        <button id="profileBtn">الملف الشخصي</button>
+        <button id="backToStoreBtn">الذهاب إلى المتجر</button>
+        <button id="logoutBtn">تسجيل الخروج</button>
     </div>
 
-    <!-- Forgot Password Modal -->
+    <!-- نافذة نسيت كلمة المرور -->
     <div id="forgotPasswordModal" class="modal">
         <div class="modal-content">
             <span class="close-btn" id="closeModal">×</span>
-            <h3 class="text-xl font-semibold text-gray-800 mb-4">Reset Password</h3>
-            <form id="resetPasswordForm" class="space-y-4">
+            <h3>إعادة تعيين كلمة المرور</h3>
+            <form id="resetPasswordForm">
                 <div>
-                    <input type="email" id="resetEmail" placeholder="Email" required aria-label="Email for password reset">
+                    <input type="email" id="resetEmail" placeholder="البريد الإلكتروني" required>
                 </div>
                 <div id="resetErrorMessage" class="error-message"></div>
                 <div id="resetSuccessMessage" class="success-message"></div>
-                <button type="submit" id="resetPasswordBtn">Send Reset Link</button>
+                <button type="submit" id="resetPasswordBtn">إرسال رابط إعادة التعيين</button>
                 <div id="resetSpinner" class="spinner"></div>
             </form>
         </div>
     </div>
 
-    <!-- Store Content -->
+    <!-- صفحة الملف الشخصي -->
+    <div class="profile-page" id="profilePage" style="display: none;">
+        <h2>الملف الشخصي</h2>
+        <img id="profileAvatar" src="https://placehold.co/100x100?text=صورة" alt="صورة المستخدم">
+        <input type="text" id="profileName" placeholder="الاسم">
+        <input type="file" id="profilePhoto" accept="image/*">
+        <div id="profileError" class="error-message"></div>
+        <div id="profileSpinner" class="spinner"></div>
+        <button id="saveProfileBtn">حفظ التغييرات</button>
+        <button id="backToDashboardBtn">رجوع إلى لوحة التحكم</button>
+    </div>
+
+    <!-- محتوى المتجر -->
     <div id="storeContent" style="display: none;">
-        <!-- Navigation Bar -->
+        <!-- شريط التنقل -->
         <nav class="navbar">
+            <button class="hamburger" id="hamburgerBtn"><i class="fas fa-bars"></i></button>
             <div class="navbar-logo">
-                <img src="https://placehold.co/120x40?text=Accessories" alt="Store Logo">
+                <img src="https://placehold.co/120x40?text=الإكسسوارات" alt="شعار المتجر">
             </div>
             <div class="navbar-search">
                 <select id="searchCategory">
-                    <option>All Categories</option>
-                    <option>Watches</option>
-                    <option>Bracelets</option>
-                    <option>Rings</option>
-                    <option>Pendants</option>
+                    <option>كل الفئات</option>
+                    <option>الساعات</option>
+                    <option>الأساور</option>
+                    <option>الخواتم</option>
+                    <option>المعلقات</option>
                 </select>
-                <input type="text" id="searchInput" placeholder="Search Accessories...">
+                <input type="text" id="searchInput" placeholder="ابحث عن الإكسسوارات...">
                 <button onclick="searchProducts()"><i class="fas fa-search"></i></button>
             </div>
-            <div class="navbar-links">
-                <a href="#" id="accountLink">Account</a>
-                <a href="#" id="ordersLink">Orders</a>
-                <a href="#" id="signOutLink">Sign Out</a>
+            <div class="navbar-links" id="navbarLinks">
+                <span id="userProfile" class="user-profile" style="display: none;">
+                    <img id="userAvatar" src="https://placehold.co/32x32?text=صورة" alt="صورة المستخدم">
+                    <span id="userName"></span>
+                </span>
+                <a href="#" id="ordersLink">الطلبات</a>
+                <button class="theme-toggle" id="themeToggle"><i class="fas fa-moon"></i></button>
             </div>
             <div class="navbar-cart" id="cartBtn">
                 <i class="fas fa-shopping-cart"></i>
@@ -867,32 +1089,37 @@
             </div>
         </nav>
 
-        <!-- Main Content -->
+        <!-- المحتوى الرئيسي -->
         <main class="main-content" id="mainContent">
+            <div class="loader" id="loader"></div>
             <div class="categories" id="categories"></div>
             <div class="products" id="products" style="display: none;"></div>
             <div class="product-detail" id="productDetail" style="display: none;"></div>
         </main>
     </div>
 
-    <!-- Cart Modal -->
+    <!-- نافذة عربة التسوق -->
     <div id="cartModal" class="cart-modal">
         <div class="cart-modal-content">
             <span class="close-btn" id="closeCartModal">×</span>
-            <h2>Your Cart</h2>
+            <h2>عربة التسوق</h2>
             <div id="cartItems"></div>
-            <p id="cartEmpty" style="display: none;">Your cart is empty.</p>
-            <button id="checkoutBtn" style="width: 100%; margin-top: 20px;">Proceed to Checkout</button>
+            <p id="cartEmpty" style="display: none;">عربتك فارغة.</p>
+            <p class="cart-total" id="cartTotal"></p>
+            <button id="checkoutBtn" style="width: 100%; margin-top: 20px;">الدفع</button>
         </div>
     </div>
 
+    <!-- إشعار منبثق -->
+    <div id="toast" class="toast"></div>
+
     <footer>
-        <p>© 2025 Accessories Store</p>
+        <p>© 2025 متجر الإكسسوارات</p>
     </footer>
 
     <!-- JavaScript -->
     <script>
-        // DOM Elements
+        // العناصر
         const signUpButton = document.getElementById('signUp');
         const signInButton = document.getElementById('signIn');
         const container = document.getElementById('container');
@@ -914,6 +1141,7 @@
         const signUpWithMicrosoft = document.getElementById('signUpWithMicrosoft');
         const signInWithMicrosoft = document.getElementById('signInWithMicrosoft');
         const dashboardPage = document.getElementById('dashboardPage');
+        const welcomeMessage = document.getElementById('welcomeMessage');
         const logoutBtn = document.getElementById('logoutBtn');
         const forgotPasswordLink = document.getElementById('forgotPasswordLink');
         const forgotPasswordModal = document.getElementById('forgotPasswordModal');
@@ -929,14 +1157,16 @@
         const categoriesDiv = document.getElementById('categories');
         const productsDiv = document.getElementById('products');
         const productDetailDiv = document.getElementById('productDetail');
-        const accountLink = document.getElementById('accountLink');
+        const userProfile = document.getElementById('userProfile');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
         const ordersLink = document.getElementById('ordersLink');
-        const signOutLink = document.getElementById('signOutLink');
         const cartBtn = document.getElementById('cartBtn');
         const cartModal = document.getElementById('cartModal');
         const closeCartModal = document.getElementById('closeCartModal');
         const cartItemsDiv = document.getElementById('cartItems');
         const cartEmpty = document.getElementById('cartEmpty');
+        const cartTotal = document.getElementById('cartTotal');
         const checkoutBtn = document.getElementById('checkoutBtn');
         const cartCount = document.getElementById('cartCount');
         const guestSignInBtn = document.getElementById('guestSignInBtn');
@@ -944,35 +1174,49 @@
         const backToStoreBtn = document.getElementById('backToStoreBtn');
         const searchInput = document.getElementById('searchInput');
         const searchCategory = document.getElementById('searchCategory');
+        const themeToggle = document.getElementById('themeToggle');
+        const hamburgerBtn = document.getElementById('hamburgerBtn');
+        const navbarLinks = document.getElementById('navbarLinks');
+        const loader = document.getElementById('loader');
+        const toast = document.getElementById('toast');
+        const profilePage = document.getElementById('profilePage');
+        const profileAvatar = document.getElementById('profileAvatar');
+        const profileName = document.getElementById('profileName');
+        const profilePhoto = document.getElementById('profilePhoto');
+        const profileError = document.getElementById('profileError');
+        const profileSpinner = document.getElementById('profileSpinner');
+        const saveProfileBtn = document.getElementById('saveProfileBtn');
+        const backToDashboardBtn = document.getElementById('backToDashboardBtn');
+        const profileBtn = document.getElementById('profileBtn');
 
-        // Sample Product Data
+        // بيانات المنتجات
         const products = [
-            { id: 1, name: 'Classic Watch', category: 'Watches', price: 99.99, image: 'https://picsum.photos/300/300?random=1', description: 'Elegant watch with leather strap.', specs: 'Water-resistant, Quartz movement' },
-            { id: 2, name: 'Sports Watch', category: 'Watches', price: 149.99, image: 'https://picsum.photos/300/300?random=2', description: 'Durable watch for active lifestyles.', specs: 'Chronograph, 100m waterproof' },
-            { id: 3, name: 'Gold Bracelet', category: 'Bracelets', price: 59.99, image: 'https://picsum.photos/300/300?random=3', description: 'Shiny gold bracelet for any occasion.', specs: '18k gold-plated' },
-            { id: 4, name: 'Beaded Bracelet', category: 'Bracelets', price: 29.99, image: 'https://picsum.photos/300/300?random=4', description: 'Handcrafted beaded design.', specs: 'Adjustable fit' },
-            { id: 5, name: 'Diamond Ring', category: 'Rings', price: 199.99, image: 'https://picsum.photos/300/300?random=5', description: 'Sparkling diamond ring.', specs: '0.5 carat diamond' },
-            { id: 6, name: 'Silver Ring', category: 'Rings', price: 79.99, image: 'https://picsum.photos/300/300?random=6', description: 'Sleek silver band.', specs: 'Sterling silver' },
-            { id: 7, name: 'Heart Pendant', category: 'Pendants', price: 49.99, image: 'https://picsum.photos/300/300?random=7', description: 'Romantic heart-shaped pendant.', specs: 'Silver chain included' },
-            { id: 8, name: 'Star Pendant', category: 'Pendants', price: 69.99, image: 'https://picsum.photos/300/300?random=8', description: 'Celestial star pendant.', specs: 'Gold chain included' }
+            { id: 1, name: 'ساعة كلاسيكية', category: 'الساعات', price: 99.99, image: 'https://picsum.photos/300/300?random=1', description: 'ساعة أنيقة بحزام جلدي.', specs: 'مقاومة للماء، حركة كوارتز', rating: 4.5 },
+            { id: 2, name: 'ساعة رياضية', category: 'الساعات', price: 149.99, image: 'https://picsum.photos/300/300?random=2', description: 'ساعة متينة للأنشطة الرياضية.', specs: 'كرونوغراف، مقاومة للماء 100م', rating: 4.2 },
+            { id: 3, name: 'سوار ذهبي', category: 'الأساور', price: 59.99, image: 'https://picsum.photos/300/300?random=3', description: 'سوار ذهبي لامع لكل المناسبات.', specs: 'مطلي بالذهب عيار 18', rating: 4.8 },
+            { id: 4, name: 'سوار مطرز', category: 'الأساور', price: 29.99, image: 'https://picsum.photos/300/300?random=4', description: 'تصميم مطرز يدويًا.', specs: 'مقاس قابل للتعديل', rating: 4.0 },
+            { id: 5, name: 'خاتم ألماس', category: 'الخواتم', price: 199.99, image: 'https://picsum.photos/300/300?random=5', description: 'خاتم ألماس لامع.', specs: 'ألماس 0.5 قيراط', rating: 4.9 },
+            { id: 6, name: 'خاتم فضي', category: 'الخواتم', price: 79.99, image: 'https://picsum.photos/300/300?random=6', description: 'خاتم فضي أنيق.', specs: 'فضة إسترليني', rating: 4.3 },
+            { id: 7, name: 'معلقة قلب', category: 'المعلقات', price: 49.99, image: 'https://picsum.photos/300/300?random=7', description: 'معلقة على شكل قلب رومانسية.', specs: 'سلسلة فضية مرفقة', rating: 4.6 },
+            { id: 8, name: 'معلقة نجمة', category: 'المعلقات', price: 69.99, image: 'https://picsum.photos/300/300?random=8', description: 'معلقة نجمية سماوية.', specs: 'سلسلة ذهبية مرفقة', rating: 4.4 }
         ];
 
         const categories = [
-            { name: 'Watches', image: 'https://picsum.photos/300/300?random=9' },
-            { name: 'Bracelets', image: 'https://picsum.photos/300/300?random=10' },
-            { name: 'Rings', image: 'https://picsum.photos/300/300?random=11' },
-            { name: 'Pendants', image: 'https://picsum.photos/300/300?random=12' }
+            { name: 'الساعات', image: 'https://picsum.photos/300/300?random=9' },
+            { name: 'الأساور', image: 'https://picsum.photos/300/300?random=10' },
+            { name: 'الخواتم', image: 'https://picsum.photos/300/300?random=11' },
+            { name: 'المعلقات', image: 'https://picsum.photos/300/300?random=12' }
         ];
 
-        // State
+        // الحالة
         let currentUser = null;
         let isGuest = false;
-        let cart = [];
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-        // Utility Functions
+        // دوال مساعدة
         function showPage(show, ...hide) {
             hide.forEach(el => el.style.display = 'none');
-            show.style.display = show === container || show === storeContent ? 'block' : 'flex';
+            show.style.display = show === container || show === storeContent || show === profilePage ? 'block' : 'flex';
         }
 
         function showError(element, message) {
@@ -989,16 +1233,25 @@
             spinner.style.display = isLoading ? 'block' : 'none';
         }
 
-        // Cart Functions
+        function showToast(message) {
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => toast.style.display = 'none', 3000);
+        }
+
+        // دوال عربة التسوق
         function updateCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
             cartCount.textContent = cart.length;
             if (cart.length === 0) {
                 cartItemsDiv.style.display = 'none';
                 cartEmpty.style.display = 'block';
+                cartTotal.style.display = 'none';
                 checkoutBtn.style.display = 'none';
             } else {
                 cartItemsDiv.style.display = 'block';
                 cartEmpty.style.display = 'none';
+                cartTotal.style.display = 'block';
                 checkoutBtn.style.display = 'block';
                 cartItemsDiv.innerHTML = cart.map((item, index) => `
                     <div class="cart-item">
@@ -1007,95 +1260,136 @@
                             <h4>${item.name}</h4>
                             <p>$${item.price.toFixed(2)}</p>
                         </div>
-                        <button onclick="removeFromCart(${index})">Remove</button>
+                        <button onclick="removeFromCart(${index})">إزالة</button>
                     </div>
                 `).join('');
+                const total = cart.reduce((sum, item) => sum + item.price, 0);
+                cartTotal.textContent = `الإجمالي: $${total.toFixed(2)}`;
             }
         }
 
         function addToCart(product) {
-            if (isGuest) {
-                showPage(container, storeContent, dashboardPage);
+            if (isGuest || !currentUser) {
+                showPage(container, storeContent, dashboardPage, profilePage);
+                showToast('يرجى تسجيل الدخول لإضافة العناصر إلى العربة');
                 return;
             }
             cart.push(product);
             updateCart();
+            showToast(`تم إضافة ${product.name} إلى العربة`);
         }
 
         window.removeFromCart = function(index) {
+            const itemName = cart[index].name;
             cart.splice(index, 1);
             updateCart();
+            showToast(`تم إزالة ${itemName} من العربة`);
         };
 
-        // Render Functions
+        // دوال العرض
         function renderCategories() {
             categoriesDiv.style.display = 'grid';
             productsDiv.style.display = 'none';
             productDetailDiv.style.display = 'none';
-            categoriesDiv.innerHTML = categories.map(category => `
-                <div class="category-card" data-category="${category.name}">
-                    <img src="${category.image}" alt="${category.name}">
-                    <h3>${category.name}</h3>
-                </div>
-            `).join('');
+            loader.style.display = 'block';
+            setTimeout(() => {
+                categoriesDiv.innerHTML = categories.map(category => `
+                    <div class="category-card" data-category="${category.name}">
+                        <img src="${category.image}" alt="${category.name}">
+                        <h3>${category.name}</h3>
+                    </div>
+                `).join('');
+                loader.style.display = 'none';
+            }, 500);
         }
 
         function renderProducts(category) {
             categoriesDiv.style.display = 'none';
             productsDiv.style.display = 'grid';
             productDetailDiv.style.display = 'none';
-            const filteredProducts = category === 'All Categories' 
-                ? products 
-                : products.filter(p => p.category === category);
-            productsDiv.innerHTML = filteredProducts.map(product => `
-                <div class="product-card" data-id="${product.id}">
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>$${product.price.toFixed(2)}</p>
-                </div>
-            `).join('');
+            loader.style.display = 'block';
+            setTimeout(() => {
+                const filteredProducts = category === 'كل الفئات' 
+                    ? products 
+                    : products.filter(p => p.category === category);
+                productsDiv.innerHTML = filteredProducts.map(product => `
+                    <div class="product-card" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>$${product.price.toFixed(2)}</p>
+                        <div class="rating">
+                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                        </div>
+                    </div>
+                `).join('');
+                loader.style.display = 'none';
+            }, 500);
         }
 
         function renderProductDetail(id) {
             categoriesDiv.style.display = 'none';
             productsDiv.style.display = 'none';
             productDetailDiv.style.display = 'flex';
-            const product = products.find(p => p.id === id);
-            productDetailDiv.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <div class="product-detail-info">
-                    <h2>${product.name}</h2>
-                    <p class="price">$${product.price.toFixed(2)}</p>
-                    <p>${product.description}</p>
-                    ${isGuest ? '' : `<p><strong>Specifications:</strong> ${product.specs}</p>`}
-                    <button class="add-to-cart" ${isGuest ? 'disabled' : ''} data-id="${product.id}">Add to Cart</button>
-                    ${isGuest ? '<p class="guest-message">Please sign in to purchase or view detailed specs.</p>' : ''}
-                </div>
-            `;
+            loader.style.display = 'block';
+            setTimeout(() => {
+                const product = products.find(p => p.id === id);
+                productDetailDiv.innerHTML = `
+                    <div class="image-container">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    <div class="product-detail-info">
+                        <h2>${product.name}</h2>
+                        <p class="price">$${product.price.toFixed(2)}</p>
+                        <div class="rating">
+                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                        </div>
+                        <p>${product.description}</p>
+                        ${isGuest || !currentUser ? '' : `<p><strong>المواصفات:</strong> ${product.specs}</p>`}
+                        <button class="add-to-cart" ${isGuest || !currentUser ? 'disabled' : ''} data-id="${product.id}">أضف إلى العربة</button>
+                        ${isGuest || !currentUser ? '<p class="guest-message">يرجى تسجيل الدخول للشراء أو رؤية المواصفات التفصيلية.</p>' : ''}
+                    </div>
+                `;
+                loader.style.display = 'none';
+            }, 500);
         }
 
-        // Search Function
+        // البحث
         window.searchProducts = function() {
             const query = searchInput.value.toLowerCase();
             const category = searchCategory.value;
-            const filteredProducts = products.filter(product => {
-                const matchesCategory = category === 'All Categories' || product.category === category;
-                const matchesQuery = product.name.toLowerCase().includes(query);
-                return matchesCategory && matchesQuery;
-            });
-            categoriesDiv.style.display = 'none';
-            productsDiv.style.display = 'grid';
-            productDetailDiv.style.display = 'none';
-            productsDiv.innerHTML = filteredProducts.map(product => `
-                <div class="product-card" data-id="${product.id}">
-                    <img src="${product.image}" alt="${product.name}">
-                    <h3>${product.name}</h3>
-                    <p>$${product.price.toFixed(2)}</p>
-                </div>
-            `).join('');
+            loader.style.display = 'block';
+            setTimeout(() => {
+                const filteredProducts = products.filter(product => {
+                    const matchesCategory = category === 'كل الفئات' || product.category === category;
+                    const matchesQuery = product.name.toLowerCase().includes(query);
+                    return matchesCategory && matchesQuery;
+                });
+                categoriesDiv.style.display = 'none';
+                productsDiv.style.display = 'grid';
+                productDetailDiv.style.display = 'none';
+                productsDiv.innerHTML = filteredProducts.map(product => `
+                    <div class="product-card" data-id="${product.id}">
+                        <img src="${product.image}" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>$${product.price.toFixed(2)}</p>
+                        <div class="rating">
+                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                        </div>
+                    </div>
+                `).join('');
+                loader.style.display = 'none';
+            }, 500);
         };
 
-        // Event Listeners
+        // إدارة الملف الشخصي
+        function renderProfile() {
+            if (currentUser) {
+                profileName.value = currentUser.displayName || '';
+                profileAvatar.src = currentUser.photoURL || 'https://placehold.co/100x100?text=صورة';
+            }
+        }
+
+        // معالجات الأحداث
         categoriesDiv.addEventListener('click', (e) => {
             const categoryCard = e.target.closest('.category-card');
             if (categoryCard) {
@@ -1113,7 +1407,7 @@
         });
 
         productDetailDiv.addEventListener('click', (e) => {
-            if (e.target.classList.contains('add-to-cart') && !isGuest) {
+            if (e.target.classList.contains('add-to-cart') && currentUser && !isGuest) {
                 const id = parseInt(e.target.dataset.id);
                 const product = products.find(p => p.id === id);
                 addToCart(product);
@@ -1121,8 +1415,9 @@
         });
 
         cartBtn.addEventListener('click', () => {
-            if (isGuest) {
-                showPage(container, storeContent, dashboardPage);
+            if (!currentUser && !isGuest) {
+                showPage(container, storeContent, dashboardPage, profilePage);
+                showToast('يرجى تسجيل الدخول لعرض العربة');
             } else {
                 cartModal.style.display = 'flex';
                 updateCart();
@@ -1136,14 +1431,26 @@
         window.addEventListener('click', (e) => {
             if (e.target === cartModal) {
                 cartModal.style.display = 'none';
+            } else if (e.target === forgotPasswordModal) {
+                forgotPasswordModal.style.display = 'none';
+                resetErrorMessage.style.display = 'none';
+                resetSuccessMessage.style.display = 'none';
+                resetEmail.value = '';
             }
         });
 
         checkoutBtn.addEventListener('click', () => {
-            alert('Checkout functionality not implemented yet.');
+            if (isGuest || !currentUser) {
+                showPage(container, storeContent, dashboardPage, profilePage);
+                cartModal.style.display = 'none';
+                showToast('يرجى تسجيل الدخول لإتمام الدفع');
+            } else {
+                showToast('سيتم توجيهك إلى صفحة الدفع قريبًا...');
+                // يمكن إضافة توجيه إلى صفحة دفع حقيقية هنا
+            }
         });
 
-        // Existing Auth Handlers (Unchanged)
+        // معالجات تسجيل الدخول
         signUpButton.addEventListener('click', () => {
             container.classList.add("right-panel-active");
         });
@@ -1162,18 +1469,20 @@
             signUpError.style.display = 'none';
 
             try {
-                await createUserWithEmailAndPassword(auth, email, password);
-                showPage(storeContent, container, dashboardPage);
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(userCredential.user, { displayName: name });
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signUpSpinner);
+                showToast('تم إنشاء الحساب بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during sign up. Please try again.';
+                let errorMsg = 'حدث خطأ أثناء إنشاء الحساب. حاول مرة أخرى.';
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMsg = 'The email is already in use.';
+                    errorMsg = 'البريد الإلكتروني مستخدم بالفعل.';
                 } else if (error.code === 'auth/invalid-email') {
-                    errorMsg = 'The email is invalid.';
+                    errorMsg = 'البريد الإلكتروني غير صالح.';
                 } else if (error.code === 'auth/weak-password') {
-                    errorMsg = 'The password is too weak. It must be at least 6 characters.';
+                    errorMsg = 'كلمة المرور ضعيفة جدًا. يجب أن تكون 6 أحرف على الأقل.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
@@ -1190,17 +1499,18 @@
 
             try {
                 await signInWithEmailAndPassword(auth, email, password);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signInSpinner);
+                showToast('تم تسجيل الدخول بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during sign in. Please try again.';
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول. حاول مرة أخرى.';
                 if (error.code === 'auth/wrong-password') {
-                    errorMsg = 'The password is incorrect.';
+                    errorMsg = 'كلمة المرور غير صحيحة.';
                 } else if (error.code === 'auth/user-not-found') {
-                    errorMsg = 'No account is associated with this email.';
+                    errorMsg = 'لا يوجد حساب مرتبط بهذا البريد.';
                 } else if (error.code === 'auth/invalid-email') {
-                    errorMsg = 'The email is invalid.';
+                    errorMsg = 'البريد الإلكتروني غير صالح.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
@@ -1216,13 +1526,14 @@
                 showLoading(true, signUpSpinner);
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signUpSpinner);
+                showToast('تم إنشاء الحساب عبر جوجل بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during Google sign up.';
+                let errorMsg = 'حدث خطأ أثناء إنشاء الحساب عبر جوجل.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'The sign-up window was closed. Please try again.';
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
@@ -1238,13 +1549,14 @@
                 showLoading(true, signInSpinner);
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signInSpinner);
+                showToast('تم تسجيل الدخول عبر جوجل بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during Google sign in.';
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول عبر جوجل.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'The sign-in window was closed. Please try again.';
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
@@ -1259,13 +1571,14 @@
                 showLoading(true, signUpSpinner);
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signUpSpinner);
+                showToast('تم إنشاء الحساب عبر فيسبوك بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during Facebook sign up.';
+                let errorMsg = 'حدث خطأ أثناء إنشاء الحساب عبر فيسبوك.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'The sign-up window was closed. Please try again.';
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
@@ -1280,13 +1593,14 @@
                 showLoading(true, signInSpinner);
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signInSpinner);
+                showToast('تم تسجيل الدخول عبر فيسبوك بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during Facebook sign in.';
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول عبر فيسبوك.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'The sign-in window was closed. Please try again.';
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
@@ -1302,13 +1616,14 @@
                 showLoading(true, signUpSpinner);
                 signUpError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signUpSpinner);
+                showToast('تم إنشاء الحساب عبر مايكروسوفت بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during Microsoft sign up.';
+                let errorMsg = 'حدث خطأ أثناء إنشاء الحساب عبر مايكروسوفت.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'The sign-up window was closed. Please try again.';
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
                 }
                 showError(signUpError, errorMsg);
                 showLoading(false, signUpSpinner);
@@ -1324,13 +1639,14 @@
                 showLoading(true, signInSpinner);
                 signInError.style.display = 'none';
                 await signInWithPopup(auth, provider);
-                showPage(storeContent, container, dashboardPage);
+                showPage(storeContent, container, dashboardPage, profilePage);
                 renderCategories();
                 showLoading(false, signInSpinner);
+                showToast('تم تسجيل الدخول عبر مايكروسوفت بنجاح!');
             } catch (error) {
-                let errorMsg = 'An error occurred during Microsoft sign in.';
+                let errorMsg = 'حدث خطأ أثناء تسجيل الدخول عبر مايكروسوفت.';
                 if (error.code === 'auth/popup-closed-by-user') {
-                    errorMsg = 'The sign-in window was closed. Please try again.';
+                    errorMsg = 'تم إغلاق نافذة التسجيل. حاول مرة أخرى.';
                 }
                 showError(signInError, errorMsg);
                 showLoading(false, signInSpinner);
@@ -1359,26 +1675,17 @@
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                showSuccess(resetSuccessMessage, 'A password reset link has been sent to your email.');
+                showSuccess(resetSuccessMessage, 'تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك.');
                 showLoading(false, resetSpinner);
             } catch (error) {
-                let errorMsg = 'An error occurred while sending the reset link.';
+                let errorMsg = 'حدث خطأ أثناء إرسال الرابط.';
                 if (error.code === 'auth/invalid-email') {
-                    errorMsg = 'The email is invalid.';
+                    errorMsg = 'البريد الإلكتروني غير صالح.';
                 } else if (error.code === 'auth/user-not-found') {
-                    errorMsg = 'No account is associated with this email.';
+                    errorMsg = 'لا يوجد حساب مرتبط بهذا البريد.';
                 }
                 showError(resetErrorMessage, errorMsg);
                 showLoading(false, resetSpinner);
-            }
-        });
-
-        window.addEventListener('click', (e) => {
-            if (e.target === forgotPasswordModal) {
-                forgotPasswordModal.style.display = 'none';
-                resetErrorMessage.style.display = 'none';
-                resetSuccessMessage.style.display = 'none';
-                resetEmail.value = '';
             }
         });
 
@@ -1387,80 +1694,88 @@
                 await signOut(auth);
                 isGuest = false;
                 cart = [];
-                showPage(container, storeContent, dashboardPage);
+                localStorage.removeItem('cart');
+                showPage(container, storeContent, dashboardPage, profilePage);
+                userProfile.style.display = 'none';
+                showToast('تم تسجيل الخروج بنجاح');
             } catch (error) {
-                console.error('Error signing out:', error);
+                console.error('خطأ أثناء تسجيل الخروج:', error);
+                showToast('حدث خطأ أثناء تسجيل الخروج');
             }
         });
 
-        // Guest Mode Handlers
+        // معالجات وضع الضيف
         guestSignInBtn.addEventListener('click', () => {
             isGuest = true;
             currentUser = null;
-            showPage(storeContent, container, dashboardPage);
+            cart = [];
+            localStorage.removeItem('cart');
+            showPage(storeContent, container, dashboardPage, profilePage);
             renderCategories();
-            accountLink.textContent = 'Guest';
+            userProfile.style.display = 'none';
+            showToast('تم الدخول كضيف');
         });
 
         guestSignUpBtn.addEventListener('click', () => {
             isGuest = true;
             currentUser = null;
-            showPage(storeContent, container, dashboardPage);
+            cart = [];
+            localStorage.removeItem('cart');
+            showPage(storeContent, container, dashboardPage, profilePage);
             renderCategories();
-            accountLink.textContent = 'Guest';
+            userProfile.style.display = 'none';
+            showToast('تم الدخول كضيف');
         });
 
-        // Store Navigation Handlers
-        accountLink.addEventListener('click', (e) => {
+        // معالجات التنقل
+        userProfile.addEventListener('click', (e) => {
             e.preventDefault();
-            if (currentUser || isGuest) {
-                showPage(dashboardPage, storeContent, container);
+            if (currentUser && !isGuest) {
+                showPage(dashboardPage, storeContent, container, profilePage);
             } else {
-                showPage(container, storeContent, dashboardPage);
+                showPage(container, storeContent, dashboardPage, profilePage);
             }
         });
 
         ordersLink.addEventListener('click', (e) => {
             e.preventDefault();
-            if (isGuest) {
-                showPage(container, storeContent, dashboardPage);
+            if (isGuest || !currentUser) {
+                showPage(container, storeContent, dashboardPage, profilePage);
+                showToast('يرجى تسجيل الدخول لعرض الطلبات');
             } else {
-                alert('Orders page not implemented yet.');
-            }
-        });
-
-        signOutLink.addEventListener('click', async (e) => {
-            e.preventDefault();
-            try {
-                await signOut(auth);
-                isGuest = false;
-                cart = [];
-                showPage(container, storeContent, dashboardPage);
-            } catch (error) {
-                console.error('Error signing out:', error);
+                showToast('صفحة الطلبات قيد التطوير');
             }
         });
 
         backToStoreBtn.addEventListener('click', () => {
-            showPage(storeContent, dashboardPage, container);
+            showPage(storeContent, dashboardPage, container, profilePage);
             renderCategories();
         });
 
-        // Auth State Listener
-        onAuthStateChanged(auth, (user) => {
-            currentUser = user;
-            if (user) {
-                isGuest = false;
-                accountLink.textContent = user.email.split('@')[0];
-                showPage(storeContent, container, dashboardPage);
-                renderCategories();
-            } else if (!isGuest) {
-                showPage(container, storeContent, dashboardPage);
-            }
+        // الوضع الليلي/النهاري
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.innerHTML = document.body.classList.contains('dark-mode') 
+                ? '<i class="fas fa-sun"></i>' 
+                : '<i class="fas fa-moon"></i>';
+            localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
         });
 
-        // Initialize
-        showPage(container, storeContent, dashboardPage);
-    </script>
-</body>
-</html>
+        // تحميل الوضع المحفوظ
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        // قائمة الهامبرغر
+        hamburgerBtn.addEventListener('click', () => {
+            navbarLinks.classList.toggle('active');
+        });
+
+        // معالجات الملف الشخصي
+        profileBtn.addEventListener('click', () => {
+            showPage(profilePage, storeContent, container, dashboardPage);
+            renderProfile();
+        });
+
+        saveProfileBtn.addEventListener('click',
