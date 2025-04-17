@@ -1950,4 +1950,1110 @@
                     features: ["سلسلة ستانلس ستيل", "طول قابل للتعديل"],
                     length: "45 سم"
                 },
-                reviews
+                reviews: [
+                    {
+                        user: "نورة أحمد",
+                        rating: 5,
+                        comment: "تصميم جميل وأنيق للغاية",
+                        date: "2023-07-10"
+                    }
+                ]
+            },
+            {
+                id: 5,
+                name: "ساعة كلاسيكية",
+                description: "ساعة يد كلاسيكية بتصميم أنيق وجلد طبيعي",
+                price: 599,
+                category: "watches",
+                brand: "رولكس",
+                rating: 4.9,
+                stock: 3,
+                image: "https://via.placeholder.com/300?text=ساعة+كلاسيكية",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["أسود", "بني"],
+                sizes: ["واحد"],
+                tags: ["ساعة", "كلاسيكية", "جلد"],
+                specs: {
+                    material: "فولاذ مقاوم للصدأ",
+                    features: ["حركة كوارتز", "مقاومة الماء 50م"],
+                    warranty: "5 سنوات"
+                },
+                reviews: []
+            },
+            {
+                id: 6,
+                name: "سوار جلدي",
+                description: "سوار جلدي طبيعي بتصميم بسيط وأنيق",
+                price: 149,
+                category: "bracelets",
+                brand: "فوسيل",
+                rating: 4.0,
+                stock: 12,
+                image: "https://via.placeholder.com/300?text=سوار+جلدي",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["بني", "أسود"],
+                sizes: ["صغير", "وسط", "كبير"],
+                tags: ["سوار", "جلد", "أنيق"],
+                specs: {
+                    material: "جلد طبيعي",
+                    features: ["مشبك معدني", "قابل للتعديل"],
+                    width: "1.5 سم"
+                },
+                reviews: []
+            },
+            {
+                id: 7,
+                name: "خاتم ماسي",
+                description: "خاتم فاخر مرصع بالماس مع تصميم عصري",
+                price: 1299,
+                category: "rings",
+                brand: "بولغاري",
+                rating: 4.7,
+                stock: 2,
+                image: "https://via.placeholder.com/300?text=خاتم+ماسي",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["ذهبي", "فضي"],
+                sizes: ["16", "17", "18"],
+                tags: ["خاتم", "ماس", "فاخر"],
+                specs: {
+                    material: "ذهب 18 قيراط",
+                    features: ["مرصع بالماس", "تشطيب عالي الجودة"],
+                    diamonds: "0.5 قيراط"
+                },
+                reviews: []
+            },
+            {
+                id: 8,
+                name: "ميدالية ذهبية",
+                description: "ميدالية ذهبية عيار 18 قيراط مع سلسلة مطابقة",
+                price: 899,
+                category: "medals",
+                brand: "كارتييه",
+                rating: 4.6,
+                stock: 4,
+                image: "https://via.placeholder.com/300?text=ميدالية+ذهبية",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["ذهبي"],
+                sizes: ["واحد"],
+                tags: ["ميدالية", "ذهب", "فاخر"],
+                specs: {
+                    material: "ذهب 18 قيراط",
+                    features: ["سلسلة ذهبية", "طول قابل للتعديل"],
+                    length: "40 سم"
+                },
+                reviews: []
+            }
+        ];
+
+        const exchangeRates = {
+            SAR: 1,
+            USD: 0.27,
+            EUR: 0.24
+        };
+
+        const translations = {
+            ar: {
+                addToCart: "أضف إلى السلة",
+                cart: "سلة التسوق"
+            },
+            en: {
+                addToCart: "Add to Cart",
+                cart: "Cart"
+            }
+        };
+
+        const banners = [
+            { title: "متجر الأناقة الفاخر", subtitle: "اكتشف مجموعتنا الحصرية من الإكسسوارات العصرية", image: "https://via.placeholder.com/1400x400?text=إكسسوارات", cta: "تسوق الآن" },
+            { title: "عروض حصرية", subtitle: "خصومات تصل إلى 50% على الساعات الفاخرة", image: "https://via.placeholder.com/1400x400?text=عروض", cta: "استفد الآن" },
+            { title: "مجموعة جديدة", subtitle: "اكتشف أحدث الأساور والخواتم", image: "https://via.placeholder.com/1400x400?text=مجموعة+جديدة", cta: "تصفح الآن" }
+        ];
+
+        const faqs = [
+            {
+                question: "كيف يمكنني إرجاع منتج؟",
+                answer: "يمكنك إرجاع المنتج خلال 14 يومًا من تاريخ الاستلام عن طريق التواصل بخدمة العملاء."
+            },
+            {
+                question: "ما هي طرق الدفع المتاحة؟",
+                answer: "نحن نقبل الدفع عن طريق بطاقات الائتمان، التحويل البنكي، ودفع عند الاستلام."
+            },
+            {
+                question: "كم تستغرق عملية الشحن؟",
+                answer: "تستغرق عملية الشحن من 2-5 أيام عمل داخل المملكة العربية السعودية."
+            },
+            {
+                question: "هل لديكم خدمة التوصيل السريع؟",
+                answer: "نعم، لدينا خدمة التوصيل السريع خلال 24 ساعة في بعض المناطق."
+            }
+        ];
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCategories();
+            loadProducts();
+            loadFAQs();
+            updateBanner();
+            
+            // Check for hash in URL to show specific section
+            const hash = window.location.hash.substring(1);
+            if (hash && ['categories', 'products', 'wishlist', 'profile', 'orders', 'coupons', 'faq', 'contact'].includes(hash)) {
+                showSection(hash);
+            }
+            
+            // Load guest cart from localStorage
+            if (isGuest) {
+                cart = JSON.parse(localStorage.getItem('guestCart') || '[]');
+                updateCartUI();
+            }
+        });
+
+        // Utility Functions
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 500);
+            }, 3000);
+        }
+
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.className = 'modal active';
+            modal.setAttribute('aria-hidden', 'false');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.className = 'modal';
+            modal.setAttribute('aria-hidden', 'true');
+        }
+
+        function formatPrice(price) {
+            const rate = exchangeRates[currency];
+            let formatted = (price * rate).toFixed(2);
+            if (currency === 'SAR') return `${formatted} ر.س`;
+            if (currency === 'USD') return `$${formatted}`;
+            if (currency === 'EUR') return `€${formatted}`;
+        }
+
+        function translate(key) {
+            return translations[language][key] || key;
+        }
+
+        // Show Section
+        function showSection(sectionId) {
+            const sections = ['categories', 'products', 'productDetail', 'wishlist', 'profile', 'orders', 'coupons', 'faq', 'contact'];
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) section.style.display = id === sectionId ? 'block' : 'none';
+            });
+            document.getElementById('recentlyViewed').style.display = sectionId === 'products' && recentlyViewed.length > 0 ? 'block' : 'none';
+            document.getElementById('recommendations').style.display = sectionId === 'products' && recommendations.length > 0 ? 'block' : 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.pushState(null, '', `#${sectionId}`);
+        }
+
+        // Mobile Menu Toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            const navLinks = document.getElementById('navLinks');
+            const menuToggle = document.getElementById('menuToggle');
+            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+            navLinks.classList.toggle('active');
+            menuToggle.setAttribute('aria-expanded', !isExpanded);
+        });
+
+        // Hero Banner Rotation
+        let currentBanner = 0;
+
+        function updateBanner() {
+            const hero = document.getElementById('hero');
+            const banner = banners[currentBanner];
+            hero.style.background = `linear-gradient(135deg, #FF4B2B, #FF416C), url('${banner.image}') center/cover`;
+            hero.innerHTML = `
+                <h1>${banner.title}</h1>
+                <p>${banner.subtitle}</p>
+                <button class="cta" onclick="showSection('categories')">${banner.cta}</button>
+                <div class="banner-nav" id="bannerNav">
+                    ${banners.map((_, i) => `<span${i === currentBanner ? ' class="active"' : ''} onclick="setBanner(${i})"></span>`).join('')}
+                </div>
+            `;
+        }
+
+        function setBanner(index) {
+            currentBanner = index;
+            updateBanner();
+        }
+
+        setInterval(() => {
+            currentBanner = (currentBanner + 1) % banners.length;
+            updateBanner();
+        }, 5000);
+
+        // Load Categories
+        function loadCategories() {
+            const categoriesContainer = document.getElementById('categoriesContainer');
+            const categories = [
+                { id: 'watches', name: 'ساعات', image: 'https://via.placeholder.com/250?text=ساعات' },
+                { id: 'bracelets', name: 'أساور', image: 'https://via.placeholder.com/250?text=أساور' },
+                { id: 'rings', name: 'خواتم', image: 'https://via.placeholder.com/250?text=خواتم' },
+                { id: 'medals', name: 'ميداليات', image: 'https://via.placeholder.com/250?text=ميداليات' }
+            ];
+            
+            categoriesContainer.innerHTML = categories.map(category => `
+                <div class="category-card" onclick="filterByCategory('${category.id}')" role="button" aria-label="عرض ${category.name}">
+                    <img src="${category.image}" alt="${category.name}" loading="lazy">
+                    <h3>${category.name}</h3>
+                </div>
+            `).join('');
+        }
+
+        function filterByCategory(categoryId) {
+            document.getElementById('categoryFilter').value = categoryId;
+            applyFilters();
+            showSection('products');
+        }
+
+        // Load Products
+        function loadProducts(filters = {}, append = false) {
+            const productsContainer = document.getElementById('productsContainer');
+            const loader = document.getElementById('loader');
+            let filteredProducts = [...allProducts];
+
+            // Apply Filters
+            if (filters.category) {
+                filteredProducts = filteredProducts.filter(p => p.category === filters.category);
+            }
+            if (filters.minPrice) {
+                filteredProducts = filteredProducts.filter(p => p.price >= parseFloat(filters.minPrice));
+            }
+            if (filters.maxPrice) {
+                filteredProducts = filteredProducts.filter(p => p.price <= parseFloat(filters.maxPrice));
+            }
+            if (filters.sortBy) {
+                filteredProducts.sort((a, b) => {
+                    if (filters.sortBy === 'price-asc') return a.price - b.price;
+                    if (filters.sortBy === 'price-desc') return b.price - a.price;
+                    if (filters.sortBy === 'rating') return b.rating - a.rating;
+                    if (filters.sortBy === 'newest') return b.id - a.id;
+                    return 0;
+                });
+            }
+
+            // Pagination
+            const start = (currentPage - 1) * productsPerPage;
+            const end = start + productsPerPage;
+            const paginatedProducts = filteredProducts.slice(0, end);
+
+            const html = paginatedProducts.map(product => `
+                <div class="product-card" role="article" aria-labelledby="product-${product.id}" onclick="viewProduct(${product.id})">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    <h3 id="product-${product.id}">${product.name}</h3>
+                    <div class="price">${formatPrice(product.price)}</div>
+                    <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
+                    <div class="stock-status ${product.stock <= 5 ? 'low' : ''}">
+                        ${product.stock <= 5 ? `متبقي ${product.stock} فقط!` : `متوفر (${product.stock})`}
+                    </div>
+                    <div class="actions">
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})" aria-label="${translate('addToCart')} ${product.name}">${translate('addToCart')}</button>
+                        <button class="wishlist${wishlist.includes(product.id) ? ' active' : ''}" onclick="event.stopPropagation(); toggleWishlist(${product.id})" aria-label="${wishlist.includes(product.id) ? 'إزالة' : 'إضافة'} ${product.name} إلى قائمة الأمنيات">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        <button class="compare${compareList.includes(product.id) ? ' active' : ''}" onclick="event.stopPropagation(); toggleCompare(${product.id})" aria-label="${compareList.includes(product.id) ? 'إزالة' : 'إضافة'} ${product.name} إلى المقارنة">
+                            <i class="fas fa-balance-scale"></i>
+                        </button>
+                        <button class="ar-preview" onclick="event.stopPropagation(); showARPreview(${product.id})" aria-label="معاينة ${product.name} بالواقع المعزز">AR</button>
+                    </div>
+                </div>
+            `).join('');
+
+            if (append) {
+                productsContainer.innerHTML += html;
+            } else {
+                productsContainer.innerHTML = html;
+                currentPage = 1;
+            }
+
+            // Infinite Scroll
+            if (end < filteredProducts.length) {
+                loader.className = 'loader active';
+                window.onscroll = () => {
+                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
+                        currentPage++;
+                        loadProducts(filters, true);
+                    }
+                };
+            } else {
+                loader.className = 'loader';
+                window.onscroll = null;
+            }
+        }
+
+        function applyFilters() {
+            const filters = {
+                category: document.getElementById('categoryFilter').value,
+                minPrice: document.getElementById('minPrice').value,
+                maxPrice: document.getElementById('maxPrice').value,
+                sortBy: document.getElementById('sortBy').value
+            };
+            loadProducts(filters);
+        }
+
+        // Search Functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const suggestionsContainer = document.getElementById('searchSuggestions');
+            if (query.length < 2) {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
+
+            const suggestions = allProducts.filter(p => 
+                p.name.toLowerCase().includes(query) || 
+                p.description.toLowerCase().includes(query) ||
+                p.brand.toLowerCase().includes(query) ||
+                p.category.toLowerCase().includes(query)
+            ).slice(0, 5);
+
+            suggestionsContainer.innerHTML = suggestions.map(p => `
+                <div onclick="viewProduct(${p.id})" role="option" aria-label="عرض ${p.name}">${p.name} - ${p.brand}</div>
+            `).join('');
+            suggestionsContainer.style.display = suggestions.length ? 'block' : 'none';
+        });
+
+        // Voice Search
+        document.getElementById('micIcon').addEventListener('click', () => {
+            if ('webkitSpeechRecognition' in window) {
+                const recognition = new webkitSpeechRecognition();
+                recognition.lang = 'ar-SA';
+                recognition.onresult = (event) => {
+                    const query = event.results[0][0].transcript;
+                    document.getElementById('searchInput').value = query;
+                    document.getElementById('searchInput').dispatchEvent(new Event('input'));
+                };
+                recognition.start();
+            } else {
+                showToast('متصفحك لا يدعم التعرف على الصوت', 'error');
+            }
+        });
+
+        // Cart Functions
+        function addToCart(productId, color = null, size = null, customization = null) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product || product.stock <= 0) {
+                showToast('المنتج غير متوفر', 'error');
+                return;
+            }
+
+            if (!color && !size && (product.colors.length > 0 || product.sizes.length > 0)) {
+                showToast('يرجى اختيار اللون والحجم', 'error');
+                viewProduct(productId);
+                return;
+            }
+
+            const cartItem = cart.find(item => item.id === productId && item.color === color && item.size === size && item.customization === customization);
+            if (cartItem) {
+                cartItem.quantity += 1;
+            } else {
+                cart.push({ id: productId, quantity: 1, color, size, customization });
+            }
+
+            updateCartUI();
+            showToast(`${product.name} أُضيف إلى العربة`);
+            
+            if (isGuest) {
+                localStorage.setItem('guestCart', JSON.stringify(cart));
+            }
+        }
+
+        function updateCartUI() {
+            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        function showCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const cartTotalContainer = document.getElementById('cartTotal');
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = `<p>${translate('cart')} فارغة</p>`;
+                cartTotalContainer.textContent = `الإجمالي: ${formatPrice(0)}`;
+            } else {
+                let total = 0;
+                cartItemsContainer.innerHTML = cart.map(item => {
+                    const product = allProducts.find(p => p.id === item.id);
+                    const itemTotal = product.price * item.quantity;
+                    total += itemTotal;
+                    return `
+                        <div class="cart-item">
+                            <img src="${product.image}" alt="${product.name}">
+                            <div>
+                                <h4>${product.name}</h4>
+                                <p>${item.color ? `اللون: ${item.color}` : ''} ${item.size ? `الحجم: ${item.size}` : ''} ${item.customization ? `التخصيص: ${item.customization}` : ''}</p>
+                                <p>${formatPrice(itemTotal)} (${formatPrice(product.price)} × ${item.quantity})</p>
+                                <div class="quantity-controls">
+                                    <button onclick="updateCartQuantity(${item.id}, '${item.color || ''}', '${item.size || ''}', '${item.customization || ''}', ${item.quantity - 1})" aria-label="تقليل كمية ${product.name}">-</button>
+                                    <span>${item.quantity}</span>
+                                    <button onclick="updateCartQuantity(${item.id}, '${item.color || ''}', '${item.size || ''}', '${item.customization || ''}', ${item.quantity + 1})" aria-label="زيادة كمية ${product.name}">+</button>
+                                    <button onclick="removeFromCart(${item.id}, '${item.color || ''}', '${item.size || ''}', '${item.customization || ''}')" aria-label="إزالة ${product.name} من العربة">إزالة</button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                if (appliedCoupon) {
+                    if (appliedCoupon.discount) {
+                        total *= (100 - appliedCoupon.discount) / 100;
+                    }
+                    cartTotalContainer.textContent = `الإجمالي: ${formatPrice(total)} (بعد الخصم)`;
+                } else {
+                    cartTotalContainer.textContent = `الإجمالي: ${formatPrice(total)}`;
+                }
+            }
+            openModal('cartModal');
+        }
+
+        function updateCartQuantity(productId, color, size, customization, quantity) {
+            if (quantity <= 0) {
+                removeFromCart(productId, color, size, customization);
+                return;
+            }
+            const product = allProducts.find(p => p.id === productId);
+            if (quantity > product.stock) {
+                showToast('الكمية المطلوبة غير متوفرة', 'error');
+                return;
+            }
+
+            cart = cart.map(item => 
+                item.id === productId && item.color === color && item.size === size && item.customization === customization 
+                ? { ...item, quantity } 
+                : item
+            );
+            updateCartUI();
+            
+            if (isGuest) {
+                localStorage.setItem('guestCart', JSON.stringify(cart));
+            }
+        }
+
+        function removeFromCart(productId, color, size, customization) {
+            cart = cart.filter(item => !(item.id === productId && item.color === color && item.size === size && item.customization === customization));
+            updateCartUI();
+            
+            if (isGuest) {
+                localStorage.setItem('guestCart', JSON.stringify(cart));
+            }
+        }
+
+        function applyCoupon() {
+            const code = document.getElementById('couponCode').value.trim().toUpperCase();
+            const coupon = coupons.find(c => c.code === code);
+            if (!coupon) {
+                showToast('رمز الكوبون غير صالح', 'error');
+                return;
+            }
+            appliedCoupon = coupon;
+            showCart();
+            showToast(`تم تطبيق الكوبون ${code} بنجاح`);
+        }
+
+        function checkout() {
+            if (cart.length === 0) {
+                showToast(`${translate('cart')} فارغة`, 'error');
+                return;
+            }
+
+            const order = {
+                items: cart,
+                total: cart.reduce((sum, item) => {
+                    const product = allProducts.find(p => p.id === item.id);
+                    return sum + product.price * item.quantity;
+                }, 0),
+                coupon: appliedCoupon,
+                date: new Date(),
+                status: 'pending'
+            };
+
+            if (appliedCoupon) {
+                if (appliedCoupon.discount) {
+                    order.total *= (100 - appliedCoupon.discount) / 100;
+                }
+            }
+
+            if (isGuest) {
+                orders.push(order);
+                localStorage.setItem('guestOrders', JSON.stringify(orders));
+            } else {
+                orders.push(order);
+            }
+
+            cart = [];
+            appliedCoupon = null;
+            updateCartUI();
+            showSection('orders');
+            showToast('تم تقديم الطلب بنجاح', 'success');
+            
+            if (isGuest) {
+                localStorage.removeItem('guestCart');
+            }
+        }
+
+        // Wishlist Functions
+        function toggleWishlist(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            if (wishlist.includes(productId)) {
+                wishlist = wishlist.filter(id => id !== productId);
+                showToast(`${product.name} أُزيل من قائمة الأمنيات`);
+            } else {
+                wishlist.push(productId);
+                showToast(`${product.name} أُضيف إلى قائمة الأمنيات`);
+            }
+            loadWishlist();
+            loadProducts();
+        }
+
+        function loadWishlist() {
+            const wishlistContainer = document.getElementById('wishlistProducts');
+            if (wishlist.length === 0) {
+                wishlistContainer.innerHTML = '<p>قائمة الأمنيات فارغة</p>';
+                return;
+            }
+
+            wishlistContainer.innerHTML = wishlist.map(id => {
+                const product = allProducts.find(p => p.id === id);
+                if (!product) return '';
+                return `
+                    <div class="product-card" onclick="viewProduct(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <h3>${product.name}</h3>
+                        <div class="price">${formatPrice(product.price)}</div>
+                        <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
+                        <div class="actions">
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">${translate('addToCart')}</button>
+                            <button class="wishlist active" onclick="event.stopPropagation(); toggleWishlist(${product.id})">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="ar-preview" onclick="event.stopPropagation(); showARPreview(${product.id})">AR</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function shareWishlist() {
+            if (wishlist.length === 0) {
+                showToast('قائمة الأمنيات فارغة', 'error');
+                return;
+            }
+            const wishlistNames = wishlist.map(id => allProducts.find(p => p.id === id).name).join(', ');
+            const shareUrl = `${window.location.origin}/wishlist?ids=${wishlist.join(',')}`;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'قائمة أمنياتي - متجر الأناقة',
+                    text: `تحقق من قائمة أمنياتي: ${wishlistNames}`,
+                    url: shareUrl
+                });
+            } else {
+                navigator.clipboard.writeText(shareUrl);
+                showToast('تم نسخ رابط قائمة الأمنيات');
+            }
+        }
+
+        // Compare Functions
+        function toggleCompare(productId) {
+            if (compareList.includes(productId)) {
+                compareList = compareList.filter(id => id !== productId);
+                showToast('تمت الإزالة من المقارنة');
+            } else {
+                if (compareList.length >= 4) {
+                    showToast('لا يمكن مقارنة أكثر من 4 منتجات', 'error');
+                    return;
+                }
+                compareList.push(productId);
+                showToast('تمت الإضافة إلى المقارنة');
+            }
+            loadProducts();
+            showCompare();
+        }
+
+        function showCompare() {
+            const compareTable = document.getElementById('compareTable');
+            if (compareList.length === 0) {
+                compareTable.innerHTML = '<p>لا توجد منتجات للمقارنة</p>';
+                return;
+            }
+
+            const products = compareList.map(id => allProducts.find(p => p.id === id));
+            compareTable.innerHTML = `
+                <table class="compare-table">
+                    <tr>
+                        <th>المعيار</th>
+                        ${products.map(p => `<th>${p.name}</th>`).join('')}
+                    </tr>
+                    <tr>
+                        <td>الصورة</td>
+                        ${products.map(p => `<td><img src="${p.image}" alt="${p.name}" style="width:100px;"></td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td>السعر</td>
+                        ${products.map(p => `<td>${formatPrice(p.price)}</td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td>التقييم</td>
+                        ${products.map(p => `<td>${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}</td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td>المادة</td>
+                        ${products.map(p => `<td>${p.specs.material}</td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td>المميزات</td>
+                        ${products.map(p => `<td>${p.specs.features.join(', ')}</td>`).join('')}
+                    </tr>
+                </table>
+            `;
+            openModal('compareModal');
+        }
+
+        // AR Preview
+        function showARPreview(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const arPreview = document.getElementById('arPreview');
+            arPreview.innerHTML = `
+                <model-viewer src="${product.model3d}" alt="${product.name}" ar ar-modes="webxr scene-viewer quick-look" camera-controls>
+                    <button slot="ar-button" style="background:#f0c14b;padding:10px;border-radius:5px;">عرض في الواقع المعزز</button>
+                </model-viewer>
+            `;
+            openModal('arModal');
+        }
+
+        // Product Detail
+        function viewProduct(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            recentlyViewed = [...new Set([productId, ...recentlyViewed])].slice(0, 5);
+            localStorage.setItem('recentlyViewed', JSON.stringify(recentlyViewed));
+            loadRecentlyViewed();
+
+            const productDetail = document.getElementById('productDetailContainer');
+            productDetail.innerHTML = `
+                <div class="product-detail-content">
+                    <img src="${product.image}" alt="${product.name}" loading="lazy">
+                    <div class="details">
+                        <h2>${product.name}</h2>
+                        <div class="price">${formatPrice(product.price)}</div>
+                        <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
+                        <p>${product.description}</p>
+                        <p><strong>العلامة التجارية:</strong> ${product.brand}</p>
+                        <p><strong>المواصفات:</strong></p>
+                        <ul>
+                            ${Object.entries(product.specs).map(([key, value]) => `<li>${key}: ${Array.isArray(value) ? value.join(', ') : value}</li>`).join('')}
+                        </ul>
+                        <div class="options">
+                            ${product.colors.length ? `
+                                <label>اللون:
+                                    <select id="colorSelect${product.id}">
+                                        ${product.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
+                                    </select>
+                                </label>
+                            ` : ''}
+                            ${product.sizes.length ? `
+                                <label>الحجم:
+                                    <select id="sizeSelect${product.id}">
+                                        ${product.sizes.map(s => `<option value="${s}">${s}</option>`).join('')}
+                                </select>
+                            </label>
+                            ` : ''}
+                        </div>
+                        <div class="actions">
+                            <button class="add-to-cart" onclick="addToCart(${product.id}, document.getElementById('colorSelect${product.id}')?.value, document.getElementById('sizeSelect${product.id}')?.value)">${translate('addToCart')}</button>
+                            <button class="wishlist${wishlist.includes(product.id) ? ' active' : ''}" onclick="toggleWishlist(${product.id})">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                            <button class="ar-preview" onclick="showARPreview(${product.id})">AR</button>
+                            <button class="customize" onclick="customizeProduct(${product.id})">
+                                <i class="fas fa-edit"></i> تخصيص
+                            </button>
+                        </div>
+                        <div class="review-form">
+                            <h3>أضف تقييمك</h3>
+                            <form onsubmit="submitReview(${product.id}, event)">
+                                <div class="star-rating">
+                                    ${[5,4,3,2,1].map(i => `
+                                        <input type="radio" id="star${i}_${product.id}" name="rating" value="${i}" required>
+                                        <label for="star${i}_${product.id}">★</label>
+                                    `).join('')}
+                                </div>
+                                <textarea placeholder="اكتب تقييمك..." required></textarea>
+                                <input type="file" accept="image/*" id="reviewImage${product.id}">
+                                <button type="submit">إرسال</button>
+                            </form>
+                        </div>
+                        <div class="reviews">
+                            ${product.reviews.map(r => `
+                                <div class="review">
+                                    <p><strong>${r.user}</strong> (${'★'.repeat(r.rating)})</p>
+                                    <p>${r.comment}</p>
+                                    ${r.image ? `<img src="${r.image}" alt="صورة التقييم" style="max-width:100px;">` : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="related-products">
+                    <h3>منتجات ذات صلة</h3>
+                    <div class="products" id="relatedProducts${product.id}"></div>
+                </div>
+            `;
+            showSection('productDetail');
+
+            // Load Related Products
+            const relatedProducts = allProducts.filter(p => p.category === product.category && p.id !== product.id).slice(0, 4);
+            document.getElementById(`relatedProducts${product.id}`).innerHTML = relatedProducts.map(p => `
+                <div class="product-card" onclick="viewProduct(${p.id})">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    <h3>${p.name}</h3>
+                    <div class="price">${formatPrice(p.price)}</div>
+                    <div class="rating">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}</div>
+                    <div class="actions">
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${p.id})">${translate('addToCart')}</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function submitReview(productId, event) {
+            event.preventDefault();
+            const product = allProducts.find(p => p.id === productId);
+            const rating = document.querySelector(`input[name="rating"]:checked`).value;
+            const comment = event.target.querySelector('textarea').value;
+            const imageInput = document.getElementById(`reviewImage${productId}`);
+            const image = imageInput.files[0] ? URL.createObjectURL(imageInput.files[0]) : null;
+
+            const review = {
+                user: isGuest ? "ضيف" : "مستخدم مسجل",
+                rating: parseInt(rating),
+                comment,
+                image,
+                date: new Date().toLocaleDateString()
+            };
+
+            product.reviews.push(review);
+            showToast('تم إضافة التقييم بنجاح');
+            viewProduct(productId);
+        }
+
+        // Product Customization
+        function customizeProduct(productId) {
+            const product = allProducts.find(p => p.id === productId);
+            const modalContent = document.querySelector('#customizeModal .modal-content');
+            modalContent.innerHTML = `
+                <h2>تخصيص ${product.name}</h2>
+                <form onsubmit="saveCustomization(${productId}, event)">
+                    <label>نص التخصيص (مثل النقش):
+                        <input type="text" id="customText" placeholder="أدخل النص" maxlength="20">
+                    </label>
+                    <label>تحميل شعار (اختياري):
+                        <input type="file" accept="image/*" id="customLogo">
+                    </label>
+                    <button type="submit">حفظ التخصيص</button>
+                    <button class="modal-close" onclick="closeModal('customizeModal')">إغلاق</button>
+                </form>
+            `;
+            openModal('customizeModal');
+        }
+
+        function saveCustomization(productId, event) {
+            event.preventDefault();
+            const customText = document.getElementById('customText').value;
+            const customLogo = document.getElementById('customLogo').files[0];
+            const customization = customText + (customLogo ? ` + شعار` : '');
+            addToCart(productId, document.getElementById(`colorSelect${productId}`)?.value, document.getElementById(`sizeSelect${productId}`)?.value, customization);
+            closeModal('customizeModal');
+        }
+
+        // Recently Viewed
+        function loadRecentlyViewed() {
+            const recentlyViewedContainer = document.getElementById('recentlyViewedProducts');
+            if (recentlyViewed.length === 0) {
+                document.getElementById('recentlyViewed').style.display = 'none';
+                return;
+            }
+
+            recentlyViewedContainer.innerHTML = recentlyViewed.map(id => {
+                const product = allProducts.find(p => p.id === id);
+                if (!product) return '';
+                return `
+                    <div class="product-card" onclick="viewProduct(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <h3>${product.name}</h3>
+                        <div class="price">${formatPrice(product.price)}</div>
+                        <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
+                        <div class="actions">
+                            <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">${translate('addToCart')}</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            document.getElementById('recentlyViewed').style.display = 'block';
+        }
+
+        // Recommendations
+        function loadRecommendations() {
+            const recommendationContainer = document.getElementById('recommendationProducts');
+            recommendations = allProducts.filter(p => !recentlyViewed.includes(p.id)).slice(0, 4);
+            if (recommendations.length === 0) {
+                document.getElementById('recommendations').style.display = 'none';
+                return;
+            }
+
+            recommendationContainer.innerHTML = recommendations.map(p => `
+                <div class="product-card" onclick="viewProduct(${p.id})">
+                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    <h3>${p.name}</h3>
+                    <div class="price">${formatPrice(p.price)}</div>
+                    <div class="rating">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5 - Math.floor(p.rating))}</div>
+                    <div class="actions">
+                        <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${p.id})">${translate('addToCart')}</button>
+                    </div>
+                </div>
+            `).join('');
+            document.getElementById('recommendations').style.display = 'block';
+        }
+
+        // FAQ
+        function loadFAQs() {
+            const faqContainer = document.getElementById('faqContainer');
+            faqContainer.innerHTML = faqs.map((faq, index) => `
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(${index})">
+                        ${faq.question}
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer" id="faqAnswer${index}">
+                        ${faq.answer}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFAQ(index) {
+            const answer = document.getElementById(`faqAnswer${index}`);
+            answer.classList.toggle('active');
+        }
+
+        // Profile
+        function loadProfile() {
+            if (isGuest) {
+                document.getElementById('profileName').textContent = "وضع الضيف";
+                document.getElementById('profileEmail').textContent = "سجل الدخول لعرض الملف الشخصي";
+                document.getElementById('profilePoints').textContent = "";
+                document.getElementById('profileOrders').textContent = "0";
+                document.getElementById('profileWishlist').textContent = "0";
+                document.getElementById('profileReviews').textContent = "0";
+                return;
+            }
+
+            document.getElementById('profileName').textContent = "اسم المستخدم";
+            document.getElementById('profileEmail').textContent = "user@example.com";
+            document.getElementById('profilePoints').textContent = "النقاط: 100";
+            document.getElementById('profileOrders').textContent = orders.length;
+            document.getElementById('profileWishlist').textContent = wishlist.length;
+            document.getElementById('profileReviews').textContent = allProducts.reduce((sum, p) => sum + p.reviews.length, 0);
+        }
+
+        function updateProfile(event) {
+            event.preventDefault();
+            showToast('تم تحديث الملف الشخصي بنجاح');
+        }
+
+        // Orders
+        function loadOrders() {
+            const ordersContainer = document.getElementById('ordersContainer');
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = '<p>لا توجد طلبات سابقة</p>';
+                return;
+            }
+
+            ordersContainer.innerHTML = orders.map((order, index) => `
+                <div class="order-card">
+                    <div class="order-header">
+                        <div>
+                            <span class="order-id">طلب #${index + 1}</span>
+                            <span class="order-date">${order.date.toLocaleDateString()}</span>
+                        </div>
+                        <span class="order-status">${order.status}</span>
+                    </div>
+                    <div class="order-items">
+                        ${order.items.map(item => {
+                            const product = allProducts.find(p => p.id === item.id);
+                            return `
+                                <div class="order-item">
+                                    <img src="${product.image}" alt="${product.name}">
+                                    <div class="order-item-info">
+                                        <div class="order-item-name">${product.name}</div>
+                                        <div class="order-item-price">${formatPrice(product.price)} × ${item.quantity}</div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="order-total">الإجمالي: ${formatPrice(order.total)}</div>
+                    <div class="order-actions">
+                        <button onclick="reorder(${index})">إعادة الطلب</button>
+                        <button onclick="trackOrder(${index})">تتبع الطلب</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function reorder(orderIndex) {
+            const order = orders[orderIndex];
+            cart = order.items;
+            updateCartUI();
+            showToast('تمت إضافة الطلب إلى السلة');
+            showSection('products');
+        }
+
+        function trackOrder(orderIndex) {
+            showToast(`تتبع الطلب #${orderIndex + 1}: جاري التوصيل`);
+        }
+
+        // Coupons
+        function loadCoupons() {
+            coupons = [
+                { code: "WELCOME10", discount: 10, expiry: new Date("2023-12-31") },
+                { code: "FREESHIP", freeShipping: true, expiry: new Date("2023-12-31") },
+                { code: "LOYALTY20", discount: 20, expiry: new Date("2023-12-31") }
+            ];
+
+            const couponsContainer = document.getElementById('couponsContainer');
+            couponsContainer.innerHTML = coupons.map(coupon => `
+                <div class="coupon-card">
+                    <div class="coupon-code">${coupon.code}</div>
+                    <div class="coupon-desc">
+                        ${coupon.discount ? `خصم ${coupon.discount}% على الطلب` : ''}
+                        ${coupon.freeShipping ? 'شحن مجاني على الطلب' : ''}
+                    </div>
+                    <div class="coupon-expiry">صالح حتى: ${coupon.expiry.toLocaleDateString()}</div>
+                </div>
+            `).join('');
+        }
+
+        // Contact Form
+        function sendContactForm(event) {
+            event.preventDefault();
+            showToast('تم إرسال رسالتك بنجاح، سنتواصل معك قريباً');
+            event.target.reset();
+        }
+
+        // Newsletter
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            showToast('شكراً للاشتراك في نشرتنا البريدية');
+            event.target.reset();
+        }
+
+        // Authentication
+        function login(event) {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simulate login
+            isGuest = false;
+            showToast('تم تسجيل الدخول بنجاح');
+            closeModal('loginModal');
+            
+            // Update UI
+            document.getElementById('userName').textContent = "المستخدم";
+            document.getElementById('userImage').src = "https://via.placeholder.com/50";
+            document.getElementById('loginLink').style.display = 'none';
+            document.getElementById('logoutLink').style.display = 'block';
+            document.getElementById('ordersLink').style.display = 'block';
+            document.getElementById('profileLink').style.display = 'block';
+            document.getElementById('couponsLink').style.display = 'block';
+            document.getElementById('guestWarning').style.display = 'none';
+            
+            // Load user data
+            loadProfile();
+            loadOrders();
+            loadCoupons();
+        }
+
+        function register(event) {
+            event.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const phone = document.getElementById('registerPhone').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                showToast('كلمة المرور غير متطابقة', 'error');
+                return;
+            }
+            
+            // Simulate registration
+            showToast('تم إنشاء الحساب بنجاح');
+            closeModal('registerModal');
+            openModal('loginModal');
+        }
+
+        function logout() {
+            isGuest = true;
+            showToast('تم تسجيل الخروج بنجاح');
+            
+            // Update UI
+            document.getElementById('userName').textContent = "وضع الضيف";
+            document.getElementById('userImage').src = "https://via.placeholder.com/50";
+            document.getElementById('loginLink').style.display = 'block';
+            document.getElementById('logoutLink').style.display = 'none';
+            document.getElementById('ordersLink').style.display = 'none';
+            document.getElementById('profileLink').style.display = 'none';
+            document.getElementById('couponsLink').style.display = 'none';
+            document.getElementById('guestWarning').style.display = 'block';
+            
+            // Reset user data
+            cart = [];
+            wishlist = [];
+            orders = [];
+            updateCartUI();
+            loadProfile();
+        }
+
+        // Accessibility Functions
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark-mode');
+            darkMode = !darkMode;
+            showToast(darkMode ? 'تم تفعيل الوضع الليلي' : 'تم تعطيل الوضع الليلي');
+        }
+
+        function toggleHighContrast() {
+            document.body.classList.toggle('high-contrast');
+            highContrast = !highContrast;
+            showToast(highContrast ? 'تم تفعيل وضع التباين العالي' : 'تم تعطيل وضع التباين العالي');
+        }
+
+        function increaseFontSize() {
+            document.body.classList.toggle('font-large');
+            largeFont = !largeFont;
+            showToast(largeFont ? 'تم تكبير حجم الخط' : 'تم إعادة حجم الخط إلى الوضع الطبيعي');
+        }
+
+        function resetAccessibility() {
+            document.body.className = '';
+            darkMode = false;
+            highContrast = false;
+            largeFont = false;
+            showToast('تم إعادة تعيين جميع إعدادات الوصول');
+        }
+    </script>
+</body>
+</html>
