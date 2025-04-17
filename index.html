@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="متجر الأناقة الفاخر - إكسسوارات عصرية: ساعات، أساور، خواتم، ميداليات">
     <meta name="author" content="Your Name">
-    <meta name="keywords" content="إكسسوارات, ساعات ذكية, أساور, خواتم, ميداليات, تسوق">
+    <meta name="keywords" content="إكسسوارات, ساعات ذكية, أساور, خواتم, ميداليات, تسوق, أناقة">
     <meta property="og:title" content="متجر الأناقة - تسوق بأناقة لا تضاهى">
     <meta property="og:description" content="اكتشف مجموعتنا الفاخرة من الساعات، الأساور، الخواتم، والميداليات.">
     <meta property="og:image" content="https://via.placeholder.com/1200x630?text=متجر+الأناقة">
@@ -39,7 +39,7 @@
             background: #f4f4f4;
             direction: rtl;
             text-align: right;
-            transition: background 0.3s, color 0.3s;
+            transition: background 0.3s, color 0.3s, font-size 0.3s;
             scroll-behavior: smooth;
         }
 
@@ -55,6 +55,25 @@
 
         body.high-contrast a, body.high-contrast button {
             color: #ff0;
+        }
+
+        body.font-large {
+            font-size: 1.2em;
+        }
+
+        /* Skip Link */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: #f0c14b;
+            color: #232f3e;
+            padding: 10px;
+            z-index: 8000;
+        }
+
+        .skip-link:focus {
+            top: 0;
         }
 
         /* Navbar */
@@ -119,6 +138,20 @@
             color: #f0c14b;
         }
 
+        .navbar .search-container .mic-icon {
+            position: absolute;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .navbar .search-container .mic-icon:hover {
+            color: #f0c14b;
+        }
+
         .navbar .search-suggestions {
             position: absolute;
             top: 100%;
@@ -150,7 +183,7 @@
             gap: 30px;
         }
 
-        .navbar .nav-links a, .navbar .nav-links button {
+        .navbar .nav-links a, .navbar .nav-links button, .navbar .nav-links select {
             color: #fff;
             text-decoration: none;
             font-size: 16px;
@@ -160,7 +193,7 @@
             transition: color 0.3s, transform 0.2s;
         }
 
-        .navbar .nav-links a:hover, .navbar .nav-links button:hover {
+        .navbar .nav-links a:hover, .navbar .nav-links button:hover, .navbar .nav-links select:hover {
             color: #f0c14b;
             transform: scale(1.05);
         }
@@ -313,6 +346,30 @@
             transform: scale(1.1);
         }
 
+        .hero .banner-nav {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1;
+        }
+
+        .hero .banner-nav span {
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border-radius: 50%;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+        }
+
+        .hero .banner-nav span.active {
+            opacity: 1;
+        }
+
         @keyframes heroFade {
             from { opacity: 0; transform: scale(0.95); }
             to { opacity: 1; transform: scale(1); }
@@ -340,6 +397,11 @@
 
         .filters input[type="number"] {
             width: 100px;
+        }
+
+        .filters .price-slider {
+            width: 100%;
+            margin: 10px 0;
         }
 
         /* Categories */
@@ -453,6 +515,15 @@
             margin-bottom: 10px;
         }
 
+        .product-card .stock-status {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .product-card .stock-status.low {
+            color: #dc3545;
+        }
+
         .product-card .actions {
             display: flex;
             gap: 10px;
@@ -464,7 +535,8 @@
         .product-card .wishlist,
         .product-card .compare,
         .product-card .ar-preview,
-        .product-card .share {
+        .product-card .share,
+        .product-card .customize {
             background: #f0c14b;
             border: none;
             padding: 10px 15px;
@@ -478,9 +550,18 @@
             background: #ddd;
         }
 
+        .product-card .wishlist.active {
+            background: #ff4b2b;
+            color: #fff;
+        }
+
         .product-card .compare {
             background: #28a745;
             color: #fff;
+        }
+
+        .product-card .compare.active {
+            background: #1e7e34;
         }
 
         .product-card .ar-preview {
@@ -490,6 +571,11 @@
 
         .product-card .share {
             background: #17a2b8;
+            color: #fff;
+        }
+
+        .product-card .customize {
+            background: #6f42c1;
             color: #fff;
         }
 
@@ -515,6 +601,11 @@
 
         .product-card .share:hover {
             background: #138496;
+            transform: scale(1.05);
+        }
+
+        .product-card .customize:hover {
+            background: #5a32a3;
             transform: scale(1.05);
         }
 
@@ -568,6 +659,37 @@
             border-radius: 5px;
         }
 
+        .product-detail .review-form .star-rating {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .product-detail .review-form .star-rating input {
+            display: none;
+        }
+
+        .product-detail .review-form .star-rating label {
+            font-size: 24px;
+            color: #ddd;
+            cursor: pointer;
+        }
+
+        .product-detail .review-form .star-rating input:checked ~ label,
+        .product-detail .review-form .star-rating label:hover,
+        .product-detail .review-form .star-rating label:hover ~ label {
+            color: #f0c14b;
+        }
+
+        .related-products {
+            margin-top: 40px;
+        }
+
+        .related-products h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
         /* Modals */
         .modal {
             display: none;
@@ -590,7 +712,7 @@
             background: #fff;
             padding: 30px;
             border-radius: 15px;
-            max-width: 600px;
+            max-width: 800px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
@@ -653,12 +775,47 @@
             gap: 10px;
         }
 
+        .coupon-apply {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .coupon-apply input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            flex: 1;
+        }
+
+        .coupon-apply button {
+            background: #f0c14b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .coupon-apply button:hover {
+            background: #e0b038;
+        }
+
         /* Recently Viewed */
         .recently-viewed {
             margin: 20px 10px;
         }
 
         .recently-viewed h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Recommendations */
+        .recommendations {
+            margin: 20px 10px;
+        }
+
+        .recommendations h2 {
             font-size: 24px;
             margin-bottom: 20px;
         }
@@ -689,8 +846,7 @@
             padding: 10px;
             border: none;
             border-radius: 5px;
-            width: 100%;
-            max-width: 300px;
+            flex: 1;
         }
 
         .newsletter button {
@@ -705,35 +861,132 @@
             background: #e0b038;
         }
 
-        /* Live Chat */
-        .live-chat {
+        /* Footer */
+        .footer {
+            background: #131921;
+            color: #fff;
+            padding: 40px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        .footer h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #f0c14b;
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer ul li a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer ul li a:hover {
+            color: #f0c14b;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            color: #fff;
+            font-size: 20px;
+            transition: color 0.3s;
+        }
+
+        .social-links a:hover {
+            color: #f0c14b;
+        }
+
+        .copyright {
+            text-align: center;
+            padding: 20px;
+            background: #232f3e;
+            color: #fff;
+        }
+
+        /* Accessibility Panel */
+        .accessibility-panel {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 15px;
+            z-index: 7000;
+        }
+
+        .accessibility-panel h4 {
+            margin-bottom: 10px;
+            color: #232f3e;
+        }
+
+        .accessibility-panel button {
+            background: #f0c14b;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        .accessibility-panel button:hover {
+            background: #e0b038;
+        }
+
+        /* Loader */
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .loader.active {
+            display: block;
+        }
+
+        .loader .spinner {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #f0c14b;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast */
+        .toast {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background: #007bff;
+            background: #333;
             color: #fff;
-            padding: 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            z-index: 7000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .live-chat:hover {
-            background: #0056b3;
-        }
-
-        /* Toast Notifications */
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 20px;
             padding: 15px 25px;
             border-radius: 5px;
-            z-index: 7000;
-            transition: opacity 0.5s;
+            z-index: 8000;
             opacity: 1;
-            color: #fff;
+            transition: opacity 0.5s;
         }
 
         .toast-success {
@@ -744,39 +997,39 @@
             background: #dc3545;
         }
 
-        /* Lazy Loading */
-        .lazy-load {
-            background: #eee;
+        .toast-warning {
+            background: #ffc107;
+            color: #232f3e;
+        }
+
+        /* Compare Table */
+        .compare-table {
             width: 100%;
-            height: 250px;
-            border-radius: 10px;
-            animation: pulse 1.5s infinite;
+            border-collapse: collapse;
         }
 
-        @keyframes pulse {
-            0% { background: #eee; }
-            50% { background: #ddd; }
-            100% { background: #eee; }
+        .compare-table th, .compare-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: right;
         }
 
-        /* Accessibility */
-        button:focus, a:focus, input:focus, select:focus, textarea:focus {
-            outline: 3px solid #f0c14b;
-            outline-offset: 2px;
+        .compare-table th {
+            background: #f0c14b;
+            color: #232f3e;
         }
 
-        /* Infinite Scroll Loader */
-        .loader {
-            text-align: center;
-            padding: 20px;
-            display: none;
+        .compare-table tr:nth-child(even) {
+            background: #f9f9f9;
         }
 
-        .loader.active {
-            display: block;
+        /* AR Preview */
+        model-viewer {
+            width: 100%;
+            height: 400px;
         }
 
-        /* Profile Section */
+        /* Profile */
         .profile {
             margin: 20px 10px;
             background: #fff;
@@ -785,32 +1038,96 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
-        .profile form {
+        .profile-header {
             display: flex;
-            flex-direction: column;
-            gap: 15px;
-            max-width: 500px;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
         }
 
-        .profile input {
+        .profile-header img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #f0c14b;
+        }
+
+        .profile-info h2 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .profile-stat {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            flex: 1;
+        }
+
+        .profile-stat h3 {
+            color: #232f3e;
+            margin-bottom: 5px;
+        }
+
+        .profile-stat p {
+            color: #666;
+        }
+
+        .profile-edit {
+            margin-top: 30px;
+        }
+
+        .profile-edit h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .profile-edit form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .profile-edit label {
+            display: block;
+            margin-bottom: 5px;
+            color: #232f3e;
+        }
+
+        .profile-edit input, .profile-edit select, .profile-edit textarea {
+            width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
         }
 
-        .profile button {
-            background: #f0c14b;
-            border: none;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
+        .profile-edit textarea {
+            height: 100px;
+            resize: vertical;
         }
 
-        .profile button:hover {
+        .profile-edit button {
+            background: #f0c14b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .profile-edit button:hover {
             background: #e0b038;
         }
 
-        /* Orders Section */
+        /* Orders */
         .orders {
             margin: 20px 10px;
             background: #fff;
@@ -819,974 +1136,818 @@
             box-shadow: 0 6px 15px rgba(0,0,0,0.15);
         }
 
+        .orders h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .order-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .order-id {
+            font-weight: bold;
+            color: #232f3e;
+        }
+
+        .order-date {
+            color: #666;
+        }
+
+        .order-status {
+            background: #f0c14b;
+            color: #232f3e;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .order-items {
+            margin-bottom: 15px;
+        }
+
         .order-item {
-            padding: 15px;
-            border-bottom: 1px solid #ddd;
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .order-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .order-item-info {
+            flex: 1;
+        }
+
+        .order-item-name {
+            font-weight: bold;
+            color: #232f3e;
+        }
+
+        .order-item-price {
+            color: #B12704;
+        }
+
+        .order-total {
+            text-align: left;
+            font-weight: bold;
+            color: #232f3e;
+        }
+
+        .order-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .order-actions button {
+            background: #f0c14b;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .order-actions button:hover {
+            background: #e0b038;
+        }
+
+        /* Coupons */
+        .coupons {
+            margin: 20px 10px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .coupons h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .coupon-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f9f9f9;
+        }
+
+        .coupon-code {
+            font-weight: bold;
+            color: #232f3e;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .coupon-desc {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .coupon-expiry {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* FAQ */
+        .faq {
+            margin: 20px 10px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .faq h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+
+        .faq-question {
+            font-weight: bold;
+            color: #232f3e;
+            font-size: 18px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-answer {
+            color: #666;
+            display: none;
+        }
+
+        .faq-answer.active {
+            display: block;
+        }
+
+        /* Contact */
+        .contact {
+            margin: 20px 10px;
+            background: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .contact h2 {
+            font-size: 28px;
+            margin-bottom: 30px;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .contact-card {
+            background: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .contact-card h3 {
+            color: #232f3e;
+            margin-bottom: 15px;
+        }
+
+        .contact-card p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .contact-form {
+            margin-top: 30px;
+        }
+
+        .contact-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #232f3e;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .contact-form textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .contact-form button {
+            background: #f0c14b;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .contact-form button:hover {
+            background: #e0b038;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 600px) {
+            .profile-edit form {
+                grid-template-columns: 1fr;
+            }
+            
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-detail-content {
+                flex-direction: column;
+            }
+            
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- Skip to Content Link -->
+    <a href="#main-content" class="skip-link">تخطي إلى المحتوى الرئيسي</a>
+
     <!-- Navbar -->
-    <nav class="navbar" role="navigation" aria-label="التنقل الرئيسي">
-        <div class="logo" onclick="showSection('categories')" role="button" aria-label="الانتقال إلى الفئات">متجر الأناقة</div>
-        <button class="menu-toggle" id="menuToggle" aria-label="فتح القائمة" aria-expanded="false">
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="search-container" role="search">
-            <input type="text" id="searchInput" placeholder="ابحث عن ساعات، أساور، خواتم..." aria-label="البحث عن المنتجات">
-            <i class="fas fa-search search-icon" role="button" aria-label="بحث"></i>
-            <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
+    <nav class="navbar">
+        <div class="logo" onclick="showSection('categories')">متجر الأناقة</div>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="ابحث عن منتجات..." aria-label="بحث عن منتجات">
+            <i class="fas fa-search search-icon" id="searchIcon"></i>
+            <i class="fas fa-microphone mic-icon" id="micIcon"></i>
+            <div class="search-suggestions" id="searchSuggestions"></div>
         </div>
+        
         <div class="nav-links" id="navLinks">
-            <div class="user-profile" id="userProfile">
-                <span id="userName">وضع الضيف</span>
-                <img id="userImage" src="https://via.placeholder.com/50" alt="صورة المستخدم" style="display: none;">
-            </div>
+            <a href="#" onclick="showSection('categories')">الرئيسية</a>
+            <a href="#" onclick="showSection('products')">المنتجات</a>
+            <a href="#" id="ordersLink" style="display:none;" onclick="showSection('orders')">طلباتي</a>
+            <a href="#" id="couponsLink" style="display:none;" onclick="showSection('coupons')">كوبوناتي</a>
+            <a href="#" onclick="showSection('faq')">الأسئلة الشائعة</a>
+            <a href="#" onclick="showSection('contact')">اتصل بنا</a>
+            <button onclick="openModal('cartModal')">
+                <i class="fas fa-shopping-cart"></i>
+                <span id="cartCount">0</span>
+            </button>
             <div class="dropdown">
-                <a href="#" id="accountLink">الحساب</a>
+                <div class="user-profile" id="userProfile">
+                    <span id="userName">وضع الضيف</span>
+                    <img id="userImage" src="https://via.placeholder.com/50" alt="صورة المستخدم">
+                </div>
                 <div class="dropdown-content">
-                    <a href="#" id="loginLink">تسجيل الدخول</a>
-                    <a href="#" id="logoutLink" style="display: none;">تسجيل الخروج</a>
-                    <a href="#" id="ordersLink" style="display: none;" onclick="showSection('orders')">طلباتي</a>
+                    <a href="#" id="profileLink" style="display:none;" onclick="showSection('profile')">الملف الشخصي</a>
                     <a href="#" id="wishlistLink" onclick="showSection('wishlist')">قائمة الأمنيات</a>
-                    <a href="#" id="profileLink" style="display: none;" onclick="showSection('profile')">الملف الشخصي</a>
-                    <a href="#" id="couponsLink" style="display: none;" onclick="showSection('coupons')">الكوبونات</a>
+                    <a href="#" id="loginLink" style="display:none;" onclick="openModal('loginModal')">تسجيل الدخول</a>
+                    <a href="#" id="logoutLink" style="display:none;" onclick="logout()">تسجيل الخروج</a>
                 </div>
             </div>
-            <a href="#" class="cart" id="cartLink" onclick="showCart()">
-                <i class="fas fa-shopping-cart"></i>
-                <span class="cart-count" id="cartCount">0</span>
-            </a>
-            <button class="theme-toggle" id="themeToggle" title="تبديل الوضع"><i class="fas fa-moon"></i></button>
-            <button class="language-toggle" id="languageToggle" title="تغيير اللغة">العربية</button>
-            <select id="currencyToggle" title="تغيير العملة">
-                <option value="SAR">ر.س</option>
-                <option value="USD">$</option>
-                <option value="EUR">€</option>
-            </select>
         </div>
+        
+        <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-label="قائمة الهاتف">
+            <i class="fas fa-bars"></i>
+        </button>
     </nav>
 
     <!-- Main Content -->
-    <div class="main-content">
-        <!-- Guest Warning -->
-        <div class="guest-warning" id="guestWarning">
-            أنت في وضع الضيف. سجل الدخول للاستمتاع بالشراء، الكوبونات، المراجعات، وتجربة الواقع المعزز!
-        </div>
-
-        <!-- Hero Section -->
-        <div class="hero">
-            <h1>ارتقِ بأناقتك مع إكسسواراتنا الفاخرة</h1>
-            <p>ساعات ذكية، أساور يدوية، خواتم مميزة، وميداليات فريدة تنتظرك</p>
+    <main id="main-content">
+        <!-- Hero Banner -->
+        <section class="hero" id="hero">
+            <h1>متجر الأناقة الفاخر</h1>
+            <p>اكتشف مجموعتنا الحصرية من الإكسسوارات العصرية</p>
             <button class="cta" onclick="showSection('categories')">تسوق الآن</button>
+            <div class="banner-nav" id="bannerNav">
+                <span class="active"></span>
+                <span></span>
+                <span></span>
+            </div>
+        </section>
+
+        <!-- Guest Warning -->
+        <div id="guestWarning" style="display:none; background:#ffc107; color:#232f3e; padding:10px; margin:10px; border-radius:5px; text-align:center;">
+            أنت تستخدم الموقع كضيف. <a href="#" style="color:#232f3e; text-decoration:underline;" onclick="openModal('loginModal')">سجل الدخول</a> لحفظ سلة التسوق والوصول إلى جميع الميزات.
         </div>
 
-        <!-- Filters -->
-        <div class="filters">
-            <select id="sortBy">
-                <option value="">الترتيب حسب</option>
-                <option value="price-asc">السعر: الأقل</option>
-                <option value="price-desc">السعر: الأعلى</option>
-                <option value="rating">التقييم</option>
-                <option value="newest">الأحدث</option>
-            </select>
-            <select id="categoryFilter">
-                <option value="">جميع الفئات</option>
-                <option value="watches">ساعات</option>
-                <option value="bracelets">أساور</option>
-                <option value="rings">خواتم</option>
-                <option value="medals">ميداليات</option>
-            </select>
-            <input type="number" id="minPrice" placeholder="السعر الأدنى">
-            <input type="number" id="maxPrice" placeholder="السعر الأعلى">
-            <input type="text" id="brandFilter" placeholder="البحث حسب العلامة التجارية">
-            <select id="colorFilter">
-                <option value="">جميع الألوان</option>
-                <option value="أسود">أسود</option>
-                <option value="فضي">فضي</option>
-                <option value="ذهبي">ذهبي</option>
-            </select>
-            <select id="sizeFilter">
-                <option value="">جميع الأحجام</option>
-                <option value="42mm">42mm</option>
-                <option value="46mm">46mm</option>
-            </select>
-        </div>
+        <!-- Categories Section -->
+        <section id="categories" style="display:block;">
+            <h2 style="margin:20px 10px;">تصفح حسب الفئة</h2>
+            <div class="categories" id="categoriesContainer"></div>
+        </section>
 
-        <!-- Categories -->
-        <div class="categories" id="categories"></div>
+        <!-- Products Section -->
+        <section id="products" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 10px;">
+                <h2>جميع المنتجات</h2>
+                <div class="filters">
+                    <select id="categoryFilter" onchange="applyFilters()">
+                        <option value="">كل الفئات</option>
+                        <option value="watches">ساعات</option>
+                        <option value="bracelets">أساور</option>
+                        <option value="rings">خواتم</option>
+                        <option value="medals">ميداليات</option>
+                    </select>
+                    <select id="sortBy" onchange="applyFilters()">
+                        <option value="">ترتيب حسب</option>
+                        <option value="price-asc">السعر: من الأقل للأعلى</option>
+                        <option value="price-desc">السعر: من الأعلى للأقل</option>
+                        <option value="rating">التقييم</option>
+                        <option value="newest">الأحدث</option>
+                    </select>
+                    <input type="number" id="minPrice" placeholder="أقل سعر" onchange="applyFilters()">
+                    <input type="number" id="maxPrice" placeholder="أعلى سعر" onchange="applyFilters()">
+                </div>
+            </div>
+            <div class="products" id="productsContainer"></div>
+            <div class="loader" id="loader">
+                <div class="spinner"></div>
+            </div>
+        </section>
 
-        <!-- Products -->
-        <div class="products" id="products"></div>
-        <div class="loader" id="loader"><i class="fas fa-spinner fa-spin"></i> جارٍ التحميل...</div>
+        <!-- Product Detail Section -->
+        <section id="productDetail" style="display:none;">
+            <div class="product-detail" id="productDetailContainer"></div>
+        </section>
 
-        <!-- Product Detail -->
-        <div class="product-detail" id="productDetail" style="display: none;"></div>
+        <!-- Wishlist Section -->
+        <section id="wishlist" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:20px 10px;">
+                <h2>قائمة الأمنيات</h2>
+                <button onclick="shareWishlist()" style="background:#f0c14b; border:none; padding:10px 20px; border-radius:5px; cursor:pointer;">مشاركة القائمة</button>
+            </div>
+            <div class="products" id="wishlistProducts"></div>
+        </section>
+
+        <!-- Profile Section -->
+        <section id="profile" style="display:none;">
+            <div class="profile">
+                <div class="profile-header">
+                    <img id="profileImage" src="https://via.placeholder.com/100" alt="صورة الملف الشخصي">
+                    <div class="profile-info">
+                        <h2 id="profileName">اسم المستخدم</h2>
+                        <p id="profileEmail">البريد الإلكتروني</p>
+                        <p id="profilePoints">النقاط: 0</p>
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <h3 id="profileOrders">0</h3>
+                        <p>الطلبات</p>
+                    </div>
+                    <div class="profile-stat">
+                        <h3 id="profileWishlist">0</h3>
+                        <p>قائمة الأمنيات</p>
+                    </div>
+                    <div class="profile-stat">
+                        <h3 id="profileReviews">0</h3>
+                        <p>التقييمات</p>
+                    </div>
+                </div>
+                
+                <div class="profile-edit">
+                    <h3>تعديل الملف الشخصي</h3>
+                    <form onsubmit="updateProfile(event)">
+                        <div>
+                            <label for="editName">الاسم الكامل</label>
+                            <input type="text" id="editName" required>
+                        </div>
+                        <div>
+                            <label for="editEmail">البريد الإلكتروني</label>
+                            <input type="email" id="editEmail" required>
+                        </div>
+                        <div>
+                            <label for="editPhone">رقم الهاتف</label>
+                            <input type="tel" id="editPhone">
+                        </div>
+                        <div>
+                            <label for="editAddress">العنوان</label>
+                            <textarea id="editAddress"></textarea>
+                        </div>
+                        <div>
+                            <label for="editImage">صورة الملف الشخصي</label>
+                            <input type="file" id="editImage" accept="image/*">
+                        </div>
+                        <button type="submit">حفظ التغييرات</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Orders Section -->
+        <section id="orders" style="display:none;">
+            <div class="orders">
+                <h2>طلباتي</h2>
+                <div id="ordersContainer"></div>
+            </div>
+        </section>
+
+        <!-- Coupons Section -->
+        <section id="coupons" style="display:none;">
+            <div class="coupons">
+                <h2>كوبوناتي</h2>
+                <div id="couponsContainer"></div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq" style="display:none;">
+            <div class="faq">
+                <h2>الأسئلة الشائعة</h2>
+                <div id="faqContainer"></div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" style="display:none;">
+            <div class="contact">
+                <h2>اتصل بنا</h2>
+                <div class="contact-info">
+                    <div class="contact-card">
+                        <h3>معلومات التواصل</h3>
+                        <p><i class="fas fa-phone"></i> +966 12 345 6789</p>
+                        <p><i class="fas fa-envelope"></i> info@example.com</p>
+                        <p><i class="fas fa-map-marker-alt"></i> الرياض، المملكة العربية السعودية</p>
+                    </div>
+                    <div class="contact-card">
+                        <h3>ساعات العمل</h3>
+                        <p>الأحد - الخميس: 9 ص - 5 م</p>
+                        <p>الجمعة - السبت: مغلق</p>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <h3>أرسل لنا رسالة</h3>
+                    <form onsubmit="sendContactForm(event)">
+                        <div>
+                            <label for="contactName">الاسم</label>
+                            <input type="text" id="contactName" required>
+                        </div>
+                        <div>
+                            <label for="contactEmail">البريد الإلكتروني</label>
+                            <input type="email" id="contactEmail" required>
+                        </div>
+                        <div>
+                            <label for="contactSubject">الموضوع</label>
+                            <input type="text" id="contactSubject" required>
+                        </div>
+                        <div>
+                            <label for="contactMessage">الرسالة</label>
+                            <textarea id="contactMessage" required></textarea>
+                        </div>
+                        <button type="submit">إرسال</button>
+                    </form>
+                </div>
+            </div>
+        </section>
 
         <!-- Recently Viewed -->
-        <div class="recently-viewed" id="recentlyViewed" style="display: none;">
-            <h2>تمت مشاهدتها مؤخرًا</h2>
+        <section class="recently-viewed" id="recentlyViewed" style="display:none;">
+            <h2>عرضت مؤخراً</h2>
             <div class="products" id="recentlyViewedProducts"></div>
-        </div>
+        </section>
 
-        <!-- Wishlist -->
-        <div class="wishlist" id="wishlist" style="display: none;">
-            <h2>قائمة الأمنيات</h2>
-            <div class="products" id="wishlistProducts"></div>
-        </div>
-
-        <!-- Profile -->
-        <div class="profile" id="profile" style="display: none;">
-            <h2>الملف الشخصي</h2>
-            <form id="profileForm">
-                <input type="text" id="profileName" placeholder="الاسم" required>
-                <input type="url" id="profilePhoto" placeholder="رابط الصورة">
-                <input type="text" id="profileAddress" placeholder="العنوان">
-                <button type="submit">حفظ التغييرات</button>
-            </form>
-        </div>
-
-        <!-- Orders -->
-        <div class="orders" id="orders" style="display: none;">
-            <h2>طلباتي</h2>
-            <div id="orderList"></div>
-        </div>
-
-        <!-- Coupons -->
-        <div class="coupons" id="coupons" style="display: none;">
-            <h2>الكوبونات</h2>
-            <div id="couponList"></div>
-        </div>
+        <!-- Recommendations -->
+        <section class="recommendations" id="recommendations" style="display:none;">
+            <h2>قد يعجبك أيضاً</h2>
+            <div class="products" id="recommendationProducts"></div>
+        </section>
 
         <!-- Newsletter -->
-        <div class="newsletter">
-            <h2>اشترك في النشرة الإخبارية</h2>
-            <form id="newsletterForm">
-                <input type="email" id="newsletterEmail" placeholder="أدخل بريدك الإلكتروني" required>
-                <button type="submit">اشترك</button>
+        <section class="newsletter">
+            <h2>اشترك في نشرتنا البريدية</h2>
+            <p>احصل على آخر العروض والتخفيضات مباشرة إلى بريدك الإلكتروني</p>
+            <form onsubmit="subscribeNewsletter(event)">
+                <input type="email" placeholder="بريدك الإلكتروني" required>
+                <button type="submit">اشتراك</button>
             </form>
-        </div>
+        </section>
+    </main>
 
-        <!-- Cart Modal -->
-        <div class="modal" id="cartModal" role="dialog" aria-labelledby="cartTitle" aria-hidden="true">
-            <div class="modal-content">
-                <h2 id="cartTitle">عربة التسوق</h2>
-                <div id="cartItems"></div>
-                <div class="coupon-apply">
-                    <input type="text" id="couponCode" placeholder="أدخل رمز الكوبون">
-                    <button onclick="applyCoupon()">تطبيق الكوبون</button>
-                </div>
-                <div id="cartTotal">الإجمالي: 0 ر.س</div>
-                <button class="modal-close" onclick="closeModal('cartModal')" aria-label="إغلاق العربة">إغلاق</button>
-                <button class="checkout" onclick="checkout()" aria-label="الدفع">الدفع</button>
+    <!-- Footer -->
+    <footer class="footer">
+        <div>
+            <h3>عن المتجر</h3>
+            <p>متجر الأناقة هو وجهتك الأولى للإكسسوارات الفاخرة والعصرية التي تضيف لمسة أنيقة إلى مظهرك.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-snapchat-ghost"></i></a>
             </div>
         </div>
-
-        <!-- AR Preview Modal -->
-        <div class="modal" id="arModal" role="dialog" aria-labelledby="arTitle" aria-hidden="true">
-            <div class="modal-content">
-                <h2 id="arTitle">معاينة الواقع المعزز</h2>
-                <div id="arPreview"></div>
-                <button class="modal-close" onclick="closeModal('arModal')" aria-label="إغلاق المعاينة">إغلاق</button>
-            </div>
+        <div>
+            <h3>روابط سريعة</h3>
+            <ul>
+                <li><a href="#" onclick="showSection('categories')">الرئيسية</a></li>
+                <li><a href="#" onclick="showSection('products')">المنتجات</a></li>
+                <li><a href="#" onclick="showSection('faq')">الأسئلة الشائعة</a></li>
+                <li><a href="#" onclick="showSection('contact')">اتصل بنا</a></li>
+            </ul>
         </div>
+        <div>
+            <h3>خدمة العملاء</h3>
+            <ul>
+                <li><a href="#">سياسة الإرجاع</a></li>
+                <li><a href="#">شروط الخصوصية</a></li>
+                <li><a href="#">شروط الاستخدام</a></li>
+                <li><a href="#">الأسئلة المتكررة</a></li>
+            </ul>
+        </div>
+        <div>
+            <h3>معلومات الاتصال</h3>
+            <ul>
+                <li><i class="fas fa-map-marker-alt"></i> الرياض، السعودية</li>
+                <li><i class="fas fa-phone"></i> +966 12 345 6789</li>
+                <li><i class="fas fa-envelope"></i> info@example.com</li>
+            </ul>
+        </div>
+    </footer>
 
-        <!-- Live Chat -->
-        <div class="live-chat" id="liveChat" title="الدردشة المباشرة">
-            <i class="fas fa-comment"></i>
+    <div class="copyright">
+        &copy; 2023 متجر الأناقة. جميع الحقوق محفوظة.
+    </div>
+
+    <!-- Accessibility Panel -->
+    <div class="accessibility-panel">
+        <h4>خيارات الوصول</h4>
+        <button onclick="toggleDarkMode()">الوضع الليلي</button>
+        <button onclick="toggleHighContrast()">تباين عالي</button>
+        <button onclick="increaseFontSize()">تكبير الخط</button>
+        <button onclick="resetAccessibility()">إعادة تعيين</button>
+    </div>
+
+    <!-- Modals -->
+    <!-- Cart Modal -->
+    <div class="modal" id="cartModal" aria-hidden="true">
+        <div class="modal-content">
+            <h2>سلة التسوق</h2>
+            <div id="cartItems"></div>
+            <p id="cartTotal">الإجمالي: 0 ر.س</p>
+            
+            <div class="coupon-apply">
+                <input type="text" id="couponCode" placeholder="أدخل كود الخصم">
+                <button onclick="applyCoupon()">تطبيق</button>
+            </div>
+            
+            <button class="checkout" onclick="checkout()">إتمام الشراء</button>
+            <button class="modal-close" onclick="closeModal('cartModal')">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Compare Modal -->
+    <div class="modal" id="compareModal" aria-hidden="true">
+        <div class="modal-content">
+            <h2>مقارنة المنتجات</h2>
+            <div id="compareTable"></div>
+            <button class="modal-close" onclick="closeModal('compareModal')">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- AR Preview Modal -->
+    <div class="modal" id="arModal" aria-hidden="true">
+        <div class="modal-content">
+            <h2>معاينة بالواقع المعزز</h2>
+            <div id="arPreview"></div>
+            <button class="modal-close" onclick="closeModal('arModal')">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal" aria-hidden="true">
+        <div class="modal-content">
+            <h2>تسجيل الدخول</h2>
+            <form onsubmit="login(event)">
+                <label for="loginEmail">البريد الإلكتروني</label>
+                <input type="email" id="loginEmail" required>
+                
+                <label for="loginPassword">كلمة المرور</label>
+                <input type="password" id="loginPassword" required>
+                
+                <button type="submit">تسجيل الدخول</button>
+                <p>ليس لديك حساب؟ <a href="#" onclick="openModal('registerModal'); closeModal('loginModal')">سجل الآن</a></p>
+            </form>
+            <button class="modal-close" onclick="closeModal('loginModal')">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal" aria-hidden="true">
+        <div class="modal-content">
+            <h2>تسجيل حساب جديد</h2>
+            <form onsubmit="register(event)">
+                <label for="registerName">الاسم الكامل</label>
+                <input type="text" id="registerName" required>
+                
+                <label for="registerEmail">البريد الإلكتروني</label>
+                <input type="email" id="registerEmail" required>
+                
+                <label for="registerPhone">رقم الهاتف</label>
+                <input type="tel" id="registerPhone" required>
+                
+                <label for="registerPassword">كلمة المرور</label>
+                <input type="password" id="registerPassword" required>
+                
+                <label for="registerConfirmPassword">تأكيد كلمة المرور</label>
+                <input type="password" id="registerConfirmPassword" required>
+                
+                <button type="submit">تسجيل</button>
+                <p>لديك حساب بالفعل؟ <a href="#" onclick="openModal('loginModal'); closeModal('registerModal')">سجل الدخول</a></p>
+            </form>
+            <button class="modal-close" onclick="closeModal('registerModal')">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- Customize Modal -->
+    <div class="modal" id="customizeModal" aria-hidden="true">
+        <div class="modal-content">
+            <div id="customizeContent"></div>
         </div>
     </div>
 
     <!-- Firebase SDK -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, updateProfile } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAnalytics, logEvent } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-analytics-compat.js"></script>
 
+    <!-- Main Script -->
+    <script>
+        // Firebase Configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyBfXJ-2tmCYo-pQjfN_4nAdxC-NcqfjAlo",
-            authDomain: "tamec-8f9ea.firebaseapp.com",
-            projectId: "tamec-8f9ea",
-            storageBucket: "tamec-8f9ea.firebasestorage.app",
-            messagingSenderId: "372610375354",
-            appId: "1:372610375354:web:1beaff9695e7b49cdeec83",
-            measurementId: "G-W7TT6VTKSP"
+            apiKey: "AIzaSyDummyKey-DummyKeyDummyKeyDummy",
+            authDomain: "your-project-id.firebaseapp.com",
+            projectId: "your-project-id",
+            storageBucket: "your-project-id.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:dummyappid1234567890",
+            measurementId: "G-DUMMYMEASUREID"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const analytics = getAnalytics(app);
-    </script>
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const analytics = firebase.analytics();
 
-    <!-- PWA Service Worker -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(reg => console.log('Service Worker registered'))
-                    .catch(err => console.error('Service Worker registration failed:', err));
-            });
-        }
-    </script>
-
-    <!-- JavaScript -->
-    <script>
-        // Core Variables
-        const allProducts = [
-            { 
-                id: 1, 
-                name: "ساعة ذكية ألترا", 
-                category: "watches", 
-                price: 599, 
-                image: "https://via.placeholder.com/300x250?text=ساعة+ذكية+ألترا", 
-                model3d: "https://modelviewer.dev/assets/astronaut.glb", 
-                description: "ساعة ذكية بتقنيات متطورة", 
-                specs: { material: "تيتانيوم", display: "AMOLED 1.5\"", battery: "48 ساعة", features: ["GPS", "تتبع النوم", "مقاومة للماء"] }, 
-                rating: 4.9, 
-                brand: "TechTrend", 
-                colors: ["أسود", "فضي"], 
-                sizes: ["42mm", "46mm"], 
-                stock: 50, 
-                reviews: [{ user: "أحمد", rating: 5, comment: "مذهلة!" }] 
-            },
-            { 
-                id: 2, 
-                name: "سوار جلدي فاخر", 
-                category: "bracelets", 
-                price: 199, 
-                image: "https://via.placeholder.com/300x250?text=سوار+جلدي", 
-                model3d: "https://modelviewer.dev/assets/astronaut.glb", 
-                description: "سوار مصنوع يدويًا من الجلد الطبيعي", 
-                specs: { material: "جلد", length: "20 سم", features: ["مقاوم للماء"] }, 
-                rating: 4.7, 
-                brand: "LuxCraft", 
-                colors: ["بني", "أسود"], 
-                sizes: ["M", "L"], 
-                stock: 30, 
-                reviews: [{ user: "سارة", rating: 4, comment: "أنيق جدًا" }] 
-            },
-            // Add more products to reach 50+ for realism
-        ];
-
+        // App State
+        let isGuest = true;
+        let language = 'ar';
+        let currency = 'SAR';
+        let darkMode = false;
+        let highContrast = false;
+        let largeFont = false;
+        let currentPage = 1;
+        const productsPerPage = 8;
         let cart = [];
         let wishlist = [];
         let compareList = [];
         let orders = [];
-        let coupons = [
-            { code: "SAVE10", discount: 10 },
-            { code: "FREESHIP", discount: 0, freeShipping: true },
-            { code: "WELCOME20", discount: 20 }
-        ];
-        let recentlyViewed = [];
-        let isGuest = true;
-        let language = 'ar';
-        let currency = 'SAR';
-        let exchangeRates = { SAR: 1, USD: 0.27, EUR: 0.24 };
+        let coupons = [];
         let appliedCoupon = null;
-        let currentPage = 1;
-        const productsPerPage = 12;
+        let loyaltyPoints = 0;
+        let recentlyViewed = JSON.parse(localStorage.getItem('recentlyViewed') || '[]');
+        let recommendations = [];
 
-        // Utility Functions
-        function showToast(message, type = 'success') {
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type}`;
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
-        }
-
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.className = 'modal active';
-            modal.setAttribute('aria-hidden', 'false');
-            logEvent(analytics, `open_${modalId}`);
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.className = 'modal';
-            modal.setAttribute('aria-hidden', 'true');
-        }
-
-        function formatPrice(price) {
-            const rate = exchangeRates[currency];
-            let formatted = (price * rate).toFixed(2);
-            if (currency === 'SAR') return `${formatted} ر.س`;
-            if (currency === 'USD') return `$${formatted}`;
-            if (currency === 'EUR') return `€${formatted}`;
-        }
-
-        // Mobile Menu Toggle
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            const navLinks = document.getElementById('navLinks');
-            const menuToggle = document.getElementById('menuToggle');
-            const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-            navLinks.classList.toggle('active');
-            menuToggle.setAttribute('aria-expanded', !isExpanded);
-            logEvent(analytics, 'toggle_mobile_menu');
-        });
-
-        // Show Section
-        function showSection(sectionId) {
-            const sections = ['categories', 'products', 'productDetail', 'wishlist', 'profile', 'orders', 'coupons'];
-            sections.forEach(id => {
-                const section = document.getElementById(id);
-                if (section) section.style.display = id === sectionId ? 'block' : 'none';
-            });
-            document.getElementById('recentlyViewed').style.display = sectionId === 'products' && recentlyViewed.length > 0 ? 'block' : 'none';
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            logEvent(analytics, `view_${sectionId}`);
-        }
-
-        // Load Categories
-        async function loadCategories() {
-            const categoriesContainer = document.getElementById('categories');
-            const categories = [
-                { id: 'watches', name: language === 'ar' ? 'ساعات' : 'Watches', image: 'https://via.placeholder.com/250?text=ساعات' },
-                { id: 'bracelets', name: language === 'ar' ? 'أساور' : 'Bracelets', image: 'https://via.placeholder.com/250?text=أساور' },
-                { id: 'rings', name: language === 'ar' ? 'خواتم' : 'Rings', image: 'https://via.placeholder.com/250?text=خواتم' },
-                { id: 'medals', name: language === 'ar' ? 'ميداليات' : 'Medals', image: 'https://via.placeholder.com/250?text=ميداليات' }
-            ];
-            
-            categoriesContainer.innerHTML = categories.map(category => `
-                <div class="category-card" onclick="filterByCategory('${category.id}')" role="button" aria-label="عرض ${category.name}">
-                    <img src="${category.image}" alt="${category.name}" loading="lazy">
-                    <h3>${category.name}</h3>
-                </div>
-            `).join('');
-        }
-
-        // Load Products with Infinite Scroll
-        async function loadProducts(filters = {}, append = false) {
-            const productsContainer = document.getElementById('products');
-            const loader = document.getElementById('loader');
-            let filteredProducts = [...allProducts];
-
-            // Apply Filters
-            if (filters.category) {
-                filteredProducts = filteredProducts.filter(p => p.category === filters.category);
-            }
-            if (filters.minPrice) {
-                filteredProducts = filteredProducts.filter(p => p.price >= parseFloat(filters.minPrice));
-            }
-            if (filters.maxPrice) {
-                filteredProducts = filteredProducts.filter(p => p.price <= parseFloat(filters.maxPrice));
-            }
-            if (filters.brand) {
-                filteredProducts = filteredProducts.filter(p => p.brand.toLowerCase().includes(filters.brand.toLowerCase()));
-            }
-            if (filters.color) {
-                filteredProducts = filteredProducts.filter(p => p.colors.includes(filters.color));
-            }
-            if (filters.size) {
-                filteredProducts = filteredProducts.filter(p => p.sizes.includes(filters.size));
-            }
-            if (filters.sortBy) {
-                filteredProducts.sort((a, b) => {
-                    if (filters.sortBy === 'price-asc') return a.price - b.price;
-                    if (filters.sortBy === 'price-desc') return b.price - a.price;
-                    if (filters.sortBy === 'rating') return b.rating - a.rating;
-                    if (filters.sortBy === 'newest') return b.id - a.id;
-                    return 0;
-                });
-            }
-
-            // Pagination
-            const start = (currentPage - 1) * productsPerPage;
-            const end = start + productsPerPage;
-            const paginatedProducts = filteredProducts.slice(0, end);
-
-            const html = paginatedProducts.map(product => `
-                <div class="product-card" role="article" aria-labelledby="product-${product.id}">
-                    <img src="${product.image}" alt="${product.name}" loading="lazy" class="lazy-load" onload="this.classList.remove('lazy-load')">
-                    <h3 id="product-${product.id}">${product.name}</h3>
-                    <div class="price">${formatPrice(product.price)}</div>
-                    <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
-                    <div class="actions">
-                        <button class="add-to-cart" onclick="addToCart(${product.id})" aria-label="إضافة ${product.name} إلى العربة">إضافة إلى العربة</button>
-                        <button class="wishlist${wishlist.includes(product.id) ? ' active' : ''}" onclick="toggleWishlist(${product.id})" aria-label="${wishlist.includes(product.id) ? 'إزالة' : 'إضافة'} ${product.name} إلى قائمة الأمنيات">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        <button class="compare${compareList.includes(product.id) ? ' active' : ''}" onclick="toggleCompare(${product.id})" aria-label="${compareList.includes(product.id) ? 'إزالة' : 'إضافة'} ${product.name} إلى المقارنة">
-                            <i class="fas fa-balance-scale"></i>
-                        </button>
-                        <button class="ar-preview" onclick="showARPreview(${product.id})" aria-label="معاينة ${product.name} بالواقع المعزز">AR</button>
-                        <button class="share" onclick="shareProduct(${product.id})" aria-label="مشاركة ${product.name}">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                    </div>
-                </div>
-            `).join('');
-
-            if (append) {
-                productsContainer.innerHTML += html;
-            } else {
-                productsContainer.innerHTML = html;
-            }
-
-            // Lazy Loading
-            const lazyImages = document.querySelectorAll('img[loading="lazy"]');
-            const observer = new IntersectionObserver((entries, observer) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const img = entry.target;
-                        img.src = img.getAttribute('src');
-                        observer.unobserve(img);
+        // Sample Data (In a real app, this would come from Firestore)
+        const allProducts = [
+            {
+                id: 1,
+                name: "ساعة ذكية فاخرة",
+                description: "ساعة ذكية بتصميم عصري مع شاشة لمس عالية الدقة ومقاومة للماء",
+                price: 499,
+                category: "watches",
+                brand: "أبل",
+                rating: 4.5,
+                stock: 10,
+                image: "https://via.placeholder.com/300?text=ساعة+ذكية",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["أسود", "فضي", "ذهبي"],
+                sizes: ["واحد"],
+                tags: ["ساعة", "ذكية", "أبل"],
+                specs: {
+                    material: "ألومنيوم",
+                    features: ["مقاومة الماء", "تتبع اللياقة", "إشعارات"],
+                    battery: "24 ساعة"
+                },
+                reviews: [
+                    {
+                        user: "أحمد محمد",
+                        rating: 5,
+                        comment: "ساعة رائعة ومريحة للاستخدام اليومي",
+                        date: "2023-05-15"
+                    },
+                    {
+                        user: "سارة عبدالله",
+                        rating: 4,
+                        comment: "جيدة ولكن عمر البطارية يمكن أن يكون أفضل",
+                        date: "2023-06-02"
                     }
-                });
-            });
-            lazyImages.forEach(img => observer.observe(img));
-
-            // Infinite Scroll
-            if (end < filteredProducts.length) {
-                loader.className = 'loader active';
-                window.onscroll = () => {
-                    if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 100) {
-                        currentPage++;
-                        loadProducts(filters, true);
+                ]
+            },
+            {
+                id: 2,
+                name: "سوار رياضي",
+                description: "سوار رياضي مقاوم للماء مع تتبع دقيق للنشاط البدني",
+                price: 199,
+                category: "bracelets",
+                brand: "سامسونج",
+                rating: 4.2,
+                stock: 15,
+                image: "https://via.placeholder.com/300?text=سوار+رياضي",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["أزرق", "أسود", "أحمر"],
+                sizes: ["صغير", "وسط", "كبير"],
+                tags: ["سوار", "رياضي", "تتبع"],
+                specs: {
+                    material: "مطاط",
+                    features: ["مقاومة الماء", "تتبع النوم", "معدل ضربات القلب"],
+                    battery: "7 أيام"
+                },
+                reviews: [
+                    {
+                        user: "خالد علي",
+                        rating: 5,
+                        comment: "مريح ويوفر بيانات دقيقة عن نشاطي",
+                        date: "2023-04-20"
                     }
-                };
-            } else {
-                loader.className = 'loader';
-                window.onscroll = null;
-            }
-        }
-
-        // Search Functionality
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const suggestionsContainer = document.getElementById('searchSuggestions');
-            if (query.length < 2) {
-                suggestionsContainer.style.display = 'none';
-                return;
-            }
-
-            const suggestions = allProducts.filter(p => 
-                p.name.toLowerCase().includes(query) || 
-                p.description.toLowerCase().includes(query) ||
-                p.brand.toLowerCase().includes(query) ||
-                p.category.toLowerCase().includes(query)
-            ).slice(0, 5);
-
-            suggestionsContainer.innerHTML = suggestions.map(p => `
-                <div onclick="viewProduct(${p.id})" role="option" aria-label="عرض ${p.name}">${p.name} - ${p.brand}</div>
-            `).join('');
-            suggestionsContainer.style.display = suggestions.length ? 'block' : 'none';
-            logEvent(analytics, 'search', { search_term: query });
-        });
-
-        // Cart Functions
-        async function addToCart(productId, color = null, size = null) {
-            if (isGuest) {
-                showToast('سجل الدخول لإضافة المنتجات إلى العربة', 'error');
-                return;
-            }
-            const product = allProducts.find(p => p.id === productId);
-            if (!product || product.stock <= 0) {
-                showToast('المنتج غير متوفر', 'error');
-                return;
-            }
-
-            const cartItem = cart.find(item => item.id === productId && item.color === color && item.size === size);
-            if (cartItem) {
-                cartItem.quantity += 1;
-            } else {
-                cart.push({ id: productId, quantity: 1, color, size });
-            }
-
-            updateCartUI();
-            
-            if (!isGuest) {
-                try {
-                    await setDoc(doc(db, 'users', auth.currentUser.uid, 'cart', `${productId}_${color || ''}_${size || ''}`), {
-                        quantity: cartItem ? cartItem.quantity : 1,
-                        color,
-                        size
-                    });
-                    showToast(`${product.name} أُضيف إلى العربة`);
-                    logEvent(analytics, 'add_to_cart', { product_id: productId });
-                } catch (error) {
-                    showToast('خطأ أثناء إضافة المنتج', 'error');
-                    console.error(error);
-                }
-            }
-        }
-
-        function updateCartUI() {
-            document.getElementById('cartCount').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-            showCart();
-        }
-
-        function showCart() {
-            const cartItemsContainer = document.getElementById('cartItems');
-            const cartTotalContainer = document.getElementById('cartTotal');
-            if (cart.length === 0) {
-                cartItemsContainer.innerHTML = '<p>العربة فارغة</p>';
-                cartTotalContainer.textContent = `الإجمالي: ${formatPrice(0)}`;
-            } else {
-                let total = 0;
-                cartItemsContainer.innerHTML = cart.map(item => {
-                    const product = allProducts.find(p => p.id === item.id);
-                    const itemTotal = product.price * item.quantity;
-                    total += itemTotal;
-                    return `
-                        <div class="cart-item">
-                            <img src="${product.image}" alt="${product.name}">
-                            <div>
-                                <h4>${product.name}</h4>
-                                <p>${item.color ? `اللون: ${item.color}` : ''} ${item.size ? `الحجم: ${item.size}` : ''}</p>
-                                <p>${formatPrice(itemTotal)} (${formatPrice(product.price)} × ${item.quantity})</p>
-                                <div class="quantity-controls">
-                                    <button onclick="updateCartQuantity(${item.id}, '${item.color || ''}', '${item.size || ''}', ${item.quantity - 1})" aria-label="تقليل كمية ${product.name}">-</button>
-                                    <span>${item.quantity}</span>
-                                    <button onclick="updateCartQuantity(${item.id}, '${item.color || ''}', '${item.size || ''}', ${item.quantity + 1})" aria-label="زيادة كمية ${product.name}">+</button>
-                                    <button onclick="removeFromCart(${item.id}, '${item.color || ''}', '${item.size || ''}')" aria-label="إزالة ${product.name} من العربة">إزالة</button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-
-                if (appliedCoupon) {
-                    if (appliedCoupon.discount) {
-                        total *= (100 - appliedCoupon.discount) / 100;
-                    }
-                    if (appliedCoupon.freeShipping) {
-                        total += 0; // Placeholder for shipping cost
-                    }
-                }
-                cartTotalContainer.textContent = `الإجمالي: ${formatPrice(total)}`;
-            }
-            openModal('cartModal');
-        }
-
-        async function updateCartQuantity(productId, color, size, quantity) {
-            if (quantity <= 0) {
-                removeFromCart(productId, color, size);
-                return;
-            }
-            const product = allProducts.find(p => p.id === productId);
-            if (quantity > product.stock) {
-                showToast('الكمية المطلوبة غير متوفرة', 'error');
-                return;
-            }
-
-            cart = cart.map(item => 
-                item.id === productId && item.color === color && item.size === size 
-                ? { ...item, quantity } 
-                : item
-            );
-            updateCartUI();
-
-            if (!isGuest) {
-                try {
-                    await setDoc(doc(db, 'users', auth.currentUser.uid, 'cart', `${productId}_${color || ''}_${size || ''}`), { 
-                        quantity,
-                        color,
-                        size
-                    });
-                } catch (error) {
-                    showToast('خطأ أثناء تحديث العربة', 'error');
-                    console.error(error);
-                }
-            }
-        }
-
-        async function removeFromCart(productId, color, size) {
-            cart = cart.filter(item => !(item.id === productId && item.color === color && item.size === size));
-            updateCartUI();
-
-            if (!isGuest) {
-                try {
-                    await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'cart', `${productId}_${color || ''}_${size || ''}`));
-                } catch (error) {
-                    showToast('خطأ أثناء إزالة المنتج', 'error');
-                    console.error(error);
-                }
-            }
-        }
-
-        async function applyCoupon() {
-            const code = document.getElementById('couponCode').value.trim().toUpperCase();
-            const coupon = coupons.find(c => c.code === code);
-            if (!coupon) {
-                showToast('رمز الكوبون غير صالح', 'error');
-                return;
-            }
-            appliedCoupon = coupon;
-            showCart();
-            showToast(`تم تطبيق الكوبون ${code} بنجاح`);
-            logEvent(analytics, 'apply_coupon', { coupon_code: code });
-        }
-
-        async function checkout() {
-            if (isGuest) {
-                showToast('سجل الدخول لإتمام الدفع', 'error');
-                return;
-            }
-            if (cart.length === 0) {
-                showToast('العربة فارغة', 'error');
-                return;
-            }
-
-            const order = {
-                items: cart,
-                total: cart.reduce((sum, item) => {
-                    const product = allProducts.find(p => p.id === item.id);
-                    return sum + product.price * item.quantity;
-                }, 0),
-                coupon: appliedCoupon,
-                date: new Date(),
-                status: 'pending'
-            };
-
-            if (appliedCoupon) {
-                if (appliedCoupon.discount) {
-                    order.total *= (100 - appliedCoupon.discount) / 100;
-                }
-                if (appliedCoupon.freeShipping) {
-                    order.total += 0; // Placeholder for shipping cost
-                }
-            }
-
-            try {
-                await addDoc(collection(db, 'users', auth.currentUser.uid, 'orders'), order);
-                orders.push(order);
-                cart = [];
-                appliedCoupon = null;
-                updateCartUI();
-                showSection('orders');
-                showToast('تم تقديم الطلب بنجاح', 'success');
-                logEvent(analytics, 'checkout', { order_total: order.total });
-            } catch (error) {
-                showToast('خطأ أثناء معالجة الطلب', 'error');
-                console.error(error);
-            }
-        }
-
-        // Wishlist Functions
-        async function toggleWishlist(productId) {
-            if (isGuest) {
-                showToast('سجل الدخول لإضافة المنتجات إلى قائمة الأمنيات', 'error');
-                return;
-            }
-            if (wishlist.includes(productId)) {
-                wishlist = wishlist.filter(id => id !== productId);
-                showToast('تمت الإزالة من قائمة الأمنيات');
-                if (!isGuest) {
-                    try {
-                        await deleteDoc(doc(db, 'users', auth.currentUser.uid, 'wishlist', productId.toString()));
-                    } catch (error) {
-                        showToast('خطأ أثناء تحديث قائمة الأمنيات', 'error');
-                        console.error(error);
-                    }
-                }
-            } else {
-                wishlist.push(productId);
-                showToast('تمت الإضافة إلى قائمة الأمنيات');
-                if (!isGuest) {
-                    try {
-                        await setDoc(doc(db, 'users', auth.currentUser.uid, 'wishlist', productId.toString()), {
-                            addedAt: new Date()
-                        });
-                    } catch (error) {
-                        showToast('خطأ أثناء تحديث قائمة الأمنيات', 'error');
-                        console.error(error);
-                    }
-                }
-            }
-            loadProducts();
-            showWishlist();
-            logEvent(analytics, wishlist.includes(productId) ? 'add_to_wishlist' : 'remove_from_wishlist', { product_id: productId });
-        }
-
-        function showWishlist() {
-            const wishlistContainer = document.getElementById('wishlistProducts');
-            if (wishlist.length === 0) {
-                wishlistContainer.innerHTML = '<p>قائمة الأمنيات فارغة</p>';
-            } else {
-                wishlistContainer.innerHTML = wishlist.map(id => {
-                    const product = allProducts.find(p => p.id === id);
-                    return `
-                        <div class="product-card" role="article" aria-labelledby="wishlist-${product.id}">
-                            <img src="${product.image}" alt="${product.name}" loading="lazy">
-                            <h3 id="wishlist-${product.id}">${product.name}</h3>
-                            <div class="price">${formatPrice(product.price)}</div>
-                            <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
-                            <div class="actions">
-                                <button class="add-to-cart" onclick="addToCart(${product.id})" aria-label="إضافة ${product.name} إلى العربة">إضافة إلى العربة</button>
-                                <button class="wishlist active" onclick="toggleWishlist(${product.id})" aria-label="إزالة ${product.name} من قائمة الأمنيات">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        // Compare Functions
-        function toggleCompare(productId) {
-            if (compareList.includes(productId)) {
-                compareList = compareList.filter(id => id !== productId);
-                showToast('تمت الإزالة من المقارنة');
-            } else {
-                if (compareList.length >= 4) {
-                    showToast('يمكنك مقارنة 4 منتجات فقط', 'error');
-                    return;
-                }
-                compareList.push(productId);
-                showToast('تمت الإضافة إلى المقارنة');
-            }
-            loadProducts();
-            logEvent(analytics, compareList.includes(productId) ? 'add_to_compare' : 'remove_from_compare', { product_id: productId });
-        }
-
-        // AR Preview
-        function showARPreview(productId) {
-            const product = allProducts.find(p => p.id === productId);
-            const arPreviewContainer = document.getElementById('arPreview');
-            arPreviewContainer.innerHTML = `
-                <model-viewer src="${product.model3d}" alt="${product.name}" auto-rotate camera-controls ar ios-src="${product.model3d}" style="width: 100%; height: 400px;">
-                    <button slot="ar-button" style="background: #f0c14b; border: none; padding: 10px; border-radius: 5px; position: absolute; bottom: 20px; right: 20px;">
-                        تفعيل الواقع المعزز
-                    </button>
-                </model-viewer>
-            `;
-            openModal('arModal');
-            logEvent(analytics, 'view_ar_preview', { product_id: productId });
-        }
-
-        // Share Product
-        function shareProduct(productId) {
-            const product = allProducts.find(p => p.id === productId);
-            if (navigator.share) {
-                navigator.share({
-                    title: product.name,
-                    text: product.description,
-                    url: window.location.href + `#product-${productId}`
-                }).catch(err => console.error('Share failed:', err));
-            } else {
-                showToast('المشاركة غير مدعومة في هذا المتصفح. انسخ الرابط يدويًا.', 'error');
-            }
-            logEvent(analytics, 'share_product', { product_id: productId });
-        }
-
-        // Recently Viewed
-        function updateRecentlyViewed(productId) {
-            if (!recentlyViewed.includes(productId)) {
-                recentlyViewed.unshift(productId);
-                recentlyViewed = recentlyViewed.slice(0, 5);
-                const recentlyViewedContainer = document.getElementById('recentlyViewedProducts');
-                recentlyViewedContainer.innerHTML = recentlyViewed.map(id => {
-                    const product = allProducts.find(p => p.id === id);
-                    return `
-                        <div class="product-card" role="article" aria-labelledby="recent-${product.id}">
-                            <img src="${product.image}" alt="${product.name}" loading="lazy">
-                            <h3 id="recent-${product.id}">${product.name}</h3>
-                            <div class="price">${formatPrice(product.price)}</div>
-                            <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
-                            <div class="actions">
-                                <button class="add-to-cart" onclick="addToCart(${product.id})" aria-label="إضافة ${product.name} إلى العربة">إضافة إلى العربة</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-        }
-
-        // Product Detail
-        function viewProduct(productId) {
-            const product = allProducts.find(p => p.id === productId);
-            updateRecentlyViewed(productId);
-            showSection('productDetail');
-            const productDetailContainer = document.getElementById('productDetail');
-            productDetailContainer.innerHTML = `
-                <div class="product-detail-content" role="article" aria-labelledby="detail-${product.id}">
-                    <img src="${product.image}" alt="${product.name}" loading="lazy">
-                    <div class="details">
-                        <h2 id="detail-${product.id}">${product.name}</h2>
-                        <p>${product.description}</p>
-                        <div class="price">${formatPrice(product.price)}</div>
-                        <div class="rating">${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}</div>
-                        <p><strong>العلامة التجارية:</strong> ${product.brand}</p>
-                        <p><strong>الألوان:</strong> 
-                            <select id="colorSelect-${product.id}">
-                                ${product.colors.map(color => `<option value="${color}">${color}</option>`).join('')}
-                            </select>
-                        </p>
-                        <p><strong>الأحجام:</strong> 
-                            <select id="sizeSelect-${product.id}">
-                                ${product.sizes.map(size => `<option value="${size}">${size}</option>`).join('')}
-                            </select>
-                        </p>
-                        <p><strong>المخزون:</strong> ${product.stock} متبقي</p>
-                        <button class="add-to-cart" onclick="addToCart(${product.id}, document.getElementById('colorSelect-${product.id}').value, document.getElementById('sizeSelect-${product.id}').value)" aria-label="إضافة ${product.name} إلى العربة">إضافة إلى العربة</button>
-                        <button class="wishlist${wishlist.includes(product.id) ? ' active' : ''}" onclick="toggleWishlist(${product.id})" aria-label="${wishlist.includes(product.id) ? 'إزالة' : 'إضافة'} ${product.name} إلى قائمة الأمنيات">
-                            <i class="fas fa-heart"></i>
-                        </button>
-                        <button class="ar-preview" onclick="showARPreview(${product.id})" aria-label="معاينة ${product.name} بالواقع المعزز">AR</button>
-                        <button class="share" onclick="shareProduct(${product.id})" aria-label="مشاركة ${product.name}">
-                            <i class="fas fa-share-alt"></i>
-                        </button>
-                        <div class="review-form">
-                            <h3>أضف مراجعتك</h3>
-                            <select id="reviewRating-${product.id}" required>
-                                <option value="">اختر التقييم</option>
-                                ${[1,2,3,4,5].map(n => `<option value="${n}">${n} نجوم</option>`).join('')}
-                            </select>
-                            <textarea id="reviewComment-${product.id}" placeholder="اكتب تعليقك..." required></textarea>
-                            <button onclick="submitReview(${product.id})">إرسال المراجعة</button>
-                        </div>
-                        <h3>المراجعات</h3>
-                        ${product.reviews.map(review => `
-                            <div class="review">
-                                <p><strong>${review.user}</strong>: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}</p>
-                                <p>${review.comment}</p>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-            logEvent(analytics, 'view_product', { product_id: productId });
-        }
-
-        async function submitReview(productId) {
-            if (isGuest) {
-                showToast('سجل الدخول لإضافة مراجعة', 'error');
-                return;
-            }
-            const rating = parseInt(document.getElementById(`reviewRating-${productId}`).value);
-            const comment = document.getElementById(`reviewComment-${productId}`).value.trim();
-            if (!rating || !comment) {
-                showToast('يرجى إكمال جميع الحقول', 'error');
-                return;
-            }
-
-            const review = {
-                user: auth.currentUser.displayName || 'مستخدم',
-                rating,
-                comment,
-                date: new Date()
-            };
-
-            const product = allProducts.find(p => p.id === productId);
-            product.reviews.push(review);
-
-            try {
-                await setDoc(doc(db, 'products', productId.toString(), 'reviews', `${auth.currentUser.uid}_${Date.now()}`), review);
-                showToast('تم إرسال المراجعة بنجاح');
-                viewProduct(productId);
-                logEvent(analytics, 'submit_review', { product_id: productId, rating });
-            } catch (error) {
-                showToast('خطأ أثناء إرسال المراجعة', 'error');
-                console.error(error);
-            }
-        }
-
-        // Filter by Category
-        function filterByCategory(categoryId) {
-            document.getElementById('categoryFilter').value = categoryId;
-            currentPage = 1;
-            loadProducts({ category: categoryId });
-        }
-
-        // Theme Toggle
-        document.getElementById('themeToggle').addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            document.getElementById('themeToggle').innerHTML = `<i class="fas fa-${isDark ? 'sun' : 'moon'}"></i>`;
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            logEvent(analytics, 'toggle_theme', { theme: isDark ? 'dark' : 'light' });
-        });
-
-        // Language Toggle
-        document.getElementById('languageToggle').addEventListener('click', () => {
-            language = language === 'ar' ? 'en' : 'ar';
-            document.documentElement.setAttribute('lang', language);
-            document.documentElement.setAttribute('dir', language === 'ar' ? 'rtl' : 'ltr');
-            document.getElementById('languageToggle').textContent = language === 'ar' ? 'العربية' : 'English';
-            document.querySelector('.logo').textContent = language === 'ar' ? 'متجر الأناقة' : 'Elegance Store';
-            document.getElementById('searchInput').placeholder = language === 'ar' ? 'ابحث عن ساعات، أساور، خواتم...' : 'Search for watches, bracelets, rings...';
-            loadCategories();
-            loadProducts();
-            showSection('categories');
-            localStorage.setItem('language', language);
-            logEvent(analytics, 'toggle_language', { language });
-        });
-
-        // Currency Toggle
-        document.getElementById('currencyToggle').addEventListener('change', () => {
-            currency = document.getElementById('currencyToggle').value;
-            loadProducts();
-            showCart();
-            viewProduct(allProducts[0].id);
-            localStorage.setItem('currency', currency);
-            logEvent(analytics, 'toggle_currency', { currency });
-        });
-
-        // Newsletter Signup
-        document.getElementById('newsletterForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            const email = document.getElementById('newsletterEmail').value;
-            try {
-                await addDoc(collection(db, 'subscriptions'), { email, date: new Date() });
-                showToast('تم الاشتراك بنجاح', 'success');
-                document.getElementById('newsletterEmail').value = '';
-                logEvent(analytics, 'newsletter_signup', { email });
-            } catch (error) {
-                showToast('خطأ أثناء الاشتراك', 'error');
-                console.error(error);
-            }
-        });
-
-        // Live Chat
-        document.getElementById('liveChat').addEventListener('click', () => {
-            showToast('الدردشة المباشرة قيد التطوير. تواصلوا عبر البريد الإلكتروني.', 'success');
-            logEvent(analytics, 'open_live_chat');
-        });
-
-        // Profile Management
-        document.getElementById('profileForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            if (isGuest) {
-                showToast('سجل الدخول لتحديث الملف الشخصي', 'error');
-                return;
-            }
-            const name = document.getElementById('profileName').value;
-            const photo = document.getElementById('profilePhoto').value;
-            const address = document.getElementById('profileAddress').value;
-
-            try {
-                await updateProfile(auth.currentUser, { displayName: name, photoURL: photo });
-                await setDoc(doc(db, 'users', auth.currentUser.uid), { address }, { merge: true });
-                document.getElementById('userName').textContent = name;
-                document.getElementById('userImage').src = photo || "https://via.placeholder.com/50";
-                showToast('تم تحديث الملف الشخصي بنجاح');
-                logEvent(analytics, 'update_profile');
-            } catch (error) {
-                showToast('خطأ أثناء تحديث الملف الشخصي', 'error');
-                console.error(error);
-            }
-        });
-
-        // Load Orders
-        async function loadOrders() {
-            const orderList = document.getElementById('orderList');
-            if (isGuest) {
-                orderList.innerHTML = '<p>سجل الدخول لعرض الطلبات</p>';
-                return;
-            }
-            try {
-                const snapshot = await getDocs(collection(db, 'users', auth.currentUser.uid, 'orders'));
-                orders = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                orderList.innerHTML = orders.length === 0 ? '<p>لا توجد طلبات</p>' : orders.map(order => `
-                    <div class="order-item">
-                        <p><strong>تاريخ الطلب:</strong> ${new Date(order.date.seconds * 1000).toLocaleDateString()}</p>
-                        <p><strong>الإجمالي:</strong> ${formatPrice(order.total)}</p>
-                        <p><strong
+                ]
+            },
+            {
+                id: 3,
+                name: "خاتم تيتانيوم",
+                description: "خاتم أنيق من التيتانيوم الخالص مع تشطيب لامع",
+                price: 349,
+                category: "rings",
+                brand: "كارتييه",
+                rating: 4.8,
+                stock: 5,
+                image: "https://via.placeholder.com/300?text=خاتم+تيتانيوم",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["فضي", "أسود"],
+                sizes: ["16", "17", "18", "19", "20"],
+                tags: ["خاتم", "تيتانيوم", "أنيق"],
+                specs: {
+                    material: "تيتانيوم",
+                    features: ["خفيف الوزن", "مقاوم للخدش", "غير مسبب للحساسية"],
+                    weight: "8 جرام"
+                },
+                reviews: []
+            },
+            {
+                id: 4,
+                name: "ميدالية فضية",
+                description: "ميدالية فضية عيار 925 مع سلسلة ستانلس ستيل",
+                price: 249,
+                category: "medals",
+                brand: "تيفاني",
+                rating: 4.3,
+                stock: 8,
+                image: "https://via.placeholder.com/300?text=ميدالية+فضية",
+                model3d: "https://modelviewer.dev/shared-assets/models/Astronaut.glb",
+                colors: ["فضي"],
+                sizes: ["واحد"],
+                tags: ["ميدالية", "فضة", "سلسلة"],
+                specs: {
+                    material: "فضة 925",
+                    features: ["سلسلة ستانلس ستيل", "طول قابل للتعديل"],
+                    length: "45 سم"
+                },
+                reviews
